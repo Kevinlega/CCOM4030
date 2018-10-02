@@ -14,6 +14,11 @@
 		0A9B78BD215DA51500F48859 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A9B78BB215DA51500F48859 /* LaunchScreen.storyboard */; };
 		0A9B78C8215DA51500F48859 /* ETNOTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9B78C7215DA51500F48859 /* ETNOTests.swift */; };
 		0A9B78D3215DA51500F48859 /* ETNOUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9B78D2215DA51500F48859 /* ETNOUITests.swift */; };
+		0ABE28D421642A33001C2385 /* CreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABE28D321642A33001C2385 /* CreateAccountViewController.swift */; };
+		0ABE28D8216430AB001C2385 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABE28D7216430AB001C2385 /* DashboardViewController.swift */; };
+		0ABE28DA216430C5001C2385 /* ChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABE28D9216430C5001C2385 /* ChangePasswordViewController.swift */; };
+		0ABE28DC216431CA001C2385 /* AddParticipantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABE28DB216431CA001C2385 /* AddParticipantViewController.swift */; };
+		0ABE28DE21643365001C2385 /* CreateAProyectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABE28DD21643365001C2385 /* CreateAProyectViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +52,11 @@
 		0A9B78CE215DA51500F48859 /* ETNOUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ETNOUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A9B78D2215DA51500F48859 /* ETNOUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ETNOUITests.swift; sourceTree = "<group>"; };
 		0A9B78D4215DA51500F48859 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0ABE28D321642A33001C2385 /* CreateAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountViewController.swift; sourceTree = "<group>"; };
+		0ABE28D7216430AB001C2385 /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
+		0ABE28D9216430C5001C2385 /* ChangePasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewController.swift; sourceTree = "<group>"; };
+		0ABE28DB216431CA001C2385 /* AddParticipantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddParticipantViewController.swift; sourceTree = "<group>"; };
+		0ABE28DD21643365001C2385 /* CreateAProyectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAProyectViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +113,11 @@
 				0A9B78B9215DA51500F48859 /* Assets.xcassets */,
 				0A9B78BB215DA51500F48859 /* LaunchScreen.storyboard */,
 				0A9B78BE215DA51500F48859 /* Info.plist */,
+				0ABE28D321642A33001C2385 /* CreateAccountViewController.swift */,
+				0ABE28D7216430AB001C2385 /* DashboardViewController.swift */,
+				0ABE28D9216430C5001C2385 /* ChangePasswordViewController.swift */,
+				0ABE28DB216431CA001C2385 /* AddParticipantViewController.swift */,
+				0ABE28DD21643365001C2385 /* CreateAProyectViewController.swift */,
 			);
 			path = ETNO;
 			sourceTree = "<group>";
@@ -256,8 +271,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0ABE28D421642A33001C2385 /* CreateAccountViewController.swift in Sources */,
 				0A9B78B5215DA51300F48859 /* ViewController.swift in Sources */,
 				0A9B78B3215DA51300F48859 /* AppDelegate.swift in Sources */,
+				0ABE28DA216430C5001C2385 /* ChangePasswordViewController.swift in Sources */,
+				0ABE28DE21643365001C2385 /* CreateAProyectViewController.swift in Sources */,
+				0ABE28DC216431CA001C2385 /* AddParticipantViewController.swift in Sources */,
+				0ABE28D8216430AB001C2385 /* DashboardViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -431,6 +451,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = WNLDE44E2U;
 				INFOPLIST_FILE = ETNO/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -448,6 +469,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = WNLDE44E2U;
 				INFOPLIST_FILE = ETNO/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
