@@ -21,7 +21,16 @@ class AddParticipantViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "AddParticipants"){
+            let _ = segue.destination as! DashboardViewController
+        }
+        else if (segue.identifier == "BackToDashboard"){
+            let _ = segue.destination as! DashboardViewController
+        }
+    }
+    
+    
     /*
     // MARK: - Navigation
 

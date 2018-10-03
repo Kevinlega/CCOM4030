@@ -21,7 +21,15 @@ class ChangePasswordViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "BackToLogin"){
+            let _ = segue.destination as! ViewController
+        }
+        else if (segue.identifier == "ChangePassword"){
+            let _ = segue.destination as! ViewController
+        }
+    }
+    
     /*
     // MARK: - Navigation
 

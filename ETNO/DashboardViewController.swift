@@ -21,6 +21,14 @@ class DashboardViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "AddParticipants"){
+            let _ = segue.destination as! AddParticipantViewController
+        }
+        else if (segue.identifier == "CreateProyect"){
+            let _ = segue.destination as! CreateAProyectViewController
+        }
+    }
 
     /*
     // MARK: - Navigation

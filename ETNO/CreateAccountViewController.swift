@@ -21,7 +21,18 @@ class CreateAccountViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
+    // We think is only needed if we send information from view to view
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "BackToLogin"){
+            let _ = segue.destination as! ViewController
+        }
+        else if (segue.identifier == "CreateAccount"){
+            let _ = segue.destination as! ViewController
+        }
+    }
+    
+    
     /*
     // MARK: - Navigation
 
