@@ -203,12 +203,12 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vMi-Wx-vvG">
-                                <rect key="frame" x="16" y="118" width="343" height="30"/>
+                                <rect key="frame" x="16" y="391" width="343" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="23"/>
-                                <state key="normal" title="Add Participants"/>
+                                <state key="normal" title="View Proyect"/>
                                 <connections>
-                                    <segue destination="7UN-HE-faA" kind="show" identifier="AddParticipants" id="LIe-LU-wdM"/>
+                                    <segue destination="Ukw-4a-vco" kind="show" identifier="ViewProyect" id="TwH-3j-TDA"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -218,7 +218,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rJT-dI-nsP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1408.8" y="35.467980295566505"/>
+            <point key="canvasLocation" x="1409" y="36"/>
         </scene>
         <!--CreateA Proyect View Controller-->
         <scene sceneID="IBT-aq-LRW">
@@ -295,7 +295,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xZx-6f-7JS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1408.8" y="958.37438423645324"/>
+            <point key="canvasLocation" x="1409" y="800"/>
         </scene>
         <!--Add Participant View Controller-->
         <scene sceneID="2VT-qu-Tuy">
@@ -305,22 +305,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cpr-BN-yEU">
-                                <rect key="frame" x="102" y="317" width="170" height="41"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <state key="normal" title="Add Participants"/>
-                                <connections>
-                                    <segue destination="9oE-wu-JnM" kind="show" identifier="AddParticipants" id="xru-2e-UYp"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oIc-Iz-0qI">
                                 <rect key="frame" x="16" y="44" width="73" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <state key="normal" title="Back"/>
                                 <connections>
-                                    <segue destination="9oE-wu-JnM" kind="show" identifier="BackToDashboard" id="1eG-S8-MoT"/>
+                                    <segue destination="Ukw-4a-vco" kind="show" identifier="BackToProyect" id="chT-jX-6aO"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Emails separados por coma:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JEi-2O-yK9">
@@ -351,6 +342,15 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ezI-EL-SRS">
+                                <rect key="frame" x="87" y="389" width="201" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <state key="normal" title="Add Participants"/>
+                                <connections>
+                                    <segue destination="Ukw-4a-vco" kind="show" identifier="AddParticipants" id="iT3-Xx-2rP"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="6id-ue-er0"/>
@@ -358,7 +358,42 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OmP-i8-EBW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1408.8" y="-814.28571428571433"/>
+            <point key="canvasLocation" x="3814" y="-908"/>
+        </scene>
+        <!--Proyect View Controller-->
+        <scene sceneID="Oi4-5m-nIf">
+            <objects>
+                <viewController id="Ukw-4a-vco" customClass="ProyectViewController" customModule="ETNO" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="rB0-Bo-k0P">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="asg-2v-3RZ">
+                                <rect key="frame" x="16" y="94" width="343" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <state key="normal" title="Add Participants"/>
+                                <connections>
+                                    <segue destination="7UN-HE-faA" kind="show" identifier="AddParticipants" id="5qV-Xp-Sn9"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CQf-1V-mSv">
+                                <rect key="frame" x="16" y="44" width="67" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                <state key="normal" title="Back"/>
+                                <connections>
+                                    <segue destination="9oE-wu-JnM" kind="show" identifier="BackToDashboard" id="YSk-mB-5ei"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="MEN-g5-Yib"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jMa-eg-uar" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3095" y="36"/>
         </scene>
         <!--Change Password View Controller-->
         <scene sceneID="0FX-1g-jFI">
@@ -439,8 +474,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="T43-dE-oEN"/>
-        <segue reference="tyf-OD-UqI"/>
+        <segue reference="TwH-3j-TDA"/>
+        <segue reference="YSk-mB-5ei"/>
         <segue reference="YDh-3o-jHY"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -1,14 +1,14 @@
 //
-//  DashboardViewController.swift
+//  ProyectViewController.swift
 //  ETNO
 //
-//  Created by Kevin Legarreta on 10/2/18.
+//  Created by Kevin Legarreta on 10/3/18.
 //  Copyright © 2018 Los 5. All rights reserved.
 //
 
 import UIKit
 
-class DashboardViewController: UIViewController {
+class ProyectViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +29,10 @@ class DashboardViewController: UIViewController {
             let _ = segue.destination as! DashboardViewController
         }
     }
-
+    
+    
+    
+    
     /*
     // MARK: - Navigation
 

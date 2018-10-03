@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A32854E21650BE100388A51 /* ProyectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A32854D21650BE100388A51 /* ProyectViewController.swift */; };
 		0A9B78B3215DA51300F48859 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9B78B2215DA51300F48859 /* AppDelegate.swift */; };
 		0A9B78B5215DA51300F48859 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9B78B4215DA51300F48859 /* ViewController.swift */; };
 		0A9B78B8215DA51300F48859 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A9B78B6215DA51300F48859 /* Main.storyboard */; };
@@ -39,6 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0A32854D21650BE100388A51 /* ProyectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProyectViewController.swift; sourceTree = "<group>"; };
 		0A9B78AF215DA51300F48859 /* ETNO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ETNO.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A9B78B2215DA51300F48859 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0A9B78B4215DA51300F48859 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -118,6 +120,7 @@
 				0ABE28D9216430C5001C2385 /* ChangePasswordViewController.swift */,
 				0ABE28DB216431CA001C2385 /* AddParticipantViewController.swift */,
 				0ABE28DD21643365001C2385 /* CreateAProyectViewController.swift */,
+				0A32854D21650BE100388A51 /* ProyectViewController.swift */,
 			);
 			path = ETNO;
 			sourceTree = "<group>";
@@ -274,6 +277,7 @@
 				0ABE28D421642A33001C2385 /* CreateAccountViewController.swift in Sources */,
 				0A9B78B5215DA51300F48859 /* ViewController.swift in Sources */,
 				0A9B78B3215DA51300F48859 /* AppDelegate.swift in Sources */,
+				0A32854E21650BE100388A51 /* ProyectViewController.swift in Sources */,
 				0ABE28DA216430C5001C2385 /* ChangePasswordViewController.swift in Sources */,
 				0ABE28DE21643365001C2385 /* CreateAProyectViewController.swift in Sources */,
 				0ABE28DC216431CA001C2385 /* AddParticipantViewController.swift in Sources */,
