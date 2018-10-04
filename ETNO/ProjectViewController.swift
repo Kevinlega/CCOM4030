@@ -1,14 +1,14 @@
 //
-//  AddParticipantViewController.swift
+//  ProjectViewController.swift
 //  ETNO
 //
-//  Created by Kevin Legarreta on 10/2/18.
+//  Created by Kevin Legarreta on 10/4/18.
 //  Copyright © 2018 Los 5. All rights reserved.
 //
 
 import UIKit
 
-class AddParticipantViewController: UIViewController {
+class ProjectViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,14 +23,14 @@ class AddParticipantViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "AddParticipants"){
-            let _ = segue.destination as! ProyectViewController
+            let _ = segue.destination as! AddParticipantViewController
         }
-        else if (segue.identifier == "BackToProject"){
-            let _ = segue.destination as! ProyectViewController
+        else if (segue.identifier == "BackToDashboard"){
+            let _ = segue.destination as! DashboardViewController
         }
     }
     
-    
+
     /*
     // MARK: - Navigation
 

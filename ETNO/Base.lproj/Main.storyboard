@@ -188,7 +188,7 @@
                                 <rect key="frame" x="16" y="82" width="343" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="23"/>
-                                <state key="normal" title="Create a Proyect"/>
+                                <state key="normal" title="Create a Project"/>
                                 <connections>
                                     <segue destination="Kn4-c0-9Sq" kind="show" identifier="CreateProyect" id="T43-dE-oEN"/>
                                 </connections>
@@ -199,16 +199,16 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="Log out"/>
                                 <connections>
-                                    <segue destination="BYZ-38-t0r" kind="show" id="YDh-3o-jHY"/>
+                                    <segue destination="BYZ-38-t0r" kind="show" identifier="Logout" id="YDh-3o-jHY"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vMi-Wx-vvG">
-                                <rect key="frame" x="16" y="391" width="343" height="30"/>
+                                <rect key="frame" x="16" y="386" width="343" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="23"/>
-                                <state key="normal" title="View Proyect"/>
+                                <state key="normal" title="View Project"/>
                                 <connections>
-                                    <segue destination="Ukw-4a-vco" kind="show" identifier="ViewProyect" id="TwH-3j-TDA"/>
+                                    <segue destination="Ukw-4a-vco" kind="show" identifier="ViewProject" id="TwH-3j-TDA"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -280,12 +280,12 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Zy-r3-XJo">
-                                <rect key="frame" x="92" y="384" width="191" height="30"/>
+                                <rect key="frame" x="92" y="379" width="191" height="41"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <state key="normal" title="Create Proyect"/>
+                                <state key="normal" title="Create Project"/>
                                 <connections>
-                                    <segue destination="9oE-wu-JnM" kind="show" identifier="CreateProyect" id="IqL-4h-R3Q"/>
+                                    <segue destination="9oE-wu-JnM" kind="show" identifier="CreateProject" id="IqL-4h-R3Q"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -311,7 +311,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <state key="normal" title="Back"/>
                                 <connections>
-                                    <segue destination="Ukw-4a-vco" kind="show" identifier="BackToProyect" id="chT-jX-6aO"/>
+                                    <segue destination="Ukw-4a-vco" kind="show" identifier="BackToProject" id="chT-jX-6aO"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Emails separados por coma:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JEi-2O-yK9">
@@ -360,10 +360,10 @@
             </objects>
             <point key="canvasLocation" x="3814" y="-908"/>
         </scene>
-        <!--Proyect View Controller-->
+        <!--Project View Controller-->
         <scene sceneID="Oi4-5m-nIf">
             <objects>
-                <viewController id="Ukw-4a-vco" customClass="ProyectViewController" customModule="ETNO" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Ukw-4a-vco" customClass="ProjectViewController" customModule="ETNO" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="rB0-Bo-k0P">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

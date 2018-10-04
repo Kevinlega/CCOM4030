@@ -25,7 +25,7 @@ class CreateAProyectViewController: UIViewController {
         if (segue.identifier == "BackToDashboard"){
             let _ = segue.destination as! DashboardViewController
         }
-        else if (segue.identifier == "CreateProyect"){
+        else if (segue.identifier == "CreateProject"){
             let _ = segue.destination as! DashboardViewController
         }
     }
