@@ -13,9 +13,56 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     
-    var users = ["uno", "dos"]
+    var id = [String()]
+    var users = [String()]
     var FilteredUsers = [String()]
     var Searching = false
+    
+    
+
+    // Create connection
+    
+    func GetUsers(){
+        let apiLink = URL(string: "http://www.linkhere.com/insert.php")
+        
+        let task = URLSession.shared.dataTask(with: apiLink!, completionHandler: {(data, response, error) -> Void in
+            do
+            {
+                let jsonResponse = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
+                    
+                self.users = jsonResponse["name"] as! [String]
+            
+                self.id = jsonResponse["user_id"] as! [String]
+                
+                
+                DispatchQueue.main.async {
+                    
+                    self.tableView.reloadData()
+                
+                }
+                
+            }
+            catch{
+                
+            }
+            })
+        task.resume()
+        
+    }
+    
+    
+//    func httpPOST(jsonData: Data){
+//        if !jsonData.isEmpty{
+//            var request = URLRequest(url: apiLink!)
+//            request.httpMethod = "POST"
+//
+//            let task = URLSession.shared.dataTask(with: request, completionHandler: ({ (responseData: Data?, response: URLResponse?,error: Error?) in NSLog("\(String(describing: response))")}))
+//            task.resume()
+//        }
+//    }
+
+    
+    // Work with the table
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if Searching{
@@ -36,6 +83,7 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
         return cell
     }
     
+    // Work with the search bar
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text == nil || searchBar.text == ""{
             Searching = false
@@ -50,11 +98,11 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
             
         }
     }
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        GetUsers()
+        
         // Do any additional setup after loading the view.
     }
 
