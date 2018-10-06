@@ -211,13 +211,16 @@
 				TargetAttributes = {
 					0A9B78AE215DA51300F48859 = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1000;
 					};
 					0A9B78C2215DA51500F48859 = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1000;
 						TestTargetID = 0A9B78AE215DA51300F48859;
 					};
 					0A9B78CD215DA51500F48859 = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1000;
 						TestTargetID = 0A9B78AE215DA51300F48859;
 					};
 				};
@@ -463,7 +466,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.los5.ETNO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -481,7 +484,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.los5.ETNO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -500,7 +503,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.los5.ETNOTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ETNO.app/ETNO";
 			};
@@ -520,7 +523,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.los5.ETNOTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ETNO.app/ETNO";
 			};
@@ -539,7 +542,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.los5.ETNOUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = ETNO;
 			};
@@ -558,7 +561,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.los5.ETNOUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = ETNO;
 			};

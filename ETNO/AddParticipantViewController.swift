@@ -23,17 +23,19 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
     // Create connection
     
     func GetUsers(){
-        let apiLink = URL(string: "http://www.linkhere.com/insert.php")
+        let apiLink = URL(string: "http://54.81.239.120/API.php?QueryType=GetUsers")
         
         let task = URLSession.shared.dataTask(with: apiLink!, completionHandler: {(data, response, error) -> Void in
             do
             {
+                print("here")
                 let jsonResponse = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
-                    
+                print(jsonResponse)
                 self.users = jsonResponse["name"] as! [String]
             
                 self.id = jsonResponse["user_id"] as! [String]
                 
+                print("done")
                 
                 DispatchQueue.main.async {
                     
@@ -43,25 +45,14 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
                 
             }
             catch{
-                
+                // nothing
+                print("bad")
             }
             })
         task.resume()
         
     }
-    
-    
-//    func httpPOST(jsonData: Data){
-//        if !jsonData.isEmpty{
-//            var request = URLRequest(url: apiLink!)
-//            request.httpMethod = "POST"
-//
-//            let task = URLSession.shared.dataTask(with: request, completionHandler: ({ (responseData: Data?, response: URLResponse?,error: Error?) in NSLog("\(String(describing: response))")}))
-//            task.resume()
-//        }
-//    }
 
-    
     // Work with the table
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
