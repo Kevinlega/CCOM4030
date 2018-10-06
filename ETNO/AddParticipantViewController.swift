@@ -8,8 +8,50 @@
 
 import UIKit
 
-class AddParticipantViewController: UIViewController {
+class AddParticipantViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate{
+    
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var searchBar: UISearchBar!
+    
+    var users = ["uno", "dos"]
+    var FilteredUsers = [String()]
+    var Searching = false
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if Searching{
+            return FilteredUsers.count
+        }
+        return users.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Row", for: indexPath)
+        if Searching{
+            cell.textLabel?.text = FilteredUsers[indexPath.row]
+        }
+        else{
+           cell.textLabel?.text = users[indexPath.row]
+        }
+        
+        return cell
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text == nil || searchBar.text == ""{
+            Searching = false
+            view.endEditing(true)
+            tableView.reloadData()
+        }
+        else{
+            Searching = true
+            FilteredUsers = users.filter({$0.localizedCaseInsensitiveContains(searchBar.text!)})
+            
+            tableView.reloadData()
+            
+        }
+    }
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
