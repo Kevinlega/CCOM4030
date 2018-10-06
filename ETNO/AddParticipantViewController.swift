@@ -23,10 +23,10 @@ class AddParticipantViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "AddParticipants"){
-            let _ = segue.destination as! ProyectViewController
+            let _ = segue.destination as! ProjectViewController
         }
         else if (segue.identifier == "BackToProject"){
-            let _ = segue.destination as! ProyectViewController
+            let _ = segue.destination as! ProjectViewController
         }
     }
     
