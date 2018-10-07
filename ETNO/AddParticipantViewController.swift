@@ -9,33 +9,27 @@
 import UIKit
 
 class AddParticipantViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate{
+   
+    var users = [String()]
+    var FilteredUsers = [String()]
+    var SelectedUsers = [String()]
+    
+    var FirstSelected = true
+    var Searching = false
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
-    
-    var id = [String()]
-    var users = [String()]
-    var FilteredUsers = [String()]
-    var Searching = false
-    
-    
 
     // Create connection
     
     func GetUsers(){
-        let apiLink = URL(string: "http://54.81.239.120/API.php?QueryType=GetUsers")
+        let apiLink = URL(string: "http://54.81.239.120/API.php?query=1")
         
         let task = URLSession.shared.dataTask(with: apiLink!, completionHandler: {(data, response, error) -> Void in
             do
             {
-                print("here")
-                let jsonResponse = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
-                print(jsonResponse)
-                self.users = jsonResponse["name"] as! [String]
-            
-                self.id = jsonResponse["user_id"] as! [String]
-                
-                print("done")
+             
+                self.users = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String]
                 
                 DispatchQueue.main.async {
                     
@@ -46,7 +40,7 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
             }
             catch{
                 // nothing
-                print("bad")
+
             }
             })
         task.resume()
@@ -59,7 +53,7 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
         if Searching{
             return FilteredUsers.count
         }
-        return users.count
+        return SelectedUsers.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -68,26 +62,65 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
             cell.textLabel?.text = FilteredUsers[indexPath.row]
         }
         else{
-           cell.textLabel?.text = users[indexPath.row]
+            cell.textLabel?.text = SelectedUsers[indexPath.row]
         }
         
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if !Searching{
+            if let selectedUser = tableView.cellForRow(at: indexPath){
+                let indexToDelete = SelectedUsers.firstIndex(of: (selectedUser.textLabel?.text)!)
+                SelectedUsers.remove(at: indexToDelete!)
+                DispatchQueue.main.asyncAfter(deadline: (DispatchTime.now()+0.25), execute: {tableView.reloadData()})
+                
+            }
+            }
+            
+        else{
+            
+            if let selectedUser = tableView.cellForRow(at: indexPath){
+                if !(SelectedUsers.contains((selectedUser.textLabel?.text)!)){
+                    
+                    
+                    SelectedUsers.append((selectedUser.textLabel?.text)!)
+                
+                    if FirstSelected {
+                        SelectedUsers.remove(at: 0)
+                        FirstSelected = false
+                        }
+                
+                    FilteredUsers = Array(Set(FilteredUsers).subtracting(SelectedUsers))
+                    DispatchQueue.main.asyncAfter(deadline: (DispatchTime.now()+0.25), execute: {tableView.reloadData()})
+                    
+                    }
+                
+                }
+            }
+        }
     
     // Work with the search bar
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text == nil || searchBar.text == ""{
             Searching = false
             view.endEditing(true)
-            tableView.reloadData()
         }
         else{
-            Searching = true
-            FilteredUsers = users.filter({$0.localizedCaseInsensitiveContains(searchBar.text!)})
-            
-            tableView.reloadData()
-            
+            if (searchBar.text!.contains("@") && searchBar.text!.count > 5){
+                Searching = true
+                FilteredUsers = users.filter({$0.localizedCaseInsensitiveContains(searchBar.text!)})
+                FilteredUsers = Array(Set(FilteredUsers).subtracting(SelectedUsers))
+                
+                
+            }
+            else{
+                Searching = false
+                FilteredUsers = []
+            }
+        
         }
+        tableView.reloadData()
     }
     
     override func viewDidLoad() {
