@@ -10,19 +10,32 @@ import UIKit
 
 class AddParticipantViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate{
     
+    // MARK: - Variables
+    // Flag that indicates if the admin has users to be added
     var UsersCanBeAdded = false
-    var project_id = 1
+    
+    // Variables passed from previous view
+    var user_id = 0
+    var project_id = 0
+    
+    // List of every user in the data base that is not in the project
     var users = [String()]
+    // Will Filtered the Users from using the Search Bar
     var FilteredUsers = [String()]
+    // Users selected by the admin to add to the project
     var SelectedUsers = [String()]
     
+    // Flags to know if the list was empty and if the admin is searching for users.
     var FirstSelected = true
     var Searching = false
     
+    // Connections to the app view
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
 
-    // Verify if we have users to add
+    
+    // MARK: - Add Participant Action (Button Press)
+    // Verify if we have users to add and alert if not
     
     @IBAction func CanWeAddUsers(_ sender: Any) {
        
@@ -30,60 +43,66 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
             UsersCanBeAdded = true
         }
         else{
-            let alertController = UIAlertController(title: "Error", message: "No new participant was selected", preferredStyle: UIAlertController.Style.alert)
-            alertController.addAction(UIAlertAction.init(title: "Dismiss", style: UIAlertAction.Style.destructive, handler: {(alert: UIAlertAction!) in print("Bad")}))
+            let alertController = UIAlertController(title: "Cannot add", message: "No new participant was selected", preferredStyle: UIAlertController.Style.alert)
+            alertController.addAction(UIAlertAction.init(title: "Continue", style: UIAlertAction.Style.destructive, handler: {(alert: UIAlertAction!) in print("Bad")}))
             
             self.present(alertController, animated: true, completion: nil)
         }
     }
     
 
-
-    // Get the Users of the database
+    // MARK: - Retrieve Users
+    // Get the Users from the database
     
     func GetUsers(){
         
-        var Linkstring = "http://54.81.239.120/API.php?query=1&pid="
-        Linkstring += String(project_id)
-        let apiLink = URL(string: Linkstring)
+        let QueryType = "1";
+        let url = URL(string: "http://54.81.239.120/selectAPI.php");
+        var request = URLRequest(url:url!)
         
-        let task = URLSession.shared.dataTask(with: apiLink!, completionHandler: {(data, response, error) -> Void in
+        request.httpMethod = "POST"
+        let post = "queryType=\(QueryType)&pid=\(1)";
+        request.httpBody = post.data(using: String.Encoding.utf8);
+        print(post)
+        let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
             do
             {
-             
                 self.users = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String]
-                
+               
                 DispatchQueue.main.async {
-                    
                     self.tableView.reloadData()
-                
                 }
-                
+            }catch{
+                print("bad")
+                }
             }
-            catch{
-                // nothing
-
-            }
-            })
         task.resume()
-        
     }
     
+    // MARK: - Insert Users
     // Insert new users to the project
+    
     func InsertUsers(){
+        
         var FirstUserID = true
         var UserIdArray = [String()]
         var UserId = [String()]
         
-        let GetUserID = "http://54.81.239.120/API.php?query=2&email="
+        var QueryType = "2";
+        var url = URL(string: "http://54.81.239.120/selectAPI.php");
+
         
         for user in SelectedUsers{
-            let apiLink = URL(string: (GetUserID + user))
+            var request = URLRequest(url:url!)
+            
+            request.httpMethod = "POST"
+            let post = "queryType=\(QueryType)&email=\(user)";
+            request.httpBody = post.data(using: String.Encoding.utf8);
             
             let group = DispatchGroup()
             group.enter()
             
-            let task = URLSession.shared.dataTask(with: apiLink!, completionHandler: {(data, response, error) -> Void in
+            let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
                 do
                 {
 
@@ -96,29 +115,31 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
                         FirstUserID = false
                     }
                     group.leave()
+                }catch{
+                    }
                 }
-                catch{
-                    // nothing
-                    
-                }
-            })
             task.resume()
             group.wait()
-        }
+            }
         
-
-        let Linkstring = "http://54.81.239.120/APIinsert.php?query=1&pid=" + String(project_id) + "&uid="
+        QueryType = "1";
+        url = URL(string: "http://54.81.239.120/insertAPI.php");
+        var request = URLRequest(url:url!)
+        
+        request.httpMethod = "POST"
         
         for user in UserIdArray {
             
-            let apiLink = URL(string: (Linkstring + user))
-            let task = URLSession.shared.dataTask(with: apiLink!, completionHandler: {(data, response, error) -> Void in})
+            let post = "queryType=\(QueryType)&pid=\(String(self.project_id))&uid=\(user)"
+            print(post)
+            request.httpBody = post.data(using: String.Encoding.utf8)
+            let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in }
             task.resume()
-            
         }
     }
     
-    // Work with the table
+    // MARK: - Modify the Tableview
+    // Update the view of the table
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if Searching{
@@ -170,28 +191,28 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
             }
         }
     
-    // Work with the search bar
+    // MARK: - Search Bar Actions
+    
+    // Use the search bar to search users
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text == nil || searchBar.text == ""{
             Searching = false
             view.endEditing(true)
         }
-        else{
-            if (searchBar.text!.contains("@") && searchBar.text!.count > 5){
+        else if (searchBar.text!.contains("@") && searchBar.text!.count > 5){
                 Searching = true
                 FilteredUsers = users.filter({$0.localizedCaseInsensitiveContains(searchBar.text!)})
                 FilteredUsers = Array(Set(FilteredUsers).subtracting(SelectedUsers))
-                
-                
+
             }
             else{
                 Searching = false
                 FilteredUsers = []
             }
-        
-        }
         tableView.reloadData()
     }
+
+  // MARK: - Default Functions
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -205,28 +226,22 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
         // Dispose of any resources that can be recreated.
     }
     
+    // MARK: - Segue Function
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        Add particpants to project and move to the project view
         if (segue.identifier == "AddParticipants"){
             if (UsersCanBeAdded){
                InsertUsers()
                let vc = segue.destination as! ProjectViewController
-               vc.selected_project = project_id
+               vc.user_id = user_id
+               vc.project_id = project_id
             }
-        }
+        } // Go back to the project view
         else if (segue.identifier == "BackToProject"){
-            let _ = segue.destination as! ProjectViewController
+            let vc = segue.destination as! ProjectViewController
+            vc.user_id = user_id
+            vc.project_id = project_id
         }
     }
-    
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

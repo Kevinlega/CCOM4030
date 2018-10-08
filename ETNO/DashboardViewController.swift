@@ -9,7 +9,12 @@
 import UIKit
 
 class DashboardViewController: UIViewController {
-
+    
+//    variables
+    var user_id = 0
+//    will change with response from server after selection
+    var project_id = 1
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -22,11 +27,17 @@ class DashboardViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if (segue.identifier == "AddParticipants"){
-            let _ = segue.destination as! AddParticipantViewController
+        if (segue.identifier == "ViewProject"){
+            let vc = segue.destination as! ProjectViewController
+            vc.project_id = project_id
+            vc.user_id = user_id
         }
-        else if (segue.identifier == "BackToDashboard"){
-            let _ = segue.destination as! DashboardViewController
+        else if (segue.identifier == "Logout"){
+            let _ = segue.destination as! ViewController
+        }
+        else if (segue.identifier == "CreateProject"){
+            let vc = segue.destination as! CreateAProjectViewController
+            vc.user_id = user_id
         }
     }
 

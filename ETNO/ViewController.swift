@@ -9,7 +9,9 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
+//    This will be equal to database response
+    var user_id = 1
     
     @IBOutlet weak var SubmitCredentials: UIButton!
     
@@ -33,7 +35,9 @@ class ViewController: UIViewController {
             let _ = segue.destination as! ChangePasswordViewController
         }
         else if (segue.identifier == "Dashboard"){
-            let _ = segue.destination as! DashboardViewController
+            let vc = segue.destination as! DashboardViewController
+            vc.user_id = user_id
+            
         }
     }
 }

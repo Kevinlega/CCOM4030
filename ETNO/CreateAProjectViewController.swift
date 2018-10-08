@@ -1,5 +1,5 @@
 //
-//  CreateAProyectViewController.swift
+//  CreateAProjectViewController.swift
 //  ETNO
 //
 //  Created by Kevin Legarreta on 10/2/18.
@@ -8,8 +8,10 @@
 
 import UIKit
 
-class CreateAProyectViewController: UIViewController {
-
+class CreateAProjectViewController: UIViewController {
+    
+    var user_id = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -23,10 +25,13 @@ class CreateAProyectViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "BackToDashboard"){
-            let _ = segue.destination as! DashboardViewController
+            let vc = segue.destination as! DashboardViewController
+            vc.user_id = user_id
         }
         else if (segue.identifier == "CreateProject"){
-            let _ = segue.destination as! DashboardViewController
+            let vc = segue.destination as! DashboardViewController
+            vc.user_id = user_id
+
         }
     }
     

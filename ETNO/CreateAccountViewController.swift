@@ -15,7 +15,7 @@ class CreateAccountViewController: UIViewController {
     // Password: User password that'll be hashed ; STRING
     // ConfirmPassword: Repeated user password for confirmation ; STRING
     
-    
+    // MARK: - Text Fields and Variables
     @IBOutlet weak var Name: UITextField!
     @IBOutlet weak var Email: UITextField!
     @IBOutlet weak var Password: UITextField!
@@ -24,6 +24,8 @@ class CreateAccountViewController: UIViewController {
     var UserCanBeAdded = false
     var QueryType = "CreateAccount"
 
+    
+    // MARK: - Create User Action (Button Press)
     
     // When 'Create Account' button is pressed.
     // Input validation:
@@ -68,127 +70,119 @@ class CreateAccountViewController: UIViewController {
             }
         }
     
-override func viewDidLoad() {
-    super.viewDidLoad()
-    
-    // Do any additional setup after loading the view.
-}
-
-override func didReceiveMemoryWarning() {
-    super.didReceiveMemoryWarning()
-    // Dispose of any resources that can be recreated.
-}
-    
-    
-// Self explanatory, returns a salted and hashed password
-func saltAndHash(password: String, salt: String) -> String{
-    let hashedPassword = password + salt;
-    return String(hashedPassword.hashValue)
-}
-
+    // MARK: - Default Functions
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-        
-// Generates salt for password
-func saltGenerator(length: Int) -> String{
-    let characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTXUVXYZ0123456789";
-    let key = (0..<length).compactMap{_ in characters.randomElement()};
-    let salt = String(key);
-    return salt;
-}
-
-// Checks if user is already registered by email.
-        
-func isRegistered(email: String) -> Bool{
-    let QueryType = "CheckRegistry";
-    var done = false;
-    var registered = false;
-    let url = URL(string: "http://54.81.239.120/OtherAPI.php");
-    var request = URLRequest(url:url!)
-    request.httpMethod = "POST"
-    let post = "QueryType=\(QueryType)&email=\(email)";
-    print(post)
-    request.httpBody = post.data(using: String.Encoding.utf8);
-    
-    let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-        
-        if (error != nil) {
-            print("error=\(error!)")
-            return
-        }
-        // print("response = \(response!)")
-        do {
-            let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
-            
-            if let parseJSON = json {
-                let queryResponse = (parseJSON["registered"] as? Bool)!
-                print (queryResponse)
-                registered = queryResponse
-            }
-        }
-        catch {
-            print(error)
-        }
-        done = true;
+        // Do any additional setup after loading the view.
     }
-    task.resume()
-    repeat {
-        RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.1))
-    } while !done
-    return registered;
-}
 
-// Create an account
-        
-func CreateAccount(name: String, email: String, password: String, salt: String) -> Void{
-    let QueryType = "CreateAccount";
-    var done = false;
-    let url = URL(string: "http://54.81.239.120/OtherAPI.php");
-    var request = URLRequest(url:url!)
-    request.httpMethod = "POST"
-    let post = "QueryType=\(QueryType)&name=\(name)&email=\(email)&password=\(password)&salt=\(salt)";
-    request.httpBody = post.data(using: String.Encoding.utf8);
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
     
-    let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
+    // MARK: - Password Handlers
+    // Self explanatory, returns a salted and hashed password
+    func saltAndHash(password: String, salt: String) -> String{
+        let hashedPassword = password + salt;
+        return String(hashedPassword.hashValue)
+    }
+
+    // Generates salt for password
+    func saltGenerator(length: Int) -> String{
+        let characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTXUVXYZ0123456789";
+        let key = (0..<length).compactMap{_ in characters.randomElement()};
+        let salt = String(key);
+        return salt;
+    }
+    
+    // MARK: - Verify if Registration is Posible
+    // Checks if user is already registered by email.
+    
+    func isRegistered(email: String) -> Bool{
+        let QueryType = "0";
+        var done = false;
+        var registered = false;
+        let url = URL(string: "http://54.81.239.120/selectAPI.php");
+        var request = URLRequest(url:url!)
+        request.httpMethod = "POST"
+        let post = "queryType=\(QueryType)&email=\(email)";
+        print(post)
+        request.httpBody = post.data(using: String.Encoding.utf8);
         
-        if (error != nil) {
-            print("error=\(error!)")
-            return
-        }
-        // print("response = \(response!)")
-        do {
-            let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
+        let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
             
-            if let parseJSON = json {
-                let queryResponse = (parseJSON["registered"] as? Bool)!
-                if (queryResponse == true){
-                    print("Account succesfully created.")
-                }
-                else{
-                    print("Uh Oh")
+            if (error != nil) {
+                print("error=\(error!)")
+                return
+            }
+            do {
+                let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
+                
+                if let parseJSON = json {
+                    let queryResponse = (parseJSON["registered"] as? Bool)!
+                    print (queryResponse)
+                    registered = queryResponse
                 }
             }
+            catch {
+                print(error)
+            }
+            done = true;
         }
-        catch {
-            print(error)
-        }
-        done = true;
+        task.resume()
+        repeat {
+            RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.1))
+        } while !done
+        return registered;
     }
-    task.resume()
-    repeat {
-        RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.1))
-    } while !done
-    return
-}
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
+
+    // MARK: - Creates the Account
+    // Create an account
     
+    func CreateAccount(name: String, email: String, password: String, salt: String) -> Void{
+        let QueryType = "0";
+        var done = false;
+        let url = URL(string: "http://54.81.239.120/insertAPI.php");
+        var request = URLRequest(url:url!)
+        request.httpMethod = "POST"
+        let post = "queryType=\(QueryType)&name=\(name)&email=\(email)&password=\(password)&salt=\(salt)";
+        request.httpBody = post.data(using: String.Encoding.utf8);
+        
+        let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
+            
+            if (error != nil) {
+                print("error=\(error!)")
+                return
+            }
+            // print("response = \(response!)")
+            do {
+                let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
+                
+                if let parseJSON = json {
+                    let queryResponse = (parseJSON["registered"] as? Bool)!
+                    if (queryResponse == true){
+                        print("Account succesfully created.")
+                    }
+                    else{
+                        print("Uh Oh")
+                    }
+                }
+            }
+            catch {
+                print(error)
+            }
+            done = true;
+        }
+        task.resume()
+        repeat {
+            RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.1))
+        } while !done
+        return
+    }
+    
+    // MARK: - Segue Function
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "BackToLogin"){
             let _ = segue.destination as! ViewController
