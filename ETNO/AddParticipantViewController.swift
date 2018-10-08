@@ -9,7 +9,9 @@
 import UIKit
 
 class AddParticipantViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate{
-   
+    
+    var UsersCanBeAdded = false
+    var project_id = 1
     var users = [String()]
     var FilteredUsers = [String()]
     var SelectedUsers = [String()]
@@ -20,10 +22,30 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
 
-    // Create connection
+    // Verify if we have users to add
+    
+    @IBAction func CanWeAddUsers(_ sender: Any) {
+       
+        if (SelectedUsers.count > 0 && !FirstSelected){
+            UsersCanBeAdded = true
+        }
+        else{
+            let alertController = UIAlertController(title: "Error", message: "No new participant was selected", preferredStyle: UIAlertController.Style.alert)
+            alertController.addAction(UIAlertAction.init(title: "Dismiss", style: UIAlertAction.Style.destructive, handler: {(alert: UIAlertAction!) in print("Bad")}))
+            
+            self.present(alertController, animated: true, completion: nil)
+        }
+    }
+    
+
+
+    // Get the Users of the database
     
     func GetUsers(){
-        let apiLink = URL(string: "http://54.81.239.120/API.php?query=1")
+        
+        var Linkstring = "http://54.81.239.120/API.php?query=1&pid="
+        Linkstring += String(project_id)
+        let apiLink = URL(string: Linkstring)
         
         let task = URLSession.shared.dataTask(with: apiLink!, completionHandler: {(data, response, error) -> Void in
             do
@@ -46,7 +68,56 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
         task.resume()
         
     }
+    
+    // Insert new users to the project
+    func InsertUsers(){
+        var FirstUserID = true
+        var UserIdArray = [String()]
+        var UserId = [String()]
+        
+        let GetUserID = "http://54.81.239.120/API.php?query=2&email="
+        
+        for user in SelectedUsers{
+            let apiLink = URL(string: (GetUserID + user))
+            
+            let group = DispatchGroup()
+            group.enter()
+            
+            let task = URLSession.shared.dataTask(with: apiLink!, completionHandler: {(data, response, error) -> Void in
+                do
+                {
 
+                    UserId = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String]
+                    if !FirstUserID{
+                        UserIdArray.append(contentsOf: UserId)
+                    }
+                    else{
+                        UserIdArray = UserId
+                        FirstUserID = false
+                    }
+                    group.leave()
+                }
+                catch{
+                    // nothing
+                    
+                }
+            })
+            task.resume()
+            group.wait()
+        }
+        
+
+        let Linkstring = "http://54.81.239.120/APIinsert.php?query=1&pid=" + String(project_id) + "&uid="
+        
+        for user in UserIdArray {
+            
+            let apiLink = URL(string: (Linkstring + user))
+            let task = URLSession.shared.dataTask(with: apiLink!, completionHandler: {(data, response, error) -> Void in})
+            task.resume()
+            
+        }
+    }
+    
     // Work with the table
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -73,7 +144,7 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
             if let selectedUser = tableView.cellForRow(at: indexPath){
                 let indexToDelete = SelectedUsers.firstIndex(of: (selectedUser.textLabel?.text)!)
                 SelectedUsers.remove(at: indexToDelete!)
-                DispatchQueue.main.asyncAfter(deadline: (DispatchTime.now()+0.25), execute: {tableView.reloadData()})
+                DispatchQueue.main.asyncAfter(deadline: (DispatchTime.now()+0.15), execute: {tableView.reloadData()})
                 
             }
             }
@@ -92,10 +163,9 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
                         }
                 
                     FilteredUsers = Array(Set(FilteredUsers).subtracting(SelectedUsers))
-                    DispatchQueue.main.asyncAfter(deadline: (DispatchTime.now()+0.25), execute: {tableView.reloadData()})
+                    DispatchQueue.main.asyncAfter(deadline: (DispatchTime.now()+0.15), execute: {tableView.reloadData()})
                     
                     }
-                
                 }
             }
         }
@@ -137,7 +207,11 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "AddParticipants"){
-            let _ = segue.destination as! ProjectViewController
+            if (UsersCanBeAdded){
+               InsertUsers()
+               let vc = segue.destination as! ProjectViewController
+               vc.selected_project = project_id
+            }
         }
         else if (segue.identifier == "BackToProject"){
             let _ = segue.destination as! ProjectViewController

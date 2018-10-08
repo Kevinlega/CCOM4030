@@ -9,7 +9,9 @@
 import UIKit
 
 class ProjectViewController: UIViewController {
-
+    
+    var selected_project = 1
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -23,7 +25,8 @@ class ProjectViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "AddParticipants"){
-            let _ = segue.destination as! AddParticipantViewController
+            let vc = segue.destination as! AddParticipantViewController
+            vc.project_id = selected_project
         }
         else if (segue.identifier == "BackToDashboard"){
             let _ = segue.destination as! DashboardViewController
