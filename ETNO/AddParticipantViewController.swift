@@ -9,27 +9,31 @@
 import UIKit
 
 class AddParticipantViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate{
-   
-    var users = [String()]
-    var FilteredUsers = [String()]
-    var SelectedUsers = [String()]
-    
-    var FirstSelected = true
-    var Searching = false
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
+    
+    var id = [String()]
+    var users = [String()]
+    var FilteredUsers = [String()]
+    var Searching = false
+    
+    
 
     // Create connection
     
     func GetUsers(){
-        let apiLink = URL(string: "http://54.81.239.120/API.php?query=1")
+        let apiLink = URL(string: "http://www.linkhere.com/insert.php")
         
         let task = URLSession.shared.dataTask(with: apiLink!, completionHandler: {(data, response, error) -> Void in
             do
             {
-             
-                self.users = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String]
+                let jsonResponse = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
+                    
+                self.users = jsonResponse["name"] as! [String]
+            
+                self.id = jsonResponse["user_id"] as! [String]
+                
                 
                 DispatchQueue.main.async {
                     
@@ -39,21 +43,32 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
                 
             }
             catch{
-                // nothing
-
+                
             }
             })
         task.resume()
         
     }
+    
+    
+//    func httpPOST(jsonData: Data){
+//        if !jsonData.isEmpty{
+//            var request = URLRequest(url: apiLink!)
+//            request.httpMethod = "POST"
+//
+//            let task = URLSession.shared.dataTask(with: request, completionHandler: ({ (responseData: Data?, response: URLResponse?,error: Error?) in NSLog("\(String(describing: response))")}))
+//            task.resume()
+//        }
+//    }
 
+    
     // Work with the table
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if Searching{
             return FilteredUsers.count
         }
-        return SelectedUsers.count
+        return users.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -62,65 +77,26 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
             cell.textLabel?.text = FilteredUsers[indexPath.row]
         }
         else{
-            cell.textLabel?.text = SelectedUsers[indexPath.row]
+           cell.textLabel?.text = users[indexPath.row]
         }
         
         return cell
     }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if !Searching{
-            if let selectedUser = tableView.cellForRow(at: indexPath){
-                let indexToDelete = SelectedUsers.firstIndex(of: (selectedUser.textLabel?.text)!)
-                SelectedUsers.remove(at: indexToDelete!)
-                DispatchQueue.main.asyncAfter(deadline: (DispatchTime.now()+0.25), execute: {tableView.reloadData()})
-                
-            }
-            }
-            
-        else{
-            
-            if let selectedUser = tableView.cellForRow(at: indexPath){
-                if !(SelectedUsers.contains((selectedUser.textLabel?.text)!)){
-                    
-                    
-                    SelectedUsers.append((selectedUser.textLabel?.text)!)
-                
-                    if FirstSelected {
-                        SelectedUsers.remove(at: 0)
-                        FirstSelected = false
-                        }
-                
-                    FilteredUsers = Array(Set(FilteredUsers).subtracting(SelectedUsers))
-                    DispatchQueue.main.asyncAfter(deadline: (DispatchTime.now()+0.25), execute: {tableView.reloadData()})
-                    
-                    }
-                
-                }
-            }
-        }
     
     // Work with the search bar
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text == nil || searchBar.text == ""{
             Searching = false
             view.endEditing(true)
+            tableView.reloadData()
         }
         else{
-            if (searchBar.text!.contains("@") && searchBar.text!.count > 5){
-                Searching = true
-                FilteredUsers = users.filter({$0.localizedCaseInsensitiveContains(searchBar.text!)})
-                FilteredUsers = Array(Set(FilteredUsers).subtracting(SelectedUsers))
-                
-                
-            }
-            else{
-                Searching = false
-                FilteredUsers = []
-            }
-        
+            Searching = true
+            FilteredUsers = users.filter({$0.localizedCaseInsensitiveContains(searchBar.text!)})
+            
+            tableView.reloadData()
+            
         }
-        tableView.reloadData()
     }
     
     override func viewDidLoad() {
