@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="7UN-HE-faA">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="UCp-4p-WhP">
     <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -125,6 +125,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                 <state key="normal" title="Create Account"/>
                                 <connections>
+                                    <action selector="CanUserBeCreated:" destination="UCp-4p-WhP" eventType="touchUpInside" id="piS-RI-HhX"/>
                                     <segue destination="BYZ-38-t0r" kind="show" identifier="CreateAccount" id="eSj-1U-tho"/>
                                 </connections>
                             </button>
@@ -631,8 +632,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="iT3-Xx-2rP"/>
-        <segue reference="UWL-vV-kQq"/>
+        <segue reference="chT-jX-6aO"/>
+        <segue reference="YSk-mB-5ei"/>
         <segue reference="eSj-1U-tho"/>
     </inferredMetricsTieBreakers>
 </document>
