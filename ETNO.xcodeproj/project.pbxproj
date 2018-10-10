@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0A4A29A42166521C00DF49EF /* ProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4A29A32166521C00DF49EF /* ProjectViewController.swift */; };
+		0A87E558216D7C630060B150 /* CreateAProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A87E557216D7C630060B150 /* CreateAProjectViewController.swift */; };
 		0A9B78B3215DA51300F48859 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9B78B2215DA51300F48859 /* AppDelegate.swift */; };
 		0A9B78B5215DA51300F48859 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9B78B4215DA51300F48859 /* ViewController.swift */; };
 		0A9B78B8215DA51300F48859 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A9B78B6215DA51300F48859 /* Main.storyboard */; };
@@ -19,7 +20,6 @@
 		0ABE28D8216430AB001C2385 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABE28D7216430AB001C2385 /* DashboardViewController.swift */; };
 		0ABE28DA216430C5001C2385 /* ChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABE28D9216430C5001C2385 /* ChangePasswordViewController.swift */; };
 		0ABE28DC216431CA001C2385 /* AddParticipantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABE28DB216431CA001C2385 /* AddParticipantViewController.swift */; };
-		0ABE28DE21643365001C2385 /* CreateAProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABE28DD21643365001C2385 /* CreateAProjectViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,6 +41,7 @@
 
 /* Begin PBXFileReference section */
 		0A4A29A32166521C00DF49EF /* ProjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectViewController.swift; sourceTree = "<group>"; };
+		0A87E557216D7C630060B150 /* CreateAProjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAProjectViewController.swift; sourceTree = "<group>"; };
 		0A9B78AF215DA51300F48859 /* ETNO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ETNO.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A9B78B2215DA51300F48859 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0A9B78B4215DA51300F48859 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -58,7 +59,6 @@
 		0ABE28D7216430AB001C2385 /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
 		0ABE28D9216430C5001C2385 /* ChangePasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewController.swift; sourceTree = "<group>"; };
 		0ABE28DB216431CA001C2385 /* AddParticipantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddParticipantViewController.swift; sourceTree = "<group>"; };
-		0ABE28DD21643365001C2385 /* CreateAProjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAProjectViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +89,7 @@
 		0A9B78A6215DA51300F48859 = {
 			isa = PBXGroup;
 			children = (
+				0A87E557216D7C630060B150 /* CreateAProjectViewController.swift */,
 				0A9B78B1215DA51300F48859 /* ETNO */,
 				0A9B78C6215DA51500F48859 /* ETNOTests */,
 				0A9B78D1215DA51500F48859 /* ETNOUITests */,
@@ -119,7 +120,6 @@
 				0ABE28D7216430AB001C2385 /* DashboardViewController.swift */,
 				0ABE28D9216430C5001C2385 /* ChangePasswordViewController.swift */,
 				0ABE28DB216431CA001C2385 /* AddParticipantViewController.swift */,
-				0ABE28DD21643365001C2385 /* CreateAProjectViewController.swift */,
 				0A4A29A32166521C00DF49EF /* ProjectViewController.swift */,
 			);
 			path = ETNO;
@@ -277,12 +277,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A87E558216D7C630060B150 /* CreateAProjectViewController.swift in Sources */,
 				0ABE28D421642A33001C2385 /* CreateAccountViewController.swift in Sources */,
 				0A9B78B5215DA51300F48859 /* ViewController.swift in Sources */,
 				0A9B78B3215DA51300F48859 /* AppDelegate.swift in Sources */,
 				0ABE28DA216430C5001C2385 /* ChangePasswordViewController.swift in Sources */,
 				0A4A29A42166521C00DF49EF /* ProjectViewController.swift in Sources */,
-				0ABE28DE21643365001C2385 /* CreateAProjectViewController.swift in Sources */,
 				0ABE28DC216431CA001C2385 /* AddParticipantViewController.swift in Sources */,
 				0ABE28D8216430AB001C2385 /* DashboardViewController.swift in Sources */,
 			);

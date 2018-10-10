@@ -263,7 +263,7 @@
         <!--CreateA Project View Controller-->
         <scene sceneID="IBT-aq-LRW">
             <objects>
-                <viewController id="Kn4-c0-9Sq" customClass="CreateAProjectViewController" sceneMemberID="viewController">
+                <viewController id="Kn4-c0-9Sq" customClass="CreateAProjectViewController" customModule="ETNO" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="QQQ-2Y-ZkR">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
