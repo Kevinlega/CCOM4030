@@ -11,7 +11,7 @@ import UIKit
 class ViewController: UIViewController {
     
 //    This will be equal to database response
-    var user_id = 1
+    var user_id = 0
     
     @IBOutlet weak var SubmitCredentials: UIButton!
     

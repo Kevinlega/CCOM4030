@@ -13,7 +13,7 @@ class DashboardViewController: UIViewController {
 //    variables
     var user_id = 0
 //    will change with response from server after selection
-    var project_id = 1
+    var project_id = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()

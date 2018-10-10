@@ -41,7 +41,7 @@
 
 /* Begin PBXFileReference section */
 		0A4A29A32166521C00DF49EF /* ProjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectViewController.swift; sourceTree = "<group>"; };
-		0A87E557216D7C630060B150 /* CreateAProjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAProjectViewController.swift; sourceTree = "<group>"; };
+		0A87E557216D7C630060B150 /* CreateAProjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CreateAProjectViewController.swift; path = ../CreateAProjectViewController.swift; sourceTree = "<group>"; };
 		0A9B78AF215DA51300F48859 /* ETNO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ETNO.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A9B78B2215DA51300F48859 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0A9B78B4215DA51300F48859 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -89,7 +89,6 @@
 		0A9B78A6215DA51300F48859 = {
 			isa = PBXGroup;
 			children = (
-				0A87E557216D7C630060B150 /* CreateAProjectViewController.swift */,
 				0A9B78B1215DA51300F48859 /* ETNO */,
 				0A9B78C6215DA51500F48859 /* ETNOTests */,
 				0A9B78D1215DA51500F48859 /* ETNOUITests */,
@@ -121,6 +120,7 @@
 				0ABE28D9216430C5001C2385 /* ChangePasswordViewController.swift */,
 				0ABE28DB216431CA001C2385 /* AddParticipantViewController.swift */,
 				0A4A29A32166521C00DF49EF /* ProjectViewController.swift */,
+				0A87E557216D7C630060B150 /* CreateAProjectViewController.swift */,
 			);
 			path = ETNO;
 			sourceTree = "<group>";

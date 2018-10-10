@@ -323,6 +323,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <state key="normal" title="Create Project"/>
                                 <connections>
+                                    <action selector="CanProjectBeCreated:" destination="Kn4-c0-9Sq" eventType="touchUpInside" id="dVH-yC-xHH"/>
                                     <segue destination="9oE-wu-JnM" kind="show" identifier="CreateProject" id="IqL-4h-R3Q"/>
                                 </connections>
                             </button>
@@ -356,6 +357,11 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="nqP-ZX-djf"/>
                     </view>
+                    <connections>
+                        <outlet property="projectDescription" destination="c0a-3m-Krv" id="O4b-sr-SIW"/>
+                        <outlet property="projectLocation" destination="V8s-lN-EUc" id="2af-bt-683"/>
+                        <outlet property="projectName" destination="9rL-Q0-GeP" id="DuH-K1-c5t"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xZx-6f-7JS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
