@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0A4A29A42166521C00DF49EF /* ProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4A29A32166521C00DF49EF /* ProjectViewController.swift */; };
-		0A87E558216D7C630060B150 /* CreateAProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A87E557216D7C630060B150 /* CreateAProjectViewController.swift */; };
+		0A963BA3216EA7EA00EA187B /* CreateAProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A963BA2216EA7EA00EA187B /* CreateAProjectViewController.swift */; };
 		0A9B78B3215DA51300F48859 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9B78B2215DA51300F48859 /* AppDelegate.swift */; };
 		0A9B78B5215DA51300F48859 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9B78B4215DA51300F48859 /* ViewController.swift */; };
 		0A9B78B8215DA51300F48859 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A9B78B6215DA51300F48859 /* Main.storyboard */; };
@@ -41,7 +41,7 @@
 
 /* Begin PBXFileReference section */
 		0A4A29A32166521C00DF49EF /* ProjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectViewController.swift; sourceTree = "<group>"; };
-		0A87E557216D7C630060B150 /* CreateAProjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CreateAProjectViewController.swift; path = ../CreateAProjectViewController.swift; sourceTree = "<group>"; };
+		0A963BA2216EA7EA00EA187B /* CreateAProjectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateAProjectViewController.swift; sourceTree = "<group>"; };
 		0A9B78AF215DA51300F48859 /* ETNO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ETNO.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A9B78B2215DA51300F48859 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0A9B78B4215DA51300F48859 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -119,8 +119,8 @@
 				0ABE28D7216430AB001C2385 /* DashboardViewController.swift */,
 				0ABE28D9216430C5001C2385 /* ChangePasswordViewController.swift */,
 				0ABE28DB216431CA001C2385 /* AddParticipantViewController.swift */,
+				0A963BA2216EA7EA00EA187B /* CreateAProjectViewController.swift */,
 				0A4A29A32166521C00DF49EF /* ProjectViewController.swift */,
-				0A87E557216D7C630060B150 /* CreateAProjectViewController.swift */,
 			);
 			path = ETNO;
 			sourceTree = "<group>";
@@ -277,9 +277,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0A87E558216D7C630060B150 /* CreateAProjectViewController.swift in Sources */,
 				0ABE28D421642A33001C2385 /* CreateAccountViewController.swift in Sources */,
 				0A9B78B5215DA51300F48859 /* ViewController.swift in Sources */,
+				0A963BA3216EA7EA00EA187B /* CreateAProjectViewController.swift in Sources */,
 				0A9B78B3215DA51300F48859 /* AppDelegate.swift in Sources */,
 				0ABE28DA216430C5001C2385 /* ChangePasswordViewController.swift in Sources */,
 				0A4A29A42166521C00DF49EF /* ProjectViewController.swift in Sources */,
