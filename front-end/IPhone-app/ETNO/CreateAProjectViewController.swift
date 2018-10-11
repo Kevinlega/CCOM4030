@@ -12,7 +12,7 @@ class CreateAProjectViewController: UIViewController {
     
     // MARK: - Variables
     
-    var user_id = 0
+    var user_id = Int()
     var CanProjectBeAdded = false
     
     @IBOutlet weak var projectName: UITextField!
@@ -90,7 +90,7 @@ class CreateAProjectViewController: UIViewController {
     }
     
     // MARK: - Default Functions
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         

@@ -86,7 +86,8 @@ class CreateAccountViewController: UIViewController {
     // Self explanatory, returns a salted and hashed password
     func saltAndHash(password: String, salt: String) -> String{
         let hashedPassword = password + salt;
-        return String(hashedPassword.hashValue)
+        return hashedPassword
+//        return String(hashedPassword.hashValue)
     }
 
     // Generates salt for password
@@ -185,7 +186,7 @@ class CreateAccountViewController: UIViewController {
     // MARK: - Segue Function
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "BackToLogin"){
-            let _ = segue.destination as! ViewController
+            let _ = segue.destination as! LoginViewController
         }
         else if (segue.identifier == "CreateAccount"){
             if UserCanBeAdded{
@@ -193,7 +194,7 @@ class CreateAccountViewController: UIViewController {
                 // Finally register the user:
                 // Salt and Hash password
                 
-                let _ = segue.destination as! ViewController
+                let _ = segue.destination as! LoginViewController
                 
                 var UserPassword = Password.text
                 let UserName = Name.text

@@ -23,6 +23,11 @@
     	$query = "SELECT name FROM projects WHERE projects.project_id IN (SELECT project_id FROM user_project WHERE user_project.user_id = $user_id)"; 	
     	$query2 = "SELECT project_id FROM projects WHERE projects.project_id IN (SELECT project_id FROM user_project WHERE user_project.user_id = $user_id)";
  	}
+ 	elseif ($queryType == 4) {
+ 		$email = $_REQUEST["email"];
+        $query = "SELECT hashed_password FROM users WHERE email='$email'";
+        $query2 = "SELECT salt FROM users WHERE email='$email'";
+ 	}
 
     $result = $connection->query($query);
     if($result->num_rows > 0){
@@ -46,13 +51,29 @@
           	while ($row = $result->fetch_assoc()){
             $id[] = $row["project_id"];
             	}
-            $return = array("project_id"=>$id,"project_name"=>$name);
+            $return = array("empty"=>"no","project_id"=>$id,"project_name"=>$name);
+        	}
+        elseif ($queryType == 4) {
+        	$return = array();
+        	$hashed_password = "";
+        	$salt = "";
+            while ($row = $result->fetch_assoc()){
+            $hashed_password = $row["hashed_password"];
+            	}
+            $result = $connection->query($query2);
+          	while ($row = $result->fetch_assoc()){
+            $salt = $row["salt"];
+            	}
+            $return = array("hashed_password"=>$hashed_password,"salt"=>$salt);
         	}
     }
 
     else{
         if($queryType == 0){
             $return = array("registered"=>false);
+        }
+        if($queryType == 3){
+        	$return = array("empty"=>"yes");
         }
     }
     echo json_encode($return);

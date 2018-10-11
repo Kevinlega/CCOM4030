@@ -15,8 +15,8 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
     var UsersCanBeAdded = false
     
     // Variables passed from previous view
-    var user_id = 0
-    var project_id = 0
+    var user_id = Int()
+    var project_id = Int()
     
     // List of every user in the data base that is not in the project
     var users = [String()]

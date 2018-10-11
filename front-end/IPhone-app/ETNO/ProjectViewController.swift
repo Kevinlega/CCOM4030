@@ -10,12 +10,11 @@ import UIKit
 
 class ProjectViewController: UIViewController {
     //    variables
-    var user_id = 0
-    var project_id = 0
+    var user_id = Int()
+    var project_id = Int()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
     }
 
@@ -27,6 +26,7 @@ class ProjectViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "AddParticipants"){
             let vc = segue.destination as! AddParticipantViewController
+            vc.user_id = user_id
             vc.project_id = project_id
         }
         else if (segue.identifier == "BackToDashboard"){

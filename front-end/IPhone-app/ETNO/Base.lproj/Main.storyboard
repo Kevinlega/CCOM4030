@@ -10,10 +10,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Login View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="ETNO" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="LoginViewController" customModule="ETNO" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -46,13 +46,14 @@
                                 </constraints>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES" textContentType="password"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Odr-3x-l0i">
                                 <rect key="frame" x="16" y="318" width="343" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <state key="normal" title="Login"/>
                                 <connections>
+                                    <action selector="CanLogin:" destination="BYZ-38-t0r" eventType="touchUpInside" id="f1U-l8-Uny"/>
                                     <segue destination="9oE-wu-JnM" kind="show" identifier="Dashboard" id="UWL-vV-kQq"/>
                                 </connections>
                             </button>
@@ -102,7 +103,8 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="SubmitCredentials" destination="CRe-tu-XSc" id="2vF-2Y-Ipc"/>
+                        <outlet property="emailField" destination="Fpy-mt-njY" id="91S-KY-Xeb"/>
+                        <outlet property="passwordField" destination="ZiX-4Q-ZZC" id="KsY-mJ-8Ko"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -217,48 +219,78 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m8L-U2-QZY">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m8L-U2-QZY">
                                 <rect key="frame" x="16" y="82" width="343" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="23"/>
                                 <state key="normal" title="Create a Project"/>
                                 <connections>
                                     <segue destination="Kn4-c0-9Sq" kind="show" identifier="CreateProject" id="T43-dE-oEN"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wLq-gg-Xjr">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wLq-gg-Xjr">
                                 <rect key="frame" x="307" y="44" width="52" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="Log out"/>
                                 <connections>
                                     <segue destination="BYZ-38-t0r" kind="show" identifier="Logout" id="YDh-3o-jHY"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vMi-Wx-vvG">
-                                <rect key="frame" x="16" y="386" width="343" height="40"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="23"/>
-                                <state key="normal" title="View Project"/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ajo-1g-8er">
+                                <rect key="frame" x="0.0" y="130" width="375" height="648"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="LAb-E3-IpN">
+                                    <size key="itemSize" width="170" height="161"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cell" id="clG-Ch-jxG">
+                                        <rect key="frame" x="0.0" y="0.0" width="170" height="161"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="170" height="161"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Image" translatesAutoresizingMaskIntoConstraints="NO" id="T5O-3F-Ykj">
+                                                    <rect key="frame" x="0.0" y="0.0" width="170" height="161"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <color key="tintColor" white="1" alpha="0.60000002379999995" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v5F-uT-1sw">
+                                                    <rect key="frame" x="8" y="63" width="153" height="29"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </view>
+                                    </collectionViewCell>
+                                </cells>
                                 <connections>
-                                    <segue destination="Ukw-4a-vco" kind="show" identifier="ViewProject" id="TwH-3j-TDA"/>
+                                    <outlet property="dataSource" destination="9oE-wu-JnM" id="lHF-je-oex"/>
+                                    <outlet property="delegate" destination="9oE-wu-JnM" id="HvD-Ef-J2X"/>
+                                </connections>
+                            </collectionView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rHd-Dp-giw">
+                                <rect key="frame" x="172" y="391" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <segue destination="Ukw-4a-vco" kind="show" identifier="ViewProject" id="lct-qx-bCP"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="m8L-U2-QZY" firstAttribute="top" secondItem="wLq-gg-Xjr" secondAttribute="bottom" constant="8" symbolic="YES" id="LUH-B1-P1r"/>
-                            <constraint firstItem="m8L-U2-QZY" firstAttribute="leading" secondItem="vMi-Wx-vvG" secondAttribute="leading" id="NwV-fc-hq9"/>
-                            <constraint firstItem="m8L-U2-QZY" firstAttribute="trailing" secondItem="vMi-Wx-vvG" secondAttribute="trailing" id="WCe-DH-xgR"/>
-                            <constraint firstItem="wLq-gg-Xjr" firstAttribute="top" secondItem="gZX-79-eyr" secondAttribute="top" id="eB3-xu-BHl"/>
-                            <constraint firstItem="vMi-Wx-vvG" firstAttribute="centerY" secondItem="iNl-u7-UKi" secondAttribute="centerY" id="hKP-PV-zVw"/>
-                            <constraint firstItem="wLq-gg-Xjr" firstAttribute="trailing" secondItem="iNl-u7-UKi" secondAttribute="trailingMargin" id="kCe-gb-eMm"/>
-                            <constraint firstItem="m8L-U2-QZY" firstAttribute="leading" secondItem="iNl-u7-UKi" secondAttribute="leadingMargin" id="l66-8C-dja"/>
-                            <constraint firstItem="wLq-gg-Xjr" firstAttribute="trailing" secondItem="m8L-U2-QZY" secondAttribute="trailing" id="wdZ-XC-4EL"/>
-                        </constraints>
                         <viewLayoutGuide key="safeArea" id="gZX-79-eyr"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rJT-dI-nsP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1409" y="36"/>
+            <point key="canvasLocation" x="1408.8" y="35.467980295566505"/>
         </scene>
         <!--CreateA Project View Controller-->
         <scene sceneID="IBT-aq-LRW">
@@ -475,6 +507,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="MEN-g5-Yib"/>
                     </view>
+                    <navigationItem key="navigationItem" id="kBW-Y5-RmF"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jMa-eg-uar" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -588,8 +621,11 @@
             <point key="canvasLocation" x="-1058.4000000000001" y="800.14992503748135"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Image" width="256" height="256"/>
+    </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="chT-jX-6aO"/>
+        <segue reference="lct-qx-bCP"/>
         <segue reference="UWL-vV-kQq"/>
         <segue reference="YDh-3o-jHY"/>
     </inferredMetricsTieBreakers>

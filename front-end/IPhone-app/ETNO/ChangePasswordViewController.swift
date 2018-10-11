@@ -23,10 +23,10 @@ class ChangePasswordViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "BackToLogin"){
-            let _ = segue.destination as! ViewController
+            let _ = segue.destination as! LoginViewController
         }
         else if (segue.identifier == "ChangePassword"){
-            let _ = segue.destination as! ViewController
+            let _ = segue.destination as! LoginViewController
         }
     }
     
