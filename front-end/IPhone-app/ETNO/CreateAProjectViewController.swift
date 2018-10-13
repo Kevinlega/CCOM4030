@@ -39,23 +39,24 @@ class CreateAProjectViewController: UIViewController {
         }
     }
     
-    
-    
     // MARK: - Creates the project
     
     func CreateProject(){
-        let QueryType = "2"
         let name = projectName.text!
         let description = projectDescription.text!
         let location = projectLocation.text!
         let folder_link = "the_link"
-        var done = false;
-        let url = URL(string: "http://54.81.239.120/createProjectAPI.php");
+
+        // Create the request to the API
+        let QueryType = "2"
+        let url = URL(string: "http://54.81.239.120/createProjectAPI.php")
         var request = URLRequest(url:url!)
         request.httpMethod = "POST"
-        let post = "queryType=\(QueryType)&name=\(name)&description=\(description)&location=\(location)&folder_link=\(folder_link)&user_id=\(user_id)";
-        print(post)
-        request.httpBody = post.data(using: String.Encoding.utf8);
+        let post = "queryType=\(QueryType)&name=\(name)&description=\(description)&location=\(location)&folder_link=\(folder_link)&user_id=\(user_id)"
+        request.httpBody = post.data(using: String.Encoding.utf8)
+        
+        let group = DispatchGroup()
+        group.enter()
         
         let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
             
@@ -80,12 +81,10 @@ class CreateAProjectViewController: UIViewController {
             catch {
                 print(error)
             }
-            done = true;
+            group.leave()
         }
         task.resume()
-        repeat {
-            RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.1))
-        } while !done
+        group.wait()
         return
     }
     
@@ -117,9 +116,6 @@ class CreateAProjectViewController: UIViewController {
                 vc.user_id = user_id
                 
             }
-            
-            
         }
     }
-    
 }

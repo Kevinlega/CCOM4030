@@ -40,19 +40,21 @@ class LoginViewController: UIViewController {
     
     // MARK: - Login Handler
     func CheckLogin() -> Bool{
-        var QueryType = "4"
         let email = emailField.text
         var password = passwordField.text
         var hashed_password = String()
         var salt = String()
         
-        var done = false;
-        let url = URL(string: "http://54.81.239.120/selectAPI.php");
+        // Create the request to the API
+        var QueryType = "4"
+        let url = URL(string: "http://54.81.239.120/selectAPI.php")
         var request = URLRequest(url:url!)
         request.httpMethod = "POST"
-        let post = "queryType=\(QueryType)&email=\(email!)";
-        print(post)
-        request.httpBody = post.data(using: String.Encoding.utf8);
+        let post = "queryType=\(QueryType)&email=\(email!)"
+        request.httpBody = post.data(using: String.Encoding.utf8)
+        
+        let group = DispatchGroup()
+        group.enter()
         
         let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
             
@@ -60,7 +62,6 @@ class LoginViewController: UIViewController {
                 print("error=\(error!)")
                 return
             }
-            // print("response = \(response!)")
             do {
                 let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSDictionary
                 
@@ -72,12 +73,11 @@ class LoginViewController: UIViewController {
             catch {
                 print("hi")
             }
-            done = true;
+            group.leave()
         }
         task.resume()
-        repeat {
-            RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.5))
-        } while !done
+        group.wait()
+        
         
         password = saltAndHash(password: password!, salt: salt)
         
@@ -95,20 +95,16 @@ class LoginViewController: UIViewController {
             group.enter()
             
             let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-                do
-                {
-                    
+                do{
                     let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String]
                     self.user_id = Int(json[0])!
                     group.leave()
-                    
-                }catch{
-                }
+                
+                }   catch{}
             }
+            
             task.resume()
             group.wait()
-            
-            
             return true
         }
         else {
@@ -128,14 +124,13 @@ class LoginViewController: UIViewController {
     
     // MARK: - Default Functions
     override func viewDidLoad() {
-        super.viewDidLoad()
-        
         // Do any additional setup after loading the view, typically from a nib.
+        super.viewDidLoad()
     }
     
     override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+        super.didReceiveMemoryWarning()
     }
     
     
@@ -161,11 +156,7 @@ class LoginViewController: UIViewController {
                     
                     self.present(alertController, animated: true, completion: nil)
                 }
-                
             }
-            
-            
-            
         }
     }
 }

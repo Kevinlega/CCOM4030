@@ -56,14 +56,17 @@ class DashboardViewController: UIViewController, UICollectionViewDelegate, UICol
     
     // MARK: - Connection to Database
     func GetProjects() {
-        let QueryType = "3";
-        var done = false;
-        let url = URL(string: "http://54.81.239.120/selectAPI.php");
+        
+        // Create the request to the API
+        let QueryType = "3"
+        let url = URL(string: "http://54.81.239.120/selectAPI.php")
         var request = URLRequest(url:url!)
         request.httpMethod = "POST"
-        let post = "queryType=\(QueryType)&uid=\(user_id)";
-        print(post)
-        request.httpBody = post.data(using: String.Encoding.utf8);
+        let post = "queryType=\(QueryType)&uid=\(user_id)"
+        request.httpBody = post.data(using: String.Encoding.utf8)
+        
+        let group = DispatchGroup()
+        group.enter()
         
         let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
             do {
@@ -79,12 +82,10 @@ class DashboardViewController: UIViewController, UICollectionViewDelegate, UICol
                     }
                 }
             }
-            done = true;
+            group.leave()
         }
         task.resume()
-        repeat {
-            RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.1))
-        } while !done
+        group.wait()
     }
     
     // MARK: - Default Functions

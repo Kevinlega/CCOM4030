@@ -102,15 +102,19 @@ class CreateAccountViewController: UIViewController {
     // Checks if user is already registered by email.
     
     func isRegistered(email: String) -> Bool{
-        let QueryType = "0";
-        var done = false;
-        var registered = false;
-        let url = URL(string: "http://54.81.239.120/selectAPI.php");
+        
+        var registered = false
+        
+        // Create the request to the API
+        let QueryType = "0"
+        let url = URL(string: "http://54.81.239.120/selectAPI.php")
         var request = URLRequest(url:url!)
         request.httpMethod = "POST"
-        let post = "queryType=\(QueryType)&email=\(email)";
-        print(post)
-        request.httpBody = post.data(using: String.Encoding.utf8);
+        let post = "queryType=\(QueryType)&email=\(email)"
+        request.httpBody = post.data(using: String.Encoding.utf8)
+        
+        let group = DispatchGroup()
+        group.enter()
         
         let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
             
@@ -130,26 +134,29 @@ class CreateAccountViewController: UIViewController {
             catch {
                 print(error)
             }
-            done = true;
+            group.leave()
         }
         task.resume()
-        repeat {
-            RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.1))
-        } while !done
-        return registered;
+        group.wait()
+        return registered
     }
 
     // MARK: - Creates the Account
     // Create an account
     
     func CreateAccount(name: String, email: String, password: String, salt: String) -> Void{
-        let QueryType = "0";
-        var done = false;
-        let url = URL(string: "http://54.81.239.120/insertAPI.php");
+
+        // Create the request to the API
+        let QueryType = "0"
+        let url = URL(string: "http://54.81.239.120/insertAPI.php")
         var request = URLRequest(url:url!)
         request.httpMethod = "POST"
-        let post = "queryType=\(QueryType)&name=\(name)&email=\(email)&password=\(password)&salt=\(salt)";
-        request.httpBody = post.data(using: String.Encoding.utf8);
+        let post = "queryType=\(QueryType)&name=\(name)&email=\(email)&password=\(password)&salt=\(salt)"
+        request.httpBody = post.data(using: String.Encoding.utf8)
+      
+        
+        let group = DispatchGroup()
+        group.enter()
         
         let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
             
@@ -169,18 +176,15 @@ class CreateAccountViewController: UIViewController {
                     else{
                         print("Uh Oh")
                     }
+                    group.leave()
                 }
             }
             catch {
                 print(error)
             }
-            done = true;
         }
         task.resume()
-        repeat {
-            RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.1))
-        } while !done
-        return
+        group.wait()
     }
     
     // MARK: - Segue Function

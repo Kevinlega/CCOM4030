@@ -88,6 +88,7 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
         var UserIdArray = [String()]
         var UserId = [String()]
         
+        // Create the request to the API
         var QueryType = "2";
         var url = URL(string: "http://54.81.239.120/selectAPI.php");
 
