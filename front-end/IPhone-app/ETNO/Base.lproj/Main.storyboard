@@ -76,7 +76,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                 <state key="normal" title="Forgot Password?"/>
                                 <connections>
-                                    <segue destination="bMh-Ap-jIQ" kind="show" identifier="ChangePassword" id="4ov-wm-Apc"/>
+                                    <segue destination="bMh-Ap-jIQ" kind="show" identifier="ChangePassword" id="ryS-wK-hcO"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -591,6 +591,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="23"/>
                                 <state key="normal" title="Change Password"/>
                                 <connections>
+                                    <action selector="ChangeThePassword:" destination="bMh-Ap-jIQ" eventType="touchUpInside" id="uhb-cW-DWt"/>
                                     <segue destination="BYZ-38-t0r" kind="show" identifier="ChangePassword" id="CBX-sx-lGI"/>
                                 </connections>
                             </button>
@@ -622,13 +623,13 @@
                                 <rect key="frame" x="16" y="231" width="343" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES" textContentType="new-password"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Confirm New Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JU2-MV-MDB">
                                 <rect key="frame" x="16" y="324" width="343" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES" textContentType="password"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YGg-ub-F4v">
                                 <rect key="frame" x="135" y="452" width="105" height="36"/>
@@ -677,6 +678,11 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="k0p-sv-CoS"/>
                     </view>
+                    <connections>
+                        <outlet property="ConfirmPassword" destination="JU2-MV-MDB" id="5ag-9t-bSn"/>
+                        <outlet property="NewPassword" destination="nXl-qA-zcj" id="0dv-LL-Ayy"/>
+                        <outlet property="email" destination="UgF-ex-2pQ" id="aBI-oT-wK9"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4J6-qx-CRe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -688,7 +694,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="iT3-Xx-2rP"/>
-        <segue reference="YSk-mB-5ei"/>
-        <segue reference="YDh-3o-jHY"/>
+        <segue reference="UWL-vV-kQq"/>
+        <segue reference="8Q6-CN-bGS"/>
     </inferredMetricsTieBreakers>
 </document>

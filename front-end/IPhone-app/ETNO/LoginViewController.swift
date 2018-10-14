@@ -3,7 +3,7 @@
 //  ETNO
 //
 //  Created by Kevin Legarreta on 10/10/18.
-//  Copyright © 2018 Los 5. All rights reserved.
+//  Copyright © 2018 Los Duendes Malvados. All rights reserved.
 //
 
 import UIKit
@@ -68,6 +68,7 @@ class LoginViewController: UIViewController {
                 if let parseJSON = json {
                     hashed_password = parseJSON["hashed_password"] as! String
                     salt = parseJSON["salt"] as! String
+                    
                 }
             }
             catch {
@@ -153,7 +154,7 @@ class LoginViewController: UIViewController {
                 else{
                     let alertController = UIAlertController(title: "Error", message: "Credentials are incorrect.", preferredStyle: UIAlertController.Style.alert)
                     alertController.addAction(UIAlertAction.init(title: "Dismiss", style: UIAlertAction.Style.destructive, handler: {(alert: UIAlertAction!) in print("Bad")}))
-                    
+            
                     self.present(alertController, animated: true, completion: nil)
                 }
             }

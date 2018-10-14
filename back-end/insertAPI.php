@@ -1,31 +1,94 @@
 <?php
-    include_once "config.php";
-    $queryType = $_REQUEST["queryType"];
 
-    if($queryType == 0){
-        $name = $_REQUEST["name"];
-        $email = $_REQUEST["email"];
-        $password = $_REQUEST["password"];
-        $salt = $_REQUEST["salt"];
-        $query = "INSERT INTO users (name,email,hashed_password,salt) VALUES ('$name','$email','$password','$salt')";
-    }
+/**
+ * Insert API: version with sanitized input to prevent SQL injection.
+ */
+include_once "config.php";
 
-	if($queryType == 1){
-		$project_id = (int)$_REQUEST["pid"];
-		$user_id = (int)$_REQUEST["uid"];
-		$query = "INSERT INTO user_project (project_id,user_id) VALUES ($project_id,$user_id)";
+define("CREATE_USER",      0);
+define("ADD_USER_PROJECT", 1);
+define("CREATE_PROJECT",   2);
+
+if(isset($_REQUEST['queryType'])) {
+	$queryType = $_REQUEST["queryType"];
+
+	switch($queryType) {
+
+		   case CREATE_USER:
+				$query = "INSERT INTO users (name,email,hashed_password,salt) VALUES (?, ?, ?, ?)";
+
+				if(!$statement = $connection->prepare($query)) {
+					echo "Prepare failed: (" . $connection->errno . ") " . $connection->error; 
+				}
+				$statement->bind_param("ssss", $name, $email, $password, $salt);
+
+				$name = $_REQUEST["name"];
+				$email = $_REQUEST["email"];
+				$password = $_REQUEST["password"];
+				$salt = $_REQUEST["salt"];
+
+				if(!$statement->execute()) {
+					$return = array("registered"=>false);
+				} else {
+					$return = array("registered"=>true);
+				}
+				echo json_encode($return);
+				break;
+
+		    case ADD_USER_PROJECT:
+				$query = "INSERT INTO user_project (project_id,user_id) VALUES (?, ?)";
+
+				if(!$statement = $connection->prepare($query)) {
+					echo "Prepare failed: (" . $connection->errno . ") " . $connection->error;
+				}
+				$statement->bind_param("ii", $project_id, $user_id);
+
+				$project_id = $_REQUEST["pid"];
+				$user_id = $_REQUEST["uid"];
+
+				if(!$statement->execute()) {
+					echo "Execution failed.";
+				}
+				break;
+
+		    case CREATE_PROJECT:
+				$query = "INSERT INTO projects(name, location, description, folder_link, user_id) VALUES(?, ?, ?, ?, ?)";
+				if(!$statement = $connection->prepare($query) ) {
+					echo "Prepare failed : (" . $connection->errno . ") " . $connection->error;
+				}
+				$statement->bind_param('ssssi', $name, $location, $description, $folder_link,$user_id);
+
+				$name = $_REQUEST['name'];
+				$location = $_REQUEST['location'];
+				$description = $_REQUEST['description'];
+				$user_id = $_REQUEST['user_id'];
+				$folder_link = $_REQUEST['folder_link'];
+
+				if(!$statement->execute()) {
+					$return = array("created"=>false);
+				} else {
+					$return = array("created"=>true);
+				}
+				$inserted_project = $statement->insert_id;
+
+				echo json_encode($return);
+
+				$statement->close();
+
+				// Create User Project Relation
+				$query = "INSERT INTO user_project(user_id, project_id) VALUES(?, ?)";
+
+				if(!$statement = $connection->prepare($query)) {
+					echo "Prepare failed : (" . $connection->errno . ") " . $connection->error;
+				}
+				$statement->bind_param('ii', $user_id, $inserted_project);
+				$statement->execute();
+				break;
+		default:
+				echo "Invalid parameter";
 	}
-$connection->query($query);
-	if($connection->query($query)){
-		if($queryType == 0){
-			$return = array("registered"=>true);
-			echo json_encode($return);
-		}
-    }
-    else{
-		if($queryType == 0){
-			$return = array("registered"=>false);
-			echo json_encode($return);
-		}
-    }
+	$statement->close();
+}
+    
+    
 ?>

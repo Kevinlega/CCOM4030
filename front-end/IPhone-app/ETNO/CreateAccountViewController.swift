@@ -3,7 +3,7 @@
 //  ETNO
 //
 //  Created by Kevin Legarreta on 10/2/18.
-//  Copyright © 2018 Los 5. All rights reserved.
+//  Copyright © 2018 Los Duendes Malvados. All rights reserved.
 //
 import UIKit
 import Foundation
@@ -22,8 +22,6 @@ class CreateAccountViewController: UIViewController {
     @IBOutlet weak var ConfirmPassword: UITextField!
    
     var UserCanBeAdded = false
-    var QueryType = "CreateAccount"
-
     
     // MARK: - Create User Action (Button Press)
     

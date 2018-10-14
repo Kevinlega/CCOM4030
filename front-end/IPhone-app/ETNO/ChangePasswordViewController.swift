@@ -2,7 +2,7 @@
 //  ChangePasswordViewController.swift
 //  ETNO
 //
-//  Created by Kevin Legarreta on 10/2/18.
+//  Created by Kevin Legarreta on 10/13/18.
 //  Copyright © 2018 Los 5. All rights reserved.
 //
 
@@ -10,34 +10,154 @@ import UIKit
 
 class ChangePasswordViewController: UIViewController {
 
+    // MARK: - Variables
+    
+    @IBOutlet weak var email: UITextField!
+    @IBOutlet weak var ConfirmPassword: UITextField!
+    @IBOutlet weak var NewPassword: UITextField!
+    
+    var UserCanBeAdded = false
+    
+    // MARK: - Change Password Action
+    // Verify if all fields are entered and can proceed
+    @IBAction func ChangeThePassword(_ sender: Any) {
+        
+        let UserPassword = NewPassword.text
+        let UserEmail = email.text
+        let UserConfirmPassword = ConfirmPassword.text
+        
+        if (UserEmail!.isEmpty || UserPassword!.isEmpty || UserConfirmPassword!.isEmpty){
+            
+            let alertController = UIAlertController(title: "Error", message: "All fields are requiered.", preferredStyle: UIAlertController.Style.alert)
+            alertController.addAction(UIAlertAction.init(title: "Dismiss", style: UIAlertAction.Style.destructive, handler: {(alert: UIAlertAction!) in print("Bad")}))
+            
+            self.present(alertController, animated: true, completion: nil)
+        }
+            
+        else{ if(!(isRegistered(email: UserEmail!))){
+            
+            let alertController = UIAlertController(title: "Error", message: "Cannot change password.", preferredStyle: UIAlertController.Style.alert)
+            alertController.addAction(UIAlertAction.init(title: "Dismiss", style: UIAlertAction.Style.destructive, handler: {(alert: UIAlertAction!) in print("Bad")}))
+            
+            self.present(alertController, animated: true, completion: nil)
+        }
+            
+        else{
+            if(UserPassword! != UserConfirmPassword!){
+                
+                let alertController = UIAlertController(title: "Error", message: "Passwords don't match.", preferredStyle: UIAlertController.Style.alert)
+                alertController.addAction(UIAlertAction.init(title: "Dismiss", style: UIAlertAction.Style.destructive, handler: {(alert: UIAlertAction!) in print("Bad")}))
+                
+                self.present(alertController, animated: true, completion: nil)
+            }
+            else{
+                UserCanBeAdded = true
+            }
+            }
+        }
+    }
+    
+    // MARK: - Verifies if user exists
+    
+    func isRegistered(email: String) -> Bool{
+        
+        var registered = false
+        
+        // Create the request to the API
+        let QueryType = "0"
+        let url = URL(string: "http://54.81.239.120/selectAPI.php")
+        var request = URLRequest(url:url!)
+        request.httpMethod = "POST"
+        let post = "queryType=\(QueryType)&email=\(email)"
+        request.httpBody = post.data(using: String.Encoding.utf8)
+        
+        let group = DispatchGroup()
+        group.enter()
+        
+        let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
+            
+            if (error != nil) {
+                print("error=\(error!)")
+                return
+            }
+            do {
+                let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
+                
+                if let parseJSON = json {
+                    let queryResponse = (parseJSON["registered"] as? Bool)!
+                    registered = queryResponse
+                }
+            }
+            catch {
+                print(error)
+            }
+            group.leave()
+        }
+        task.resume()
+        group.wait()
+        return registered
+    }
+    
+    // MARK: - Changes the Password
+    func ChangePassword(email: String, password: String) {
+        
+        
+        // Create the request to the API
+        let QueryType = "0"
+        let url = URL(string: "http://54.81.239.120/updateAPI.php")
+        var request = URLRequest(url:url!)
+        request.httpMethod = "POST"
+        let post = "queryType=\(QueryType)&email=\(email)&password=\(password)"
+        request.httpBody = post.data(using: String.Encoding.utf8)
+        
+        let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in }
+        task.resume()
+    }
+        
+        
+    // MARK: - Password Handlers
+    // Self explanatory, returns a salted and hashed password
+    func saltAndHash(password: String, salt: String) -> String{
+        let hashedPassword = password + salt;
+        return hashedPassword
+        //        return String(hashedPassword.hashValue)
+    }
+    
+    // Generates salt for password
+    func saltGenerator(length: Int) -> String{
+        let characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTXUVXYZ0123456789";
+        let key = (0..<length).compactMap{_ in characters.randomElement()};
+        let salt = String(key);
+        return salt;
+    }
+    
+    // MARK: - Default Functions
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    // MARK: - Segue Function
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "BackToLogin"){
             let _ = segue.destination as! LoginViewController
         }
         else if (segue.identifier == "ChangePassword"){
-            let _ = segue.destination as! LoginViewController
+            if UserCanBeAdded{
+                var UserPassword = NewPassword.text
+                let UserEmail = email.text
+                let salt = saltGenerator(length: 5)
+                UserPassword = saltAndHash(password: UserPassword!, salt: salt)
+                ChangePassword(email: UserEmail!, password: UserPassword!)
+                let _ = segue.destination as! LoginViewController
+            }
         }
     }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
