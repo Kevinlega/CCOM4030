@@ -118,8 +118,7 @@ class LoginViewController: UIViewController {
     // Self explanatory, returns a salted and hashed password
     func saltAndHash(password: String, salt: String) -> String{
         let hashedPassword = password + salt;
-        return hashedPassword
-//        return String(hashedPassword.hashValue)
+        return String(hashedPassword.hash)
     }
     
     
@@ -127,6 +126,7 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         // Do any additional setup after loading the view, typically from a nib.
         super.viewDidLoad()
+        
     }
     
     override func didReceiveMemoryWarning() {

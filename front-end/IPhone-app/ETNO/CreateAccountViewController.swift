@@ -84,8 +84,7 @@ class CreateAccountViewController: UIViewController {
     // Self explanatory, returns a salted and hashed password
     func saltAndHash(password: String, salt: String) -> String{
         let hashedPassword = password + salt;
-        return hashedPassword
-//        return String(hashedPassword.hashValue)
+        return String(hashedPassword.hash)
     }
 
     // Generates salt for password

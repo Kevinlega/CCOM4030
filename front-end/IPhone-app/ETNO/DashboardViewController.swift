@@ -31,7 +31,6 @@ class DashboardViewController: UIViewController, UICollectionViewDelegate, UICol
 
     
     // MARK: - CollectionView Handlers
-
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return name.count
@@ -45,8 +44,6 @@ class DashboardViewController: UIViewController, UICollectionViewDelegate, UICol
     
         return cell
     }
-    
-    
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.project_id = Int(id[indexPath.row] as! String)!

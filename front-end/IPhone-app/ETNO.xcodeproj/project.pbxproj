@@ -10,6 +10,7 @@
 		0A421B8A216EDD0E00DA7452 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A421B89216EDD0E00DA7452 /* LoginViewController.swift */; };
 		0A4A29A42166521C00DF49EF /* ProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4A29A32166521C00DF49EF /* ProjectViewController.swift */; };
 		0A5807A121724978009874A8 /* ChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5807A021724978009874A8 /* ChangePasswordViewController.swift */; };
+		0A73FFFE2173D70100BB0664 /* ReusedFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A73FFFD2173D70100BB0664 /* ReusedFunctions.swift */; };
 		0A963BA3216EA7EA00EA187B /* CreateAProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A963BA2216EA7EA00EA187B /* CreateAProjectViewController.swift */; };
 		0A9B78B3215DA51300F48859 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9B78B2215DA51300F48859 /* AppDelegate.swift */; };
 		0A9B78B8215DA51300F48859 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A9B78B6215DA51300F48859 /* Main.storyboard */; };
@@ -43,6 +44,7 @@
 		0A421B89216EDD0E00DA7452 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		0A4A29A32166521C00DF49EF /* ProjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectViewController.swift; sourceTree = "<group>"; };
 		0A5807A021724978009874A8 /* ChangePasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewController.swift; sourceTree = "<group>"; };
+		0A73FFFD2173D70100BB0664 /* ReusedFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusedFunctions.swift; sourceTree = "<group>"; };
 		0A963BA2216EA7EA00EA187B /* CreateAProjectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateAProjectViewController.swift; sourceTree = "<group>"; };
 		0A9B78AF215DA51300F48859 /* ETNO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ETNO.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A9B78B2215DA51300F48859 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 				0A4A29A32166521C00DF49EF /* ProjectViewController.swift */,
 				0A421B89216EDD0E00DA7452 /* LoginViewController.swift */,
 				0A5807A021724978009874A8 /* ChangePasswordViewController.swift */,
+				0A73FFFD2173D70100BB0664 /* ReusedFunctions.swift */,
 			);
 			path = ETNO;
 			sourceTree = "<group>";
@@ -280,6 +283,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A73FFFE2173D70100BB0664 /* ReusedFunctions.swift in Sources */,
 				0ABE28D421642A33001C2385 /* CreateAccountViewController.swift in Sources */,
 				0A5807A121724978009874A8 /* ChangePasswordViewController.swift in Sources */,
 				0A963BA3216EA7EA00EA187B /* CreateAProjectViewController.swift in Sources */,
