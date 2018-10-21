@@ -29,7 +29,6 @@ class DashboardViewController: UIViewController, UICollectionViewDelegate, UICol
     var NoProject = false
     var CantLeave = true
 
-    
     // MARK: - CollectionView Handlers
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -114,7 +113,6 @@ class DashboardViewController: UIViewController, UICollectionViewDelegate, UICol
             vc.user_id = user_id
             vc.project_id = project_id
             
-         
         }
         else if (segue.identifier == "Logout"){
             let _ = segue.destination as! LoginViewController

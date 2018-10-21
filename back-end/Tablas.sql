@@ -1,5 +1,6 @@
 CREATE TABLE users (
   user_id int NOT NULL AUTO_INCREMENT,
+  initialValue int unsigned NOT NULL,
   name varchar(255) NOT NULL,
   email varchar(255) NOT NULL,
   hashed_password varchar(255) NOT NULL,

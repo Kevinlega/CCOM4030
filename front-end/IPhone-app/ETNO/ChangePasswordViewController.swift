@@ -28,34 +28,23 @@ class ChangePasswordViewController: UIViewController {
         
         if (UserEmail!.isEmpty || UserPassword!.isEmpty || UserConfirmPassword!.isEmpty){
             
-            let alertController = UIAlertController(title: "Error", message: "All fields are requiered.", preferredStyle: UIAlertController.Style.alert)
-            alertController.addAction(UIAlertAction.init(title: "Dismiss", style: UIAlertAction.Style.destructive, handler: {(alert: UIAlertAction!) in print("Bad")}))
-            
-            self.present(alertController, animated: true, completion: nil)
+           self.present(Alert(title: "Error", message: "All fields are requiered.", Dismiss: "Dismiss"),animated: true, completion: nil)
         }
-            
         else{ if(!(isRegistered(email: UserEmail!))){
             
-            let alertController = UIAlertController(title: "Error", message: "Cannot change password.", preferredStyle: UIAlertController.Style.alert)
-            alertController.addAction(UIAlertAction.init(title: "Dismiss", style: UIAlertAction.Style.destructive, handler: {(alert: UIAlertAction!) in print("Bad")}))
+            self.present(Alert(title: "Something went wrong.", message: "Cannot change password.", Dismiss: "Dismiss"),animated: true, completion: nil)
             
-            self.present(alertController, animated: true, completion: nil)
         }
-            
+        else{ if(UserPassword! != UserConfirmPassword!){
+                
+                self.present(Alert(title: "Error", message: "Passwords don't match.", Dismiss: "Dismiss"),animated: true, completion: nil)
+            }
         else{
-            if(UserPassword! != UserConfirmPassword!){
-                
-                let alertController = UIAlertController(title: "Error", message: "Passwords don't match.", preferredStyle: UIAlertController.Style.alert)
-                alertController.addAction(UIAlertAction.init(title: "Dismiss", style: UIAlertAction.Style.destructive, handler: {(alert: UIAlertAction!) in print("Bad")}))
-                
-                self.present(alertController, animated: true, completion: nil)
-            }
-            else{
-                UserCanBeAdded = true
-            }
+            UserCanBeAdded = true
             }
         }
     }
+}
     
     // MARK: - Verifies if user exists
     

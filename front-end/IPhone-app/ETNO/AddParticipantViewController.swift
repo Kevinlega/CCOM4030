@@ -43,10 +43,7 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
             UsersCanBeAdded = true
         }
         else{
-            let alertController = UIAlertController(title: "Cannot add", message: "No new participant was selected", preferredStyle: UIAlertController.Style.alert)
-            alertController.addAction(UIAlertAction.init(title: "Continue", style: UIAlertAction.Style.destructive, handler: {(alert: UIAlertAction!) in print("Bad")}))
-            
-            self.present(alertController, animated: true, completion: nil)
+            self.present(Alert(title: "Error", message: "No participant selected.", Dismiss: "Dismiss"),animated: true, completion: nil)
         }
     }
     

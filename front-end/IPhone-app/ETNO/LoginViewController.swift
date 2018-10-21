@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class LoginViewController: UIViewController {
 
     // MARK: - Variables
@@ -27,11 +28,7 @@ class LoginViewController: UIViewController {
         let password = passwordField.text
         
         if (password!.isEmpty || email!.isEmpty  ){
-            
-            let alertController = UIAlertController(title: "Error", message: "All fields are requiered.", preferredStyle: UIAlertController.Style.alert)
-            alertController.addAction(UIAlertAction.init(title: "Dismiss", style: UIAlertAction.Style.destructive, handler: {(alert: UIAlertAction!) in print("Bad")}))
-            
-            self.present(alertController, animated: true, completion: nil)
+            self.present(Alert(title: "Error", message: "All fields are requiered.", Dismiss: "Dismiss"),animated: true, completion: nil)
         }
         else{
             CanSendLogin = true
@@ -126,7 +123,6 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         // Do any additional setup after loading the view, typically from a nib.
         super.viewDidLoad()
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -152,10 +148,7 @@ class LoginViewController: UIViewController {
                     vc.user_id = user_id
                 }
                 else{
-                    let alertController = UIAlertController(title: "Error", message: "Credentials are incorrect.", preferredStyle: UIAlertController.Style.alert)
-                    alertController.addAction(UIAlertAction.init(title: "Dismiss", style: UIAlertAction.Style.destructive, handler: {(alert: UIAlertAction!) in print("Bad")}))
-            
-                    self.present(alertController, animated: true, completion: nil)
+                     self.present(Alert(title: "Error", message: "Credentials are incorrect.", Dismiss: "Dismiss"),animated: true, completion: nil)
                 }
             }
         }

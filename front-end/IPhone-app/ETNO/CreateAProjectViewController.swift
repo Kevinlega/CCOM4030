@@ -29,10 +29,7 @@ class CreateAProjectViewController: UIViewController {
         
         if (ProjectDescription!.isEmpty || ProjectLocation!.isEmpty || ProjectName!.isEmpty ){
             
-            let alertController = UIAlertController(title: "Error", message: "All fields are requiered.", preferredStyle: UIAlertController.Style.alert)
-            alertController.addAction(UIAlertAction.init(title: "Dismiss", style: UIAlertAction.Style.destructive, handler: {(alert: UIAlertAction!) in print("Bad")}))
-            
-            self.present(alertController, animated: true, completion: nil)
+            self.present(Alert(title: "Error", message: "All fields are requiered.", Dismiss: "Dismiss"),animated: true, completion: nil)
         }
         else{
             CanProjectBeAdded = true

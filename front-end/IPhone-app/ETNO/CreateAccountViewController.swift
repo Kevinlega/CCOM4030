@@ -39,60 +39,22 @@ class CreateAccountViewController: UIViewController {
         let UserConfirmPassword = ConfirmPassword.text
         
         if (UserName!.isEmpty || UserEmail!.isEmpty || UserPassword!.isEmpty || UserConfirmPassword!.isEmpty){
-            
-            let alertController = UIAlertController(title: "Error", message: "All fields are requiered.", preferredStyle: UIAlertController.Style.alert)
-            alertController.addAction(UIAlertAction.init(title: "Dismiss", style: UIAlertAction.Style.destructive, handler: {(alert: UIAlertAction!) in print("Bad")}))
-            
-            self.present(alertController, animated: true, completion: nil)
-        }
-            
+        
+            self.present(Alert(title: "Error", message: "All fields are requiered.", Dismiss: "Dismiss"),animated: true, completion: nil)
+            }
         else{ if(isRegistered(email: UserEmail!)){
                 
-                let alertController = UIAlertController(title: "Error", message: "Email is already registered.", preferredStyle: UIAlertController.Style.alert)
-                alertController.addAction(UIAlertAction.init(title: "Dismiss", style: UIAlertAction.Style.destructive, handler: {(alert: UIAlertAction!) in print("Bad")}))
-                
-                self.present(alertController, animated: true, completion: nil)
+                self.present(Alert(title: "Error", message: "Email is already in use.", Dismiss: "Dismiss"),animated: true, completion: nil)
                 }
+        else{ if(UserPassword! != UserConfirmPassword!){
             
-            else{ if(UserPassword! != UserConfirmPassword!){
-                    
-                    let alertController = UIAlertController(title: "Error", message: "Passwords don't match.", preferredStyle: UIAlertController.Style.alert)
-                    alertController.addAction(UIAlertAction.init(title: "Dismiss", style: UIAlertAction.Style.destructive, handler: {(alert: UIAlertAction!) in print("Bad")}))
-                    
-                    self.present(alertController, animated: true, completion: nil)
-                 }
-                  else{
-                    UserCanBeAdded = true
-                    }
+                self.present(Alert(title: "Error", message: "Passwords do not match.", Dismiss: "Dismiss"),animated: true, completion: nil)
+                }
+        else{
+                UserCanBeAdded = true
                 }
             }
         }
-    
-    // MARK: - Default Functions
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    // MARK: - Password Handlers
-    // Self explanatory, returns a salted and hashed password
-    func saltAndHash(password: String, salt: String) -> String{
-        let hashedPassword = password + salt;
-        return String(hashedPassword.hash)
-    }
-
-    // Generates salt for password
-    func saltGenerator(length: Int) -> String{
-        let characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTXUVXYZ0123456789";
-        let key = (0..<length).compactMap{_ in characters.randomElement()};
-        let salt = String(key);
-        return salt;
     }
     
     // MARK: - Verify if Registration is Posible
@@ -137,12 +99,12 @@ class CreateAccountViewController: UIViewController {
         group.wait()
         return registered
     }
-
+    
     // MARK: - Creates the Account
     // Create an account
     
     func CreateAccount(name: String, email: String, password: String, salt: String) -> Void{
-
+        
         // Create the request to the API
         let QueryType = "0"
         let url = URL(string: "http://54.81.239.120/insertAPI.php")
@@ -150,7 +112,7 @@ class CreateAccountViewController: UIViewController {
         request.httpMethod = "POST"
         let post = "queryType=\(QueryType)&name=\(name)&email=\(email)&password=\(password)&salt=\(salt)"
         request.httpBody = post.data(using: String.Encoding.utf8)
-      
+        
         
         let group = DispatchGroup()
         group.enter()
@@ -184,6 +146,18 @@ class CreateAccountViewController: UIViewController {
         group.wait()
     }
     
+    // MARK: - Default Functions
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Do any additional setup after loading the view.
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
     // MARK: - Segue Function
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "BackToLogin"){
@@ -201,12 +175,12 @@ class CreateAccountViewController: UIViewController {
                 let UserName = Name.text
                 let UserEmail = Email.text
                 
-               
-                let keyLength = 5;
-                let Salt = saltGenerator(length: keyLength)
+                let initialValue = generateRandomUInt()
+                let Salt = saltGenerator(length: 5, initialValue: initialValue)
+                UserPassword = LFSR(data: UserPassword!, initialValue: initialValue)
                 UserPassword = saltAndHash(password: UserPassword!,salt: Salt)
                 CreateAccount(name: UserName!, email: UserEmail!,password: UserPassword!, salt: Salt)
-                }
             }
         }
     }
+}
