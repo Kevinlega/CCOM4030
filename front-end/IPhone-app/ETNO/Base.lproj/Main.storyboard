@@ -570,6 +570,9 @@
                         <viewLayoutGuide key="safeArea" id="MEN-g5-Yib"/>
                     </view>
                     <navigationItem key="navigationItem" id="kBW-Y5-RmF"/>
+                    <connections>
+                        <outlet property="AddParticipant" destination="asg-2v-3RZ" id="nc6-g9-OxH"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jMa-eg-uar" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -694,7 +697,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="iT3-Xx-2rP"/>
-        <segue reference="UWL-vV-kQq"/>
-        <segue reference="YDh-3o-jHY"/>
+        <segue reference="YSk-mB-5ei"/>
+        <segue reference="CBX-sx-lGI"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -51,6 +51,7 @@ class ChangePasswordViewController: UIViewController {
     func isRegistered(email: String) -> Bool{
         
         var registered = false
+//        var response : NSDictionary
         
         // Create the request to the API
         let QueryType = "0"
@@ -59,6 +60,8 @@ class ChangePasswordViewController: UIViewController {
         request.httpMethod = "POST"
         let post = "queryType=\(QueryType)&email=\(email)"
         request.httpBody = post.data(using: String.Encoding.utf8)
+        
+//        response = ConnectToAPI(request: request)
         
         let group = DispatchGroup()
         group.enter()
@@ -84,6 +87,11 @@ class ChangePasswordViewController: UIViewController {
         }
         task.resume()
         group.wait()
+        
+//        if let parseJSON = json {
+//            let queryResponse = (parseJSON["registered"] as? Bool)!
+//            registered = queryResponse
+        
         return registered
     }
     

@@ -9,12 +9,18 @@
 import UIKit
 
 class ProjectViewController: UIViewController {
-    //    variables
+    // MARK: - Variables
     var user_id = Int()
     var project_id = Int()
+    var is_admin = Bool()
+    @IBOutlet weak var AddParticipant: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+       
+        if !is_admin{
+            AddParticipant.isHidden = true
+        }
         // Do any additional setup after loading the view.
     }
 
@@ -34,16 +40,4 @@ class ProjectViewController: UIViewController {
             vc.user_id = user_id
         }
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

@@ -42,6 +42,8 @@ class LoginViewController: UIViewController {
         var hashed_password = String()
         var salt = String()
         
+//        var response : NSDictionary
+        
         // Create the request to the API
         var QueryType = "4"
         let url = URL(string: "http://54.81.239.120/selectAPI.php")
@@ -49,6 +51,8 @@ class LoginViewController: UIViewController {
         request.httpMethod = "POST"
         let post = "queryType=\(QueryType)&email=\(email!)"
         request.httpBody = post.data(using: String.Encoding.utf8)
+        
+//        response = ConnectToAPI(request: request)
         
         let group = DispatchGroup()
         group.enter()
@@ -77,6 +81,10 @@ class LoginViewController: UIViewController {
         group.wait()
         
         
+//        if let parseJSON = json {
+//            hashed_password = parseJSON["hashed_password"] as! String
+//            salt = parseJSON["salt"] as! String
+        
         password = saltAndHash(password: password!, salt: salt)
         
         if (password == hashed_password){
@@ -89,6 +97,8 @@ class LoginViewController: UIViewController {
             
             request.httpBody = post.data(using: String.Encoding.utf8);
             
+            
+//            copy from above
             let group = DispatchGroup()
             group.enter()
             

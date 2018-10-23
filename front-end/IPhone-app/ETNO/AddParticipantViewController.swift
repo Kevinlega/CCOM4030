@@ -164,15 +164,13 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
                 let indexToDelete = SelectedUsers.firstIndex(of: (selectedUser.textLabel?.text)!)
                 SelectedUsers.remove(at: indexToDelete!)
                 DispatchQueue.main.asyncAfter(deadline: (DispatchTime.now()+0.15), execute: {tableView.reloadData()})
-                
-            }
+                }
             }
             
         else{
             
             if let selectedUser = tableView.cellForRow(at: indexPath){
                 if !(SelectedUsers.contains((selectedUser.textLabel?.text)!)){
-                    
                     
                     SelectedUsers.append((selectedUser.textLabel?.text)!)
                 

@@ -78,35 +78,19 @@ public func generateRandomUInt() -> UInt{
 }
 
 // MARK: - Connect to API
-public func ConnectToAPI(request: URLRequest){
+public func ConnectToAPI(request: URLRequest) -> NSDictionary{
+    
+    var json : NSDictionary = NSDictionary()
     let group = DispatchGroup()
     group.enter()
-
+    
     let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-        
-        if (error != nil) {
-            print("error=\(error!)")
-            return
-        }
-        // print("response = \(response!)")
-        do {
-            let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
-            
-            if let parseJSON = json {
-                let queryResponse = (parseJSON["registered"] as? Bool)!
-                if (queryResponse == true){
-                    print("Account succesfully created.")
-                }
-                else{
-                    print("Uh Oh")
-                }
-                group.leave()
+        do{
+            json = try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! NSDictionary
+            group.leave()
             }
         }
-        catch {
-            print(error)
-        }
-    }
     task.resume()
     group.wait()
+    return json
 }
