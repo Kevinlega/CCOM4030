@@ -9,6 +9,15 @@ CREATE TABLE users (
   PRIMARY KEY(user_id)
 );
 
+CREATE TABLE friends (
+  first_friend int NOT NULL,
+  second_friend int NOT NULL,
+  answered BOOLEAN DEFAULT false,
+  FOREIGN KEY (first_friend) REFERENCES users(user_id),
+  FOREIGN KEY (second_friend) REFERENCES users(user_id),
+  PRIMARY KEY (first_friend,second_friend)
+);
+
 CREATE TABLE projects (
   project_id int NOT NULL AUTO_INCREMENT,
   folder_link varchar(255) NOT NULL,

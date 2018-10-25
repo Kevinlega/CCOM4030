@@ -32,6 +32,9 @@ class DashboardViewController: UIViewController, UICollectionViewDelegate, UICol
     // MARK: - CollectionView Handlers
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if NoProject{
+            return 0
+        }
         return name.count
     }
     
@@ -49,54 +52,34 @@ class DashboardViewController: UIViewController, UICollectionViewDelegate, UICol
         performSegue(withIdentifier: "ViewProject", sender: nil)
     }
     
-    
-    // MARK: - Connection to Database
-    func GetProjects() {
-        
-        // Create the request to the API
-        let QueryType = "3"
-        let url = URL(string: "http://54.81.239.120/selectAPI.php")
-        var request = URLRequest(url:url!)
-        request.httpMethod = "POST"
-        let post = "queryType=\(QueryType)&uid=\(user_id)"
-        request.httpBody = post.data(using: String.Encoding.utf8)
-        
-        let group = DispatchGroup()
-        group.enter()
-        
-        let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-            do {
-                let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSDictionary
-                
-                if let parseJSON = json {
-                    if parseJSON!["empty"] as! String == "no"{
-                        self.name = parseJSON!["project_name"] as! NSArray
-                        self.id = parseJSON!["project_id"] as! NSArray
-                    }
-                    else{
-                        self.NoProject = true
-                    }
-                }
-            }
-            group.leave()
-        }
-        task.resume()
-        group.wait()
-    }
-    
     // MARK: - Default Functions
     override func loadViewIfNeeded() {
-        GetProjects()
+        let response = GetProjects(user_id: user_id)
+        if response["empty"] as! Bool == false{
+            self.name = response["project_name"] as! NSArray
+            self.id = response["project_id"] as! NSArray
+        }
+        else{
+            self.NoProject = true
+        }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        GetProjects()
+        let response = GetProjects(user_id: user_id)
+        if response["empty"] as! Bool == false{
+            self.name = response["project_name"] as! NSArray
+            self.id = response["project_id"] as! NSArray
+        }
+        else{
+            self.NoProject = true
+        }
         
 //        let width = ((collectionView!.frame.width) - leftAndRightPaddings) / numberOfItemsPerRow
 //        let layout = UICollectionViewLayout as! UICollectionViewFlowLayout
 //        layout.itemSize = CGSize(width: width, height: width + heightAdjustment)
+        
     }
 
     override func didReceiveMemoryWarning() {

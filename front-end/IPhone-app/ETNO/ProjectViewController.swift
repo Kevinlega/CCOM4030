@@ -17,7 +17,7 @@ class ProjectViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       
+        is_admin = CheckAdmin(project_id: project_id, user_id: user_id)
         if !is_admin{
             AddParticipant.isHidden = true
         }

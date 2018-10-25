@@ -57,95 +57,6 @@ class CreateAccountViewController: UIViewController {
         }
     }
     
-    // MARK: - Verify if Registration is Posible
-    // Checks if user is already registered by email.
-    
-    func isRegistered(email: String) -> Bool{
-        
-        var registered = false
-        
-        // Create the request to the API
-        let QueryType = "0"
-        let url = URL(string: "http://54.81.239.120/selectAPI.php")
-        var request = URLRequest(url:url!)
-        request.httpMethod = "POST"
-        let post = "queryType=\(QueryType)&email=\(email)"
-        request.httpBody = post.data(using: String.Encoding.utf8)
-        
-        let group = DispatchGroup()
-        group.enter()
-        
-        let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-            
-            if (error != nil) {
-                print("error=\(error!)")
-                return
-            }
-            do {
-                let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
-                
-                if let parseJSON = json {
-                    let queryResponse = (parseJSON["registered"] as? Bool)!
-                    print (queryResponse)
-                    registered = queryResponse
-                }
-            }
-            catch {
-                print(error)
-            }
-            group.leave()
-        }
-        task.resume()
-        group.wait()
-        return registered
-    }
-    
-    // MARK: - Creates the Account
-    // Create an account
-    
-    func CreateAccount(name: String, email: String, password: String, salt: String) -> Void{
-        
-        // Create the request to the API
-        let QueryType = "0"
-        let url = URL(string: "http://54.81.239.120/insertAPI.php")
-        var request = URLRequest(url:url!)
-        request.httpMethod = "POST"
-        let post = "queryType=\(QueryType)&name=\(name)&email=\(email)&password=\(password)&salt=\(salt)"
-        request.httpBody = post.data(using: String.Encoding.utf8)
-        
-        
-        let group = DispatchGroup()
-        group.enter()
-        
-        let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-            
-            if (error != nil) {
-                print("error=\(error!)")
-                return
-            }
-            // print("response = \(response!)")
-            do {
-                let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
-                
-                if let parseJSON = json {
-                    let queryResponse = (parseJSON["registered"] as? Bool)!
-                    if (queryResponse == true){
-                        print("Account succesfully created.")
-                    }
-                    else{
-                        print("Uh Oh")
-                    }
-                    group.leave()
-                }
-            }
-            catch {
-                print(error)
-            }
-        }
-        task.resume()
-        group.wait()
-    }
-    
     // MARK: - Default Functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -169,8 +80,6 @@ class CreateAccountViewController: UIViewController {
                 // Finally register the user:
                 // Salt and Hash password
                 
-                let _ = segue.destination as! LoginViewController
-                
                 var UserPassword = Password.text
                 let UserName = Name.text
                 let UserEmail = Email.text
@@ -179,7 +88,14 @@ class CreateAccountViewController: UIViewController {
                 let Salt = saltGenerator(length: 5, initialValue: initialValue)
                 UserPassword = LFSR(data: UserPassword!, initialValue: initialValue)
                 UserPassword = saltAndHash(password: UserPassword!,salt: Salt)
-                CreateAccount(name: UserName!, email: UserEmail!,password: UserPassword!, salt: Salt)
+                
+                // maybe do while?
+                if CreateAccount(name: UserName!, email: UserEmail!,password: UserPassword!, salt: Salt){
+                    let _ = segue.destination as! LoginViewController
+                }
+                else{
+                    self.present(Alert(title: "Could not register", message: "Try Again", Dismiss: "Dismiss"),animated: true, completion: nil)
+                }
             }
         }
     }

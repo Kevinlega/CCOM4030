@@ -8,6 +8,7 @@ include_once "config.php";
 define("CREATE_USER",      0);
 define("ADD_USER_PROJECT", 1);
 define("CREATE_PROJECT",   2);
+define("SEND_REQUEST",     3);
 
 if(isset($_REQUEST['queryType'])) {
 	$queryType = $_REQUEST["queryType"];
@@ -32,7 +33,7 @@ if(isset($_REQUEST['queryType'])) {
 				} else {
 					$return = array("registered"=>true);
 				}
-				echo json_encode($return);
+
 				break;
 
 		    case ADD_USER_PROJECT:
@@ -47,7 +48,9 @@ if(isset($_REQUEST['queryType'])) {
 				$user_id = $_REQUEST["uid"];
 
 				if(!$statement->execute()) {
-					echo "Execution failed.";
+					$return = array("registered"=>false);
+				} else {
+					$return = array("registered"=>true);
 				}
 				break;
 
@@ -66,13 +69,12 @@ if(isset($_REQUEST['queryType'])) {
 
 				if(!$statement->execute()) {
 					$return = array("created"=>false);
+					break;
 				} else {
-					$return = array("created"=>true);
+					$inserted_project = $statement->insert_id;
+					$return = array("created"=>true,"project_id"=>$inserted_project);
 				}
-				$inserted_project = $statement->insert_id;
-
-				echo json_encode($return);
-
+				
 				$statement->close();
 
 				// Create User Project Relation
@@ -84,10 +86,33 @@ if(isset($_REQUEST['queryType'])) {
 				$statement->bind_param('ii', $user_id, $inserted_project);
 				$statement->execute();
 				break;
+
+			case SEND_REQUEST:
+			    $query = "INSERT INTO friends(first_id, second_id, answered) VALUES(?, (SELECT user_id FROM users WHERE email=(?)), false)";
+
+				if(!$statement = $connection->prepare($query) ) {
+					echo "Prepare failed : (" . $connection->errno . ") " . $connection->error;
+				}
+				$statement->bind_param('ss', $first_id, $second_id);
+
+				$first_id = $_REQUEST['uid'];
+				$second_id = $_REQUEST['email'];
+
+				if(!$statement->execute()) {
+					$return = array("created"=>false);
+				} else {
+					$inserted_project = $statement->insert_id;
+					$return = array("created"=>true,"project_id"=>$inserted_project);
+				}
+
+				break;
+
 		default:
 				echo "Invalid parameter";
 	}
 	$statement->close();
+	echo json_encode($return);						// Display the result of the query in JSON format.
+
 }
     
     

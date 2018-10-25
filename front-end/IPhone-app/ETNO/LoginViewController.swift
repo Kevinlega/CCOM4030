@@ -20,7 +20,6 @@ class LoginViewController: UIViewController {
     
     var CanSendLogin = false
     
-    
     // MARK: - Verify if Login can Happen
     @IBAction func CanLogin(_ sender: Any) {
         
@@ -34,100 +33,6 @@ class LoginViewController: UIViewController {
             CanSendLogin = true
         }
     }
-    
-    // MARK: - Login Handler
-    func CheckLogin() -> Bool{
-        let email = emailField.text
-        var password = passwordField.text
-        var hashed_password = String()
-        var salt = String()
-        
-//        var response : NSDictionary
-        
-        // Create the request to the API
-        var QueryType = "4"
-        let url = URL(string: "http://54.81.239.120/selectAPI.php")
-        var request = URLRequest(url:url!)
-        request.httpMethod = "POST"
-        let post = "queryType=\(QueryType)&email=\(email!)"
-        request.httpBody = post.data(using: String.Encoding.utf8)
-        
-//        response = ConnectToAPI(request: request)
-        
-        let group = DispatchGroup()
-        group.enter()
-        
-        let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-            
-            if (error != nil) {
-                print("error=\(error!)")
-                return
-            }
-            do {
-                let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSDictionary
-                
-                if let parseJSON = json {
-                    hashed_password = parseJSON["hashed_password"] as! String
-                    salt = parseJSON["salt"] as! String
-                    
-                }
-            }
-            catch {
-                print("hi")
-            }
-            group.leave()
-        }
-        task.resume()
-        group.wait()
-        
-        
-//        if let parseJSON = json {
-//            hashed_password = parseJSON["hashed_password"] as! String
-//            salt = parseJSON["salt"] as! String
-        
-        password = saltAndHash(password: password!, salt: salt)
-        
-        if (password == hashed_password){
-            QueryType = "2";
-            let url = URL(string: "http://54.81.239.120/selectAPI.php");
-            var request = URLRequest(url:url!)
-            
-            request.httpMethod = "POST"
-            let post = "queryType=\(QueryType)&email=\(email!)";
-            
-            request.httpBody = post.data(using: String.Encoding.utf8);
-            
-            
-//            copy from above
-            let group = DispatchGroup()
-            group.enter()
-            
-            let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-                do{
-                    let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String]
-                    self.user_id = Int(json[0])!
-                    group.leave()
-                
-                }   catch{}
-            }
-            
-            task.resume()
-            group.wait()
-            return true
-        }
-        else {
-            return false
-        }
-    }
-    
-    
-    // MARK: - Password Handlers
-    // Self explanatory, returns a salted and hashed password
-    func saltAndHash(password: String, salt: String) -> String{
-        let hashedPassword = password + salt;
-        return String(hashedPassword.hash)
-    }
-    
     
     // MARK: - Default Functions
     override func viewDidLoad() {
@@ -153,9 +58,10 @@ class LoginViewController: UIViewController {
         }
         else if (segue.identifier == "Dashboard"){
             if CanSendLogin{
-                if CheckLogin(){
+                let response = CheckLogin(email: emailField.text!, psw: passwordField.text!)
+                if (response["registered"] as! Bool) == true{
                     let vc = segue.destination as! DashboardViewController
-                    vc.user_id = user_id
+                    vc.user_id = response["uid"] as! Int
                 }
                 else{
                      self.present(Alert(title: "Error", message: "Credentials are incorrect.", Dismiss: "Dismiss"),animated: true, completion: nil)
