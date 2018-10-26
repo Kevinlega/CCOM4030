@@ -19,7 +19,9 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
     var project_id = Int()
     
     // List of every user in the data base that is not in the project
-    var users = [String()]
+    var pendingUsers = [String()]
+    var pendingEmail = [String()]
+    
     // Will Filtered the Users from using the Search Bar
     var FilteredUsers = [String()]
     // Users selected by the admin to add to the project
@@ -47,27 +49,6 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
         }
     }
     
-    
-    // MARK: - Retrieve Users
-    // Get the Users from the database
-    
-    func GetUsers(){
-        
-        var response : NSDictionary = NSDictionary()
-        let QueryType = "7";
-        let url = URL(string: "http://54.81.239.120/selectAPI.php")
-        var request = URLRequest(url:url!)
-        
-        request.httpMethod = "POST"
-        let post = "queryType=\(QueryType)&uid=\(user_id)"
-        request.httpBody = post.data(using: String.Encoding.utf8)
-        
-        response = ConnectToAPI(request: request)
-        
-        if ((response["empty"] as! Bool) != false){
-            FilteredUsers.append(response["name"] as! String)
-        }
-    }
     
     // MARK: - Modify the Tableview
     // Update the view of the table
@@ -130,7 +111,7 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
         }
         else if (searchBar.text!.contains("@") && searchBar.text!.count > 5){
             Searching = true
-            FilteredUsers = users.filter({$0.localizedCaseInsensitiveContains(searchBar.text!)})
+            FilteredUsers = pendingUsers.filter({$0.localizedCaseInsensitiveContains(searchBar.text!)})
             FilteredUsers = Array(Set(FilteredUsers).subtracting(SelectedUsers))
             
         }
@@ -145,7 +126,11 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        GetUsers()
+        let response = GetPendingRequest(user_id: user_id)
+        if response["empty"] as! Bool == false{
+            pendingUsers = response["name"] as! [String]
+            pendingEmail = response["email"] as! [String]
+        }
         
         // Do any additional setup after loading the view.
     }

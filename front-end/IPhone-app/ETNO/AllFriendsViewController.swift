@@ -47,39 +47,6 @@ class AllFriendsViewController: UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
-    
-    // MARK: - Retrieve Users
-    // Get the Users from the database
-    
-    func GetUsers(){
-        
-        let QueryType = "6"
-        let url = URL(string: "http://54.81.239.120/selectAPI.php")
-        var request = URLRequest(url:url!)
-        
-        request.httpMethod = "POST"
-        let post = "queryType=\(QueryType)&uid=\(user_id)";
-        request.httpBody = post.data(using: String.Encoding.utf8);
-        print(post)
-        let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-            do
-            {
-                let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! NSDictionary
-                
-                if ((json["empty"] as! Bool) == false){
-                    self.users = json["name"] as! [String]
-                }
-                
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-            }catch{
-                print("bad")
-            }
-        }
-        task.resume()
-    }
-    
     // MARK: - Modify the Tableview
     // Update the view of the table
     
@@ -156,7 +123,12 @@ class AllFriendsViewController: UIViewController, UITableViewDelegate, UITableVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        GetUsers()
+        let response = GetFriends(user_id: user_id)
+        if (response["empty"] as! Bool) == false{
+            users = response["name"] as! [String]
+            usersEmail = response["email"] as! [String]
+        }
+        
         // Do any additional setup after loading the view.
     }
     

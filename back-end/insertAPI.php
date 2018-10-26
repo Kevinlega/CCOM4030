@@ -16,17 +16,18 @@ if(isset($_REQUEST['queryType'])) {
 	switch($queryType) {
 
 		   case CREATE_USER:
-				$query = "INSERT INTO users (name,email,hashed_password,salt) VALUES (?, ?, ?, ?)";
+				$query = "INSERT INTO users (name,email,hashed_password,salt,initialValue) VALUES (?, ?, ?, ?,?)";
 
 				if(!$statement = $connection->prepare($query)) {
 					echo "Prepare failed: (" . $connection->errno . ") " . $connection->error; 
 				}
-				$statement->bind_param("ssss", $name, $email, $password, $salt);
+				$statement->bind_param("ssssi", $name, $email, $password, $salt,$initialValue);
 
 				$name = $_REQUEST["name"];
 				$email = $_REQUEST["email"];
 				$password = $_REQUEST["password"];
 				$salt = $_REQUEST["salt"];
+				$initialValue = $_REQUEST["initialValue"];
 
 				if(!$statement->execute()) {
 					$return = array("registered"=>false);

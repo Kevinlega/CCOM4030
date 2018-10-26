@@ -115,36 +115,17 @@ public func isRegistered(email: String) -> Bool{
     return (response["registered"] as! Bool)
 }
 
-// MARK: - Retrieve initial Value from database
-public func GetInitialValue(email: String) -> UInt{
-    
-    var response : NSDictionary = NSDictionary()
-    
-    // Create the request to the API
-    let QueryType = "0"
-    let url = URL(string: "http://54.81.239.120/selectAPI.php")
-    var request = URLRequest(url:url!)
-    request.httpMethod = "POST"
-    let post = "queryType=\(QueryType)&email=\(email)"
-    request.httpBody = post.data(using: String.Encoding.utf8)
-    
-    response = ConnectToAPI(request: request)
-    
-    return (response["initialValue"] as! UInt)
-}
-
-
 // MARK: - Changes the Password
-public func ChangePassword(email: String, password: String) {
+public func ChangePassword(email: String, password: String, initialValue: UInt,salt: String) {
     
     // Create the request to the API
     let QueryType = "0"
     let url = URL(string: "http://54.81.239.120/updateAPI.php")
     var request = URLRequest(url:url!)
     request.httpMethod = "POST"
-    let post = "queryType=\(QueryType)&email=\(email)&password=\(password)"
+    let post = "queryType=\(QueryType)&email=\(email)&password=\(password)&initialValue=\(initialValue)&salt=\(salt)"
     request.httpBody = post.data(using: String.Encoding.utf8)
-    
+
     let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in }
     task.resume()
 }
@@ -152,7 +133,7 @@ public func ChangePassword(email: String, password: String) {
 // MARK: - Creates the Account
 // Create an account
 
-public func CreateAccount(name: String, email: String, password: String, salt: String) -> Bool{
+public func CreateAccount(name: String, email: String, password: String, salt: String, initialValue: UInt) -> Bool{
     
     // Create the request to the API
     var response : NSDictionary = NSDictionary()
@@ -161,7 +142,7 @@ public func CreateAccount(name: String, email: String, password: String, salt: S
     let url = URL(string: "http://54.81.239.120/insertAPI.php")
     var request = URLRequest(url:url!)
     request.httpMethod = "POST"
-    let post = "queryType=\(QueryType)&name=\(name)&email=\(email)&password=\(password)&salt=\(salt)"
+    let post = "queryType=\(QueryType)&name=\(name)&email=\(email)&password=\(password)&salt=\(salt)&initialValue=\(initialValue)"
     request.httpBody = post.data(using: String.Encoding.utf8)
     
     response = ConnectToAPI(request: request)
@@ -205,16 +186,31 @@ public func CreateProject(user_id: Int, name: String, description: String, locat
 
 // MARK: - verifies if is admin
 public func CheckAdmin(project_id: Int, user_id: Int) -> Bool{
+    // Create the request to the API
+    let QueryType = "8"
+    let url = URL(string: "http://54.81.239.120/selectAPI.php")
+    var request = URLRequest(url:url!)
+    request.httpMethod = "POST"
+    let post = "queryType=\(QueryType)&pid=\(project_id)"
+    request.httpBody = post.data(using: String.Encoding.utf8)
     
-    return true
+    let response = ConnectToAPI(request: request)
+    
+    if (response["admin"] as! Int) == user_id{
+        return true
+    }
+    else{
+        return false
+    }
 }
 
 
 // MARK: - Login Handler
-func CheckLogin(email: String, psw: String) -> NSDictionary{
+public func CheckLogin(email: String, psw: String) -> NSDictionary {
     var password = psw
     var hashed_password = String()
     var salt = String()
+    var initialValue : UInt
     
     var response : NSDictionary
     
@@ -231,11 +227,13 @@ func CheckLogin(email: String, psw: String) -> NSDictionary{
     if (response["empty"] as! Bool) == false{
         hashed_password = response["hashed_password"] as! String
         salt = response["salt"] as! String
+        initialValue = response["initialValue"] as! UInt
     }
     else{
         return ["registered": false]
     }
     
+    password = LFSR(data: password, initialValue: initialValue)
     password = saltAndHash(password: password, salt: salt)
     
     if (password == hashed_password){
@@ -256,3 +254,84 @@ func CheckLogin(email: String, psw: String) -> NSDictionary{
     }
 }
 
+// MARK: - Create a Request
+// Insert new users to the project
+
+public func SendRequest(user_id: Int, SelectedUsersEmail: [String] ) -> NSDictionary {
+    
+    let QueryType = "3"
+    let url = URL(string: "http://54.81.239.120/insertAPI.php")
+    var request = URLRequest(url:url!)
+    var FailedEmail = [String()]
+    
+    request.httpMethod = "POST"
+    
+    for email in SelectedUsersEmail {
+        
+        let post = "queryType=\(QueryType)&uid=\(user_id)&email=\(email)"
+        print(post)
+        request.httpBody = post.data(using: String.Encoding.utf8)
+        let response = ConnectToAPI(request: request)
+        
+        if response["inserted"] as! Bool == false{
+            FailedEmail.append(email)
+        }
+    }
+    if FailedEmail.count == 0{
+        return ["success": true]
+    }
+    else{
+        return ["success": false, "Failed": FailedEmail]
+    }
+}
+
+
+// MARK: - Retrieve Pending Requests
+// Get the Users from the database
+
+func GetPendingRequest(user_id: Int) -> NSDictionary{
+    
+    let QueryType = "7";
+    let url = URL(string: "http://54.81.239.120/selectAPI.php")
+    var request = URLRequest(url:url!)
+    
+    request.httpMethod = "POST"
+    let post = "queryType=\(QueryType)&uid=\(user_id)"
+    request.httpBody = post.data(using: String.Encoding.utf8)
+    
+    return ConnectToAPI(request: request)
+}
+
+
+// MARK: - Retrieve All Friends
+// Get the Users from the database
+
+public func GetFriends(user_id: Int) -> NSDictionary {
+    
+    let QueryType = "6"
+    let url = URL(string: "http://54.81.239.120/selectAPI.php")
+    var request = URLRequest(url:url!)
+    
+    request.httpMethod = "POST"
+    let post = "queryType=\(QueryType)&uid=\(user_id)";
+    request.httpBody = post.data(using: String.Encoding.utf8);
+    
+    return ConnectToAPI(request: request)
+}
+
+
+// MARK: - Get Participants of a project
+// Get the Users from the database
+
+public func GetParticipants(project_id: Int, user_id: Int) -> NSDictionary{
+    
+    let QueryType = "1";
+    let url = URL(string: "http://54.81.239.120/selectAPI.php");
+    var request = URLRequest(url:url!)
+    
+    request.httpMethod = "POST"
+    let post = "queryType=\(QueryType)&pid=\(project_id)&uid=\(user_id)";
+    request.httpBody = post.data(using: String.Encoding.utf8);
+    
+    return ConnectToAPI(request: request)
+}

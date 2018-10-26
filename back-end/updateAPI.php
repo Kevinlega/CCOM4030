@@ -5,7 +5,10 @@
     if($queryType == 0){
         $email = $_REQUEST["email"];
         $password = $_REQUEST["password"];
-        $query = "UPDATE users SET hashed_password = '$password' WHERE email = '$email'";
+        $salt = $_REQUEST["salt"];
+        $initialValue = $_REQUEST["initialValue"];
+
+        $query = "UPDATE users SET hashed_password = '$password', initialValue = '$initialValue', salt = '$salt'  WHERE email = '$email'";
     }
 
     $result = $connection->query($query);

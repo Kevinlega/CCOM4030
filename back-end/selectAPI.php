@@ -16,6 +16,8 @@ define("GET_ALL_FRIENDS_WITH_USER_ID", 6);
 
 define("GET_PENDING_REQUEST",          7);
 
+define("GET_ADMIN_ID",                 8);
+
 
 
 if(isset($_REQUEST['queryType'])) {
@@ -46,24 +48,38 @@ if(isset($_REQUEST['queryType'])) {
 
 		case USERS_NOT_IN_PROJECT :
 			$project_id = $_REQUEST["pid"];
-			$users = array();
-			$query = "SELECT email 
+			$user_id = $_REQUEST["uid"];
+			$emails = array();
+			$names = array();
+			$query = 
+	   			"SELECT email, name 
 				  FROM users 
 				  WHERE users.user_id NOT IN (
 				  	SELECT user_id 
 					FROM user_project 
-					WHERE user_project.project_id=(?) )";
+					WHERE user_project.project_id=(?) ) 
+				  AND users.user_id IN (
+					  SELECT name, email FROM users 
+					  WHERE users.user_id IN (
+					  	SELECT second_friend 
+						FROM friends 
+						WHERE friends.first_friend = (?) AND friends.answered=true) 
+						OR users.user_id IN (
+						SELECT first_friend
+						FROM friends
+						WHERE friends.second_friend = (?) AND friends.answered=true))";
 			
 			$statement = $connection->prepare($query);			// Prepare the query statement. (for sanitation)
-			$statement->bind_param('i', $project_id);			// Bind the parameters with the sql query.
+			$statement->bind_param('iii', $project_id,$user_id,$user_id);			// Bind the parameters with the sql query.
 			$statement->execute();						// Execute the now sanitized query.
-			$statement->bind_result($email);				// Asign the fetch value to this new variable.
+			$statement->bind_result($email, $name);				// Asign the fetch value to this new variable.
 
 			while($statement->fetch()) {
-				$users[] = $email;
+				$emails[] = $email;
+				$names[] = $name
 			} 
 			if(count($users) > 0) {
-				$return = array("empty" => false,"users" => $users);
+				$return = array("empty" => false,"names" => $names,"emails" => $emails);
 			} else {
 				$return = array("empty" => true);
 			}
@@ -118,22 +134,22 @@ if(isset($_REQUEST['queryType'])) {
 		case GET_HASH_AND_SALT:
 			$email = $_REQUEST["email"];
 
-			$query = "SELECT hashed_password, salt 
+			$query = "SELECT hashed_password, salt, initialValue 
 				  FROM users 
 				  WHERE email=(?)";
 
 			$statement = $connection->prepare($query);			// Prepare the query statement. (for sanitation)
 			$statement->bind_param('s', $email);				// Bind the parameters with the sql query.
 			$statement->execute();						// Execute the now sanitized query.
-			$statement->bind_result($hashed_password, $salt);	    	// Asign the fetch value to these new variables.
+			$statement->bind_result($hashed_password, $salt, $initialValue);	    	// Asign the fetch value to these new variables.
 			$statement->fetch();
 
-			$return = array("hashed_password" => $hashed_password,"salt" => $salt);
+			$return = array("hashed_password" => $hashed_password,"salt" => $salt, "initialValue"=> $initialValue);
 			break;
 
 		case GET_NAME_WITH_EMAIL:
 			$email = $_REQUEST["email"];
-			$query = "SELECT name FROM users WHERE email=(?) AND ()";
+			$query = "SELECT name FROM users WHERE email=(?)";
 
 			$statement = $connection->prepare($query);			// Prepare the query statement. (for sanitation)
 			$statement->bind_param('s', $email);				// Bind the parameters with the sql query.
@@ -147,7 +163,6 @@ if(isset($_REQUEST['queryType'])) {
 			else{
 				$empty = false;
 			}
-
 
 			$return = array("name" => $name,"empty"=>$empty);
 
@@ -187,26 +202,8 @@ if(isset($_REQUEST['queryType'])) {
 
 		case GET_PENDING_REQUEST:
 			$user_id = $_REQUEST["uid"];
-			$name_unanswered = array();
-			$email_unanswered = array();
 			$name_pending = array();
 			$email_pending = array();
-
-			$query = "SELECT name, email FROM users 
-				  WHERE users.user_id IN (
-				  	SELECT first_friend 
-					FROM friends 
-					WHERE friends.first_friend = (?) AND friends.answered=false)"; 
-
-			$statement = $connection->prepare($query);			// Prepare the query statement. (for sanitation)
-			$statement->bind_param('i', $user_id);				// Bind the parameters with the sql query.
-			$statement->execute();						// Execute the now sanitized query.
-			$statement->bind_result($name, $email);		// Asign the fetch value to these new variables.
-
-			while($statement->fetch()) {
-				$name_unanswered[] = "$name";
-				$email_unanswered[] = "$email";
-			}
 
 			$query = "SELECT name, email FROM users 
 				  WHERE users.user_id IN (
@@ -225,10 +222,26 @@ if(isset($_REQUEST['queryType'])) {
 			}
 			
 			if(count($name_unanswered) > 0) {
-				$return = array("empty" => false,"name_pending" => $name_pending,"email_pending" => $email_pending,"name_unanswered" => $name_unanswered, "email_unanswered"=+ $email_unanswered);
+				$return = array("empty" => false,"name" => $name_pending,"email" => $email_pending);
 			} else {
 				$return = array("empty" => true);
 			}
+
+			break;
+		
+		case GET_ADMIN_ID:
+			
+			$project_id = $_REQUEST["pid"];
+			$query = "SELECT admin FROM project WHERE project_id=(?)";
+
+			$statement = $connection->prepare($query);	// Prepare the query statement. (for sanitation)
+			$statement->bind_param('i', $project_id);	// Bind the parameters with the sql query.
+			$statement->execute();						// Execute the now sanitized query.
+
+			$statement->bind_result($admin);	    	    // Asign the fetch value to these new variables.
+			$statement->fetch();
+
+			$return = array("admin" => $admin);
 
 			break;
 

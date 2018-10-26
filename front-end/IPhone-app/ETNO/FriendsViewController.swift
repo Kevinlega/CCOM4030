@@ -46,27 +46,6 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    // MARK: - Create a Request
-    // Insert new users to the project
-    
-    func SendRequest(){
-        
-        let QueryType = "3"
-        let url = URL(string: "http://54.81.239.120/insertAPI.php")
-        var request = URLRequest(url:url!)
-        
-        request.httpMethod = "POST"
-        
-        for email in SelectedUsersEmail {
-            
-            let post = "queryType=\(QueryType)&uid=\(user_id)&email=\(email)"
-            print(post)
-            request.httpBody = post.data(using: String.Encoding.utf8)
-            let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in }
-            task.resume()
-        }
-    }
-    
     // MARK: - Modify the Tableview
     // Update the view of the table
     
@@ -124,14 +103,13 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     // MARK: - Search Bar Actions
-    
     // Use the search bar to search users
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text == nil || searchBar.text == ""{
             Searching = false
             view.endEditing(true)
         }
-        else if (searchBar.text!.contains("@") && searchBar.text!.count > 5 && searchBar.text!.contains(".com")){
+        else if (searchBar.text!.contains("@") && searchBar.text!.count > 15 && searchBar.text!.contains(".com")){
             Searching = true
             var response : NSDictionary = NSDictionary()
             let QueryType = "5";
@@ -169,14 +147,18 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     // MARK: - Segue Function
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Send friend request
         if (segue.identifier == "SendFriendRequest"){
             if(UsersCanBeAdded){
-                SendRequest()
-                let vc = segue.destination as! DashboardViewController
-                vc.user_id = user_id
+                let response = SendRequest(user_id: self.user_id, SelectedUsersEmail: self.SelectedUsersEmail)
+                if (response["success"] as! Bool) == true{
+                    let vc = segue.destination as! DashboardViewController
+                    vc.user_id = user_id
+                }
+                else{
+                    print(response["Failed"]!)
+                }
             }
         } // Go back to the Dashboard view
         else if (segue.identifier == "BackToDashboard"){

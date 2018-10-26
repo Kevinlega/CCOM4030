@@ -90,7 +90,7 @@ class CreateAccountViewController: UIViewController {
                 UserPassword = saltAndHash(password: UserPassword!,salt: Salt)
                 
                 // maybe do while?
-                if CreateAccount(name: UserName!, email: UserEmail!,password: UserPassword!, salt: Salt){
+                if CreateAccount(name: UserName!, email: UserEmail!,password: UserPassword!, salt: Salt, initialValue: initialValue){
                     let _ = segue.destination as! LoginViewController
                 }
                 else{

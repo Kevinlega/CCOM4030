@@ -27,16 +27,12 @@ class ChangePasswordViewController: UIViewController {
         let UserConfirmPassword = ConfirmPassword.text
         
         if (UserEmail!.isEmpty || UserPassword!.isEmpty || UserConfirmPassword!.isEmpty){
-            
            self.present(Alert(title: "Error", message: "All fields are requiered.", Dismiss: "Dismiss"),animated: true, completion: nil)
         }
         else{ if(!(isRegistered(email: UserEmail!))){
-            
             self.present(Alert(title: "Something went wrong.", message: "Cannot change password.", Dismiss: "Dismiss"),animated: true, completion: nil)
-            
         }
         else{ if(UserPassword! != UserConfirmPassword!){
-                
                 self.present(Alert(title: "Error", message: "Passwords don't match.", Dismiss: "Dismiss"),animated: true, completion: nil)
             }
         else{
@@ -49,7 +45,6 @@ class ChangePasswordViewController: UIViewController {
     // MARK: - Default Functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         // Do any additional setup after loading the view.
     }
     
@@ -68,11 +63,11 @@ class ChangePasswordViewController: UIViewController {
             if UserCanBeAdded{
                 var UserPassword = NewPassword.text
                 let UserEmail = email.text
-                let initialValue = GetInitialValue(email: UserEmail!)
+                let initialValue = generateRandomUInt()
                 let salt = saltGenerator(length: 5,initialValue: initialValue)
                 UserPassword = LFSR(data: UserPassword!, initialValue: initialValue)
                 UserPassword = saltAndHash(password: UserPassword!, salt: salt)
-                ChangePassword(email: UserEmail!, password: UserPassword!)
+                ChangePassword(email: UserEmail!, password: UserPassword!,initialValue: initialValue,salt: salt)
                 let _ = segue.destination as! LoginViewController
             }
         }
