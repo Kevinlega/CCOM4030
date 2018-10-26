@@ -59,11 +59,9 @@ if(isset($_REQUEST['queryType'])) {
 					FROM user_project 
 					WHERE user_project.project_id=(?) ) 
 				  AND users.user_id IN (
-					  SELECT name, email FROM users 
-					  WHERE users.user_id IN (
 					  	SELECT second_friend 
 						FROM friends 
-						WHERE friends.first_friend = (?) AND friends.answered=true) 
+						WHERE friends.first_friend = (?) AND friends.answered=true)
 						OR users.user_id IN (
 						SELECT first_friend
 						FROM friends
@@ -76,7 +74,7 @@ if(isset($_REQUEST['queryType'])) {
 
 			while($statement->fetch()) {
 				$emails[] = $email;
-				$names[] = $name
+				$names[] = $name;
 			} 
 			if(count($users) > 0) {
 				$return = array("empty" => false,"names" => $names,"emails" => $emails);
@@ -144,7 +142,12 @@ if(isset($_REQUEST['queryType'])) {
 			$statement->bind_result($hashed_password, $salt, $initialValue);	    	// Asign the fetch value to these new variables.
 			$statement->fetch();
 
-			$return = array("hashed_password" => $hashed_password,"salt" => $salt, "initialValue"=> $initialValue);
+			if(empty($hashed_password)){
+				$return = array("empty"=>true);
+			}
+			else{
+				$return = array("empty"=> false,"hashed_password" => $hashed_password,"salt" => $salt, "initialValue"=> $initialValue);
+			}
 			break;
 
 		case GET_NAME_WITH_EMAIL:
@@ -175,11 +178,11 @@ if(isset($_REQUEST['queryType'])) {
 
 			$query = "SELECT name, email FROM users 
 				  WHERE users.user_id IN (
-				  	SELECT first_friend 
+				  	SELECT second_friend 
 					FROM friends 
 					WHERE friends.first_friend = (?) AND friends.answered=true) 
 					OR users.user_id IN (
-					SELECT second_friend
+					SELECT first_friend
 					FROM friends
 					WHERE friends.second_friend = (?) AND friends.answered=true)"; 
 
@@ -232,7 +235,7 @@ if(isset($_REQUEST['queryType'])) {
 		case GET_ADMIN_ID:
 			
 			$project_id = $_REQUEST["pid"];
-			$query = "SELECT admin FROM project WHERE project_id=(?)";
+			$query = "SELECT admin FROM projects WHERE project_id=(?)";
 
 			$statement = $connection->prepare($query);	// Prepare the query statement. (for sanitation)
 			$statement->bind_param('i', $project_id);	// Bind the parameters with the sql query.

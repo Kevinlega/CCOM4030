@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="F9P-cB-t9L">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -414,10 +414,10 @@
             </objects>
             <point key="canvasLocation" x="3094" y="-2056"/>
         </scene>
-        <!--Tab Bar Controller-->
+        <!--Tab Bar View Controller-->
         <scene sceneID="bgG-uZ-iI4">
             <objects>
-                <tabBarController id="F9P-cB-t9L" sceneMemberID="viewController">
+                <tabBarController id="F9P-cB-t9L" customClass="TabBarViewController" customModule="ETNO" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ld2-Pn-Ny7">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -512,7 +512,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="23"/>
                                 <state key="normal" title="Friends"/>
                                 <connections>
-                                    <segue destination="F9P-cB-t9L" kind="show" id="7UE-VE-jjd"/>
+                                    <segue destination="F9P-cB-t9L" kind="show" identifier="Friends" id="7UE-VE-jjd"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -530,6 +530,9 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="gZX-79-eyr"/>
                     </view>
+                    <connections>
+                        <segue destination="Ukw-4a-vco" kind="show" identifier="ViewProject" id="WNt-Nf-6pJ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rJT-dI-nsP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -753,6 +756,18 @@
                                     <segue destination="7UN-HE-faA" kind="show" identifier="AddParticipants" id="5qV-Xp-Sn9"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cxV-HH-Aer">
+                                <rect key="frame" x="310" y="95" width="49" height="53"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button" image="Image-1"/>
+                                <connections>
+                                    <action selector="importImage:" destination="Ukw-4a-vco" eventType="touchUpInside" id="Jcb-qc-ZY0"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tuh-ag-SCo">
+                                <rect key="frame" x="0.0" y="285" width="375" height="197"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -768,6 +783,7 @@
                     <navigationItem key="navigationItem" id="kBW-Y5-RmF"/>
                     <connections>
                         <outlet property="AddParticipant" destination="asg-2v-3RZ" id="nc6-g9-OxH"/>
+                        <outlet property="imageView" destination="tuh-ag-SCo" id="i0n-tl-gJO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jMa-eg-uar" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -890,10 +906,11 @@
     </scenes>
     <resources>
         <image name="Image" width="256" height="256"/>
+        <image name="Image-1" width="256" height="256"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Gib-ww-PL3"/>
-        <segue reference="M9A-UH-uc0"/>
+        <segue reference="YSk-mB-5ei"/>
         <segue reference="YDh-3o-jHY"/>
     </inferredMetricsTieBreakers>
 </document>

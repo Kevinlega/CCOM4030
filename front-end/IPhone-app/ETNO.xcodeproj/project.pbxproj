@@ -11,6 +11,7 @@
 		0A4A29A42166521C00DF49EF /* ProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4A29A32166521C00DF49EF /* ProjectViewController.swift */; };
 		0A5807A121724978009874A8 /* ChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5807A021724978009874A8 /* ChangePasswordViewController.swift */; };
 		0A73FFFE2173D70100BB0664 /* ReusedFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A73FFFD2173D70100BB0664 /* ReusedFunctions.swift */; };
+		0A8B596121837B3B009EEDC6 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8B596021837B3B009EEDC6 /* TabBarViewController.swift */; };
 		0A963BA3216EA7EA00EA187B /* CreateAProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A963BA2216EA7EA00EA187B /* CreateAProjectViewController.swift */; };
 		0A9B78B3215DA51300F48859 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9B78B2215DA51300F48859 /* AppDelegate.swift */; };
 		0A9B78B8215DA51300F48859 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A9B78B6215DA51300F48859 /* Main.storyboard */; };
@@ -48,6 +49,7 @@
 		0A4A29A32166521C00DF49EF /* ProjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectViewController.swift; sourceTree = "<group>"; };
 		0A5807A021724978009874A8 /* ChangePasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewController.swift; sourceTree = "<group>"; };
 		0A73FFFD2173D70100BB0664 /* ReusedFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusedFunctions.swift; sourceTree = "<group>"; };
+		0A8B596021837B3B009EEDC6 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		0A963BA2216EA7EA00EA187B /* CreateAProjectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateAProjectViewController.swift; sourceTree = "<group>"; };
 		0A9B78AF215DA51300F48859 /* ETNO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ETNO.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A9B78B2215DA51300F48859 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 				0AFA5FDA217FE2D000CB360D /* FriendsViewController.swift */,
 				0AE8F27F2180F97000298297 /* PendingRequestViewController.swift */,
 				0AE8F2812180FA5600298297 /* AllFriendsViewController.swift */,
+				0A8B596021837B3B009EEDC6 /* TabBarViewController.swift */,
 			);
 			path = ETNO;
 			sourceTree = "<group>";
@@ -302,6 +305,7 @@
 				0A4A29A42166521C00DF49EF /* ProjectViewController.swift in Sources */,
 				0AE8F2822180FA5600298297 /* AllFriendsViewController.swift in Sources */,
 				0ABE28DC216431CA001C2385 /* AddParticipantViewController.swift in Sources */,
+				0A8B596121837B3B009EEDC6 /* TabBarViewController.swift in Sources */,
 				0ABE28D8216430AB001C2385 /* DashboardViewController.swift in Sources */,
 				0AE8F2802180F97000298297 /* PendingRequestViewController.swift in Sources */,
 			);
@@ -476,8 +480,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = WNLDE44E2U;
+				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = NO;
 				INFOPLIST_FILE = ETNO/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -485,8 +491,10 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.los5.ETNO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				STRIP_INSTALLED_PRODUCT = YES;
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -494,8 +502,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = WNLDE44E2U;
+				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = NO;
 				INFOPLIST_FILE = ETNO/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -503,8 +513,10 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.los5.ETNO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				STRIP_INSTALLED_PRODUCT = YES;
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

@@ -95,13 +95,16 @@ class DashboardViewController: UIViewController, UICollectionViewDelegate, UICol
             let vc = segue.destination as! ProjectViewController
             vc.user_id = user_id
             vc.project_id = project_id
-            
         }
         else if (segue.identifier == "Logout"){
             let _ = segue.destination as! LoginViewController
         }
         else if (segue.identifier == "CreateProject"){
             let vc = segue.destination as! CreateAProjectViewController
+            vc.user_id = user_id
+        }
+        else if (segue.identifier == "Friends"){
+            let vc = segue.destination as! TabBarViewController
             vc.user_id = user_id
         }
     }

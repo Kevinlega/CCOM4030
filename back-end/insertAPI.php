@@ -16,6 +16,11 @@ if(isset($_REQUEST['queryType'])) {
 	switch($queryType) {
 
 		   case CREATE_USER:
+		   		$name = $_REQUEST["name"];
+				$email = $_REQUEST["email"];
+				$password = $_REQUEST["password"];
+				$salt = $_REQUEST["salt"];
+				$initialValue = $_REQUEST["initialValue"];
 				$query = "INSERT INTO users (name,email,hashed_password,salt,initialValue) VALUES (?, ?, ?, ?,?)";
 
 				if(!$statement = $connection->prepare($query)) {
@@ -23,11 +28,7 @@ if(isset($_REQUEST['queryType'])) {
 				}
 				$statement->bind_param("ssssi", $name, $email, $password, $salt,$initialValue);
 
-				$name = $_REQUEST["name"];
-				$email = $_REQUEST["email"];
-				$password = $_REQUEST["password"];
-				$salt = $_REQUEST["salt"];
-				$initialValue = $_REQUEST["initialValue"];
+
 
 				if(!$statement->execute()) {
 					$return = array("registered"=>false);
@@ -56,7 +57,7 @@ if(isset($_REQUEST['queryType'])) {
 				break;
 
 		    case CREATE_PROJECT:
-				$query = "INSERT INTO projects(name, location, description, folder_link, user_id) VALUES(?, ?, ?, ?, ?)";
+				$query = "INSERT INTO projects(name, location, description, folder_link, admin) VALUES(?, ?, ?, ?, ?)";
 				if(!$statement = $connection->prepare($query) ) {
 					echo "Prepare failed : (" . $connection->errno . ") " . $connection->error;
 				}
@@ -111,10 +112,8 @@ if(isset($_REQUEST['queryType'])) {
 		default:
 				echo "Invalid parameter";
 	}
+
 	$statement->close();
 	echo json_encode($return);						// Display the result of the query in JSON format.
-
 }
-    
-    
 ?>

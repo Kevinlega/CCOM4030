@@ -88,7 +88,7 @@ public func ConnectToAPI(request: URLRequest) -> NSDictionary{
         do{
             json = try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! NSDictionary
             group.leave()
-            }
+        }
         }
     task.resume()
     group.wait()
@@ -109,6 +109,7 @@ public func isRegistered(email: String) -> Bool{
     request.httpMethod = "POST"
     let post = "queryType=\(QueryType)&email=\(email)"
     request.httpBody = post.data(using: String.Encoding.utf8)
+    
     
     response = ConnectToAPI(request: request)
     
@@ -142,7 +143,9 @@ public func CreateAccount(name: String, email: String, password: String, salt: S
     let url = URL(string: "http://54.81.239.120/insertAPI.php")
     var request = URLRequest(url:url!)
     request.httpMethod = "POST"
-    let post = "queryType=\(QueryType)&name=\(name)&email=\(email)&password=\(password)&salt=\(salt)&initialValue=\(initialValue)"
+
+    let post = "queryType=\(QueryType)&name=\(name)&email=\(email)&password=\(password)&salt=\(salt)&initialValue=\(initialValue))"
+
     request.httpBody = post.data(using: String.Encoding.utf8)
     
     response = ConnectToAPI(request: request)
@@ -195,7 +198,6 @@ public func CheckAdmin(project_id: Int, user_id: Int) -> Bool{
     request.httpBody = post.data(using: String.Encoding.utf8)
     
     let response = ConnectToAPI(request: request)
-    
     if (response["admin"] as! Int) == user_id{
         return true
     }
@@ -269,7 +271,6 @@ public func SendRequest(user_id: Int, SelectedUsersEmail: [String] ) -> NSDictio
     for email in SelectedUsersEmail {
         
         let post = "queryType=\(QueryType)&uid=\(user_id)&email=\(email)"
-        print(post)
         request.httpBody = post.data(using: String.Encoding.utf8)
         let response = ConnectToAPI(request: request)
         

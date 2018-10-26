@@ -6,6 +6,7 @@ CREATE TABLE users (
   hashed_password varchar(255) NOT NULL,
   salt varchar(255) NOT NULL,
   UNIQUE (email),
+  verified BOOLEAN DEFAULT false,
   PRIMARY KEY(user_id)
 );
 

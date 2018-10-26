@@ -62,6 +62,7 @@ class CreateAProjectViewController: UIViewController {
         else if (segue.identifier == "CreateProject"){
             if CanProjectBeAdded{
                 let response = CreateProject(user_id: user_id,name: projectName.text!, description: projectDescription.text!, location: projectLocation.text!)
+                
                 if (response["created"] as! Bool) ==  true{
                     let vc = segue.destination as! ProjectViewController
                     vc.user_id = user_id

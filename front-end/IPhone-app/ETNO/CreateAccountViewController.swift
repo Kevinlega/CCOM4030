@@ -37,9 +37,8 @@ class CreateAccountViewController: UIViewController {
         let UserName = Name.text
         let UserEmail = Email.text
         let UserConfirmPassword = ConfirmPassword.text
-        
+
         if (UserName!.isEmpty || UserEmail!.isEmpty || UserPassword!.isEmpty || UserConfirmPassword!.isEmpty){
-        
             self.present(Alert(title: "Error", message: "All fields are requiered.", Dismiss: "Dismiss"),animated: true, completion: nil)
             }
         else{ if(isRegistered(email: UserEmail!)){

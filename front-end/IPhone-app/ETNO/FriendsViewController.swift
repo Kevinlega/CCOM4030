@@ -109,7 +109,7 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
             Searching = false
             view.endEditing(true)
         }
-        else if (searchBar.text!.contains("@") && searchBar.text!.count > 15 && searchBar.text!.contains(".com")){
+        else if (searchBar.text!.contains("@") && searchBar.text!.count > 10 && searchBar.text!.contains(".com")){
             Searching = true
             var response : NSDictionary = NSDictionary()
             let QueryType = "5";
@@ -137,7 +137,7 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print(user_id)
         // Do any additional setup after loading the view.
     }
     
