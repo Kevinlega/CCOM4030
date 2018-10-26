@@ -88,7 +88,7 @@ class CreateAccountViewController: UIViewController {
                 UserPassword = LFSR(data: UserPassword!, initialValue: initialValue)
                 UserPassword = saltAndHash(password: UserPassword!,salt: Salt)
                 
-                // maybe do while?
+                SaveToKeychain(email: UserEmail!, password: UserPassword!)
                 if CreateAccount(name: UserName!, email: UserEmail!,password: UserPassword!, salt: Salt, initialValue: initialValue){
                     let _ = segue.destination as! LoginViewController
                 }

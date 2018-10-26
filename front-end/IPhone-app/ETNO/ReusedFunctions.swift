@@ -208,7 +208,7 @@ public func CheckAdmin(project_id: Int, user_id: Int) -> Bool{
 
 
 // MARK: - Login Handler
-public func CheckLogin(email: String, psw: String) -> NSDictionary {
+public func CheckLogin(email: String, psw: String, Biometric: Bool) -> NSDictionary {
     var password = psw
     var hashed_password = String()
     var salt = String()
@@ -235,8 +235,11 @@ public func CheckLogin(email: String, psw: String) -> NSDictionary {
         return ["registered": false]
     }
     
-    password = LFSR(data: password, initialValue: initialValue)
-    password = saltAndHash(password: password, salt: salt)
+    
+    if !Biometric{
+        password = LFSR(data: password, initialValue: initialValue)
+        password = saltAndHash(password: password, salt: salt)
+    }
     
     if (password == hashed_password){
         // Create Request
@@ -335,4 +338,16 @@ public func GetParticipants(project_id: Int, user_id: Int) -> NSDictionary{
     request.httpBody = post.data(using: String.Encoding.utf8);
     
     return ConnectToAPI(request: request)
+}
+
+// MARK: - Save to keychain function
+// Takes email and  hashed password and stores it in icloud keychain to be used for biometric login in the future.
+public func SaveToKeychain(email: String, password: String) {
+    UserDefaults.standard.set(email, forKey: "lastAccessedUserName")
+    let passwordItem = KeychainPasswordItem(service: KeychainConfiguration.serviceName, account: email, accessGroup: KeychainConfiguration.accessGroup)
+    do {
+        try passwordItem.savePassword(password)
+    } catch {
+        print("Error saving password")
+    }
 }

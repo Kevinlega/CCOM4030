@@ -7,18 +7,21 @@
 //
 
 import UIKit
-
+import LocalAuthentication
 
 class LoginViewController: UIViewController {
 
     // MARK: - Variables
     //    This will be equal to database response
     var user_id = Int()
+    var emailKeyChain = String()
+    var passwordKeyChain = String()
     
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
     
     var CanSendLogin = false
+    var BiometricAuthentication = false
     
     // MARK: - Verify if Login can Happen
     @IBAction func CanLogin(_ sender: Any) {
@@ -37,6 +40,7 @@ class LoginViewController: UIViewController {
     // MARK: - Default Functions
     override func viewDidLoad() {
         // Do any additional setup after loading the view, typically from a nib.
+        BiometricLogin()
         super.viewDidLoad()
     }
     
@@ -58,15 +62,70 @@ class LoginViewController: UIViewController {
         }
         else if (segue.identifier == "Dashboard"){
             if CanSendLogin{
-                let response = CheckLogin(email: emailField.text!, psw: passwordField.text!)
+                var response : NSDictionary = NSDictionary()
+                if BiometricAuthentication{
+                    response = CheckLogin(email: emailKeyChain, psw: passwordKeyChain,Biometric: BiometricAuthentication)
+                }
+                else{
+                    response = CheckLogin(email: emailField.text!, psw: passwordField.text!,Biometric: BiometricAuthentication)
+                }
+                
                 if (response["registered"] as! Bool) == true{
                     let vc = segue.destination as! DashboardViewController
                     vc.user_id = response["uid"] as! Int
                 }
                 else{
-                     self.present(Alert(title: "Error", message: "Credentials are incorrect.", Dismiss: "Dismiss"),animated: true, completion: nil)
+                    self.present(Alert(title: "Error", message: "Credentials are incorrect.", Dismiss: "Dismiss"),animated: true, completion: nil)
                 }
+                
             }
         }
+    }
+    
+    // MARK: - TOUCH/FACE ID
+    // Salvame papi dios
+    
+    // Get password from keychain
+    func LoadPassword(_ email: String){
+        let passwordItem = KeychainPasswordItem(service: KeychainConfiguration.serviceName, account: email, accessGroup: KeychainConfiguration.accessGroup)
+        do{
+            self.passwordKeyChain = try passwordItem.readPassword()
+            // Authenticate user using stored password from keychain. (Remember email is already registered and password is already hashed.)
+            BiometricAuthentication = true
+            self.performSegue(withIdentifier: "Dashboard", sender: nil)
+            
+        } catch KeychainPasswordItem.KeychainError.noPassword {
+            print("No saved password")
+        } catch {
+            print("Unhandled error")
+        }
+    }
+    
+    // MARK: - Biometric login
+    // If user presses biometric login button:
+    // Present biometric login window
+    // Take user to his dashboard if he is authenticated.
+    
+    func BiometricLogin(){
+        //  Request biometric authentication, we look for last accessed email in app and display authentication window.
+        let context = LAContext()
+        
+        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil){
+            guard let email = UserDefaults.standard.object(forKey: "lastAccessedUserName") as? String else {return}
+            CanSendLogin = true
+            context.evaluatePolicy(LAPolicy.deviceOwnerAuthenticationWithBiometrics, localizedReason: email, reply: { (authSuccessful, authError) in
+                if authSuccessful{
+                    self.emailKeyChain = email
+                    self.LoadPassword(email)
+                    print (self.user_id)
+                }
+                else{
+                }
+            })
+        }
+            // Device does not support biometric login.
+        else{}
+        print (BiometricAuthentication)
+        print (self.user_id)
     }
 }

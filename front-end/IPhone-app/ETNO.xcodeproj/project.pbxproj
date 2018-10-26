@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A29A4A021838F5300B35D25 /* KeychainConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A29A49E21838F5300B35D25 /* KeychainConfiguration.swift */; };
+		0A29A4A121838F5300B35D25 /* KeychainPasswordItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A29A49F21838F5300B35D25 /* KeychainPasswordItem.swift */; };
+		0A29A4A42183908600B35D25 /* LocalAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A29A4A32183908600B35D25 /* LocalAuthentication.framework */; };
 		0A421B8A216EDD0E00DA7452 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A421B89216EDD0E00DA7452 /* LoginViewController.swift */; };
 		0A4A29A42166521C00DF49EF /* ProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4A29A32166521C00DF49EF /* ProjectViewController.swift */; };
 		0A5807A121724978009874A8 /* ChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5807A021724978009874A8 /* ChangePasswordViewController.swift */; };
@@ -45,6 +48,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0A29A49E21838F5300B35D25 /* KeychainConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainConfiguration.swift; sourceTree = "<group>"; };
+		0A29A49F21838F5300B35D25 /* KeychainPasswordItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainPasswordItem.swift; sourceTree = "<group>"; };
+		0A29A4A32183908600B35D25 /* LocalAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LocalAuthentication.framework; path = System/Library/Frameworks/LocalAuthentication.framework; sourceTree = SDKROOT; };
 		0A421B89216EDD0E00DA7452 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		0A4A29A32166521C00DF49EF /* ProjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectViewController.swift; sourceTree = "<group>"; };
 		0A5807A021724978009874A8 /* ChangePasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewController.swift; sourceTree = "<group>"; };
@@ -76,6 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A29A4A42183908600B35D25 /* LocalAuthentication.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,6 +103,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0A29A4A22183908600B35D25 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0A29A4A32183908600B35D25 /* LocalAuthentication.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		0A9B78A6215DA51300F48859 = {
 			isa = PBXGroup;
 			children = (
@@ -103,6 +118,7 @@
 				0A9B78C6215DA51500F48859 /* ETNOTests */,
 				0A9B78D1215DA51500F48859 /* ETNOUITests */,
 				0A9B78B0215DA51300F48859 /* Products */,
+				0A29A4A22183908600B35D25 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -119,6 +135,8 @@
 		0A9B78B1215DA51300F48859 /* ETNO */ = {
 			isa = PBXGroup;
 			children = (
+				0A29A49E21838F5300B35D25 /* KeychainConfiguration.swift */,
+				0A29A49F21838F5300B35D25 /* KeychainPasswordItem.swift */,
 				0A9B78B2215DA51300F48859 /* AppDelegate.swift */,
 				0A9B78B6215DA51300F48859 /* Main.storyboard */,
 				0A9B78B9215DA51500F48859 /* Assets.xcassets */,
@@ -300,6 +318,7 @@
 				0A5807A121724978009874A8 /* ChangePasswordViewController.swift in Sources */,
 				0A963BA3216EA7EA00EA187B /* CreateAProjectViewController.swift in Sources */,
 				0A9B78B3215DA51300F48859 /* AppDelegate.swift in Sources */,
+				0A29A4A121838F5300B35D25 /* KeychainPasswordItem.swift in Sources */,
 				0A421B8A216EDD0E00DA7452 /* LoginViewController.swift in Sources */,
 				0AFA5FDB217FE2D000CB360D /* FriendsViewController.swift in Sources */,
 				0A4A29A42166521C00DF49EF /* ProjectViewController.swift in Sources */,
@@ -307,6 +326,7 @@
 				0ABE28DC216431CA001C2385 /* AddParticipantViewController.swift in Sources */,
 				0A8B596121837B3B009EEDC6 /* TabBarViewController.swift in Sources */,
 				0ABE28D8216430AB001C2385 /* DashboardViewController.swift in Sources */,
+				0A29A4A021838F5300B35D25 /* KeychainConfiguration.swift in Sources */,
 				0AE8F2802180F97000298297 /* PendingRequestViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
