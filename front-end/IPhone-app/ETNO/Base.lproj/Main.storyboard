@@ -259,8 +259,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="23"/>
                                 <state key="normal" title="Answer"/>
                                 <connections>
-                                    <action selector="sendAnswer:" destination="ZKY-JL-827" eventType="touchUpInside" id="DLt-3i-nz4"/>
-                                    <segue destination="9oE-wu-JnM" kind="show" id="M9A-UH-uc0"/>
+                                    <segue destination="9oE-wu-JnM" kind="show" identifier="SendFriendRequestAnswer" id="M9A-UH-uc0"/>
                                 </connections>
                             </button>
                             <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="vdz-AX-ZhK">
@@ -293,7 +292,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="23"/>
                                 <state key="normal" title="Back"/>
                                 <connections>
-                                    <segue destination="9oE-wu-JnM" kind="show" id="G2f-z4-n5c"/>
+                                    <segue destination="9oE-wu-JnM" kind="show" identifier="BackToDashboard" id="G2f-z4-n5c"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -336,15 +335,12 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="23"/>
                                 <state key="normal" title="Back"/>
                                 <connections>
-                                    <segue destination="9oE-wu-JnM" kind="show" id="uLk-8d-jeC"/>
+                                    <segue destination="9oE-wu-JnM" kind="show" identifier="BackToDashboard" id="uLk-8d-jeC"/>
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="54M-lc-Bpk">
                                 <rect key="frame" x="0.0" y="140" width="375" height="589"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="589" id="zRc-Wj-Zyb"/>
-                                </constraints>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Row" id="xIp-hU-kNC">
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
@@ -367,28 +363,18 @@
                                     <outlet property="delegate" destination="WRj-Bh-gzf" id="MZ0-9a-yR7"/>
                                 </connections>
                             </searchBar>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SGR-Fp-zOW">
-                                <rect key="frame" x="186" y="44" width="173" height="40"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="23"/>
-                                <state key="normal" title="Remove Selected"/>
-                                <connections>
-                                    <action selector="EliminateFriend:" destination="WRj-Bh-gzf" eventType="touchUpInside" id="aE8-bv-8Dj"/>
-                                    <segue destination="9oE-wu-JnM" kind="show" id="WZj-a6-xHP"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="B20-6e-XvI" firstAttribute="top" secondItem="Z1I-qY-Ae6" secondAttribute="top" id="25r-j3-DTB"/>
-                            <constraint firstItem="B20-6e-XvI" firstAttribute="baseline" secondItem="SGR-Fp-zOW" secondAttribute="baseline" id="8rS-oY-MJA"/>
-                            <constraint firstItem="54M-lc-Bpk" firstAttribute="bottom" secondItem="Z1I-qY-Ae6" secondAttribute="bottom" id="B56-T9-xRW"/>
-                            <constraint firstItem="54M-lc-Bpk" firstAttribute="top" secondItem="kXE-SX-IRV" secondAttribute="bottom" id="DoE-cf-OdP"/>
-                            <constraint firstItem="SGR-Fp-zOW" firstAttribute="trailing" secondItem="C5M-j6-d02" secondAttribute="trailingMargin" id="GZ2-BG-sVa"/>
-                            <constraint firstItem="54M-lc-Bpk" firstAttribute="leading" secondItem="C5M-j6-d02" secondAttribute="leading" id="VVR-lM-HVw"/>
-                            <constraint firstAttribute="trailing" secondItem="54M-lc-Bpk" secondAttribute="trailing" id="Yjy-xc-c8k"/>
-                            <constraint firstItem="B20-6e-XvI" firstAttribute="leading" secondItem="Z1I-qY-Ae6" secondAttribute="leading" constant="24" id="dmS-jc-pzK"/>
-                            <constraint firstItem="54M-lc-Bpk" firstAttribute="leading" secondItem="kXE-SX-IRV" secondAttribute="leading" id="xym-Vg-kL7"/>
-                            <constraint firstItem="54M-lc-Bpk" firstAttribute="trailing" secondItem="kXE-SX-IRV" secondAttribute="trailing" id="z1r-aE-TED"/>
+                            <constraint firstItem="54M-lc-Bpk" firstAttribute="top" secondItem="kXE-SX-IRV" secondAttribute="bottom" id="2Ml-Fh-EAX"/>
+                            <constraint firstItem="kXE-SX-IRV" firstAttribute="trailing" secondItem="54M-lc-Bpk" secondAttribute="trailing" id="4kc-K0-Qjc"/>
+                            <constraint firstItem="kXE-SX-IRV" firstAttribute="leading" secondItem="54M-lc-Bpk" secondAttribute="leading" id="970-Vm-BnB"/>
+                            <constraint firstItem="B20-6e-XvI" firstAttribute="leading" secondItem="Z1I-qY-Ae6" secondAttribute="leading" constant="24" id="Ce6-CH-Xmf"/>
+                            <constraint firstItem="54M-lc-Bpk" firstAttribute="bottom" secondItem="Z1I-qY-Ae6" secondAttribute="bottom" id="OyQ-tF-bQk"/>
+                            <constraint firstAttribute="trailing" secondItem="kXE-SX-IRV" secondAttribute="trailing" id="ZzO-ph-DqH"/>
+                            <constraint firstItem="kXE-SX-IRV" firstAttribute="leading" secondItem="C5M-j6-d02" secondAttribute="leading" id="bdb-F4-Eu7"/>
+                            <constraint firstItem="kXE-SX-IRV" firstAttribute="top" secondItem="B20-6e-XvI" secondAttribute="bottom" id="kip-jY-kgt"/>
+                            <constraint firstItem="B20-6e-XvI" firstAttribute="top" secondItem="Z1I-qY-Ae6" secondAttribute="top" id="sQg-vT-9yD"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Z1I-qY-Ae6"/>
                     </view>
@@ -1001,7 +987,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="chT-jX-6aO"/>
-        <segue reference="tM9-RE-h5g"/>
+        <segue reference="M9A-UH-uc0"/>
         <segue reference="YDh-3o-jHY"/>
     </inferredMetricsTieBreakers>
 </document>

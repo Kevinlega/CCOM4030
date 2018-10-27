@@ -242,7 +242,7 @@ if(isset($_REQUEST['queryType'])) {
 				$email_pending[] = $email;
 			}
 			
-			if(count($name_unanswered) > 0) {
+			if(count($name_pending) > 0) {
 				$return = array("empty" => false,"name" => $name_pending,"email" => $email_pending);
 			} else {
 				$return = array("empty" => true);

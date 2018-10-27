@@ -16,7 +16,6 @@ class AllFriendsViewController: UIViewController, UITableViewDelegate, UITableVi
     
     // Variables passed from previous view
     var user_id = Int()
-    var project_id = Int()
     
     // List of every user in the data base that is not in the project
     var users = [String()]
@@ -24,7 +23,6 @@ class AllFriendsViewController: UIViewController, UITableViewDelegate, UITableVi
     // Will Filtered the Users from using the Search Bar
     var FilteredUsers = [String()]
     // Users selected by the admin to add to the project
-    var SelectedUsers = [String()]
     
     // Flags to know if the list was empty and if the admin is searching for users.
     var FirstSelected = true
@@ -34,23 +32,6 @@ class AllFriendsViewController: UIViewController, UITableViewDelegate, UITableVi
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
-    
-    // MARK: - Add Participant Action (Button Press)
-    // Verify if we have users to add and alert if not
-    
-    @IBAction func EliminateFriend(_ sender: Any) {
-    }
-    
-    
-    @IBAction func CanWeAddUsers(_ sender: Any) {
-        
-        if (SelectedUsers.count > 0 && !FirstSelected){
-            UsersCanBeAdded = true
-        }
-        else{
-            self.present(Alert(title: "Error", message: "No participant selected.", Dismiss: "Dismiss"),animated: true, completion: nil)
-        }
-    }
     
     // MARK: - Modify the Tableview
     // Update the view of the table
@@ -74,35 +55,6 @@ class AllFriendsViewController: UIViewController, UITableViewDelegate, UITableVi
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if !Searching{
-            if let selectedUser = tableView.cellForRow(at: indexPath){
-                let indexToDelete = SelectedUsers.firstIndex(of: (selectedUser.textLabel?.text)!)
-                SelectedUsers.remove(at: indexToDelete!)
-                DispatchQueue.main.asyncAfter(deadline: (DispatchTime.now()+0.15), execute: {tableView.reloadData()})
-            }
-        }
-            
-        else{
-            
-            if let selectedUser = tableView.cellForRow(at: indexPath){
-                if !(SelectedUsers.contains((selectedUser.textLabel?.text)!)){
-                    
-                    SelectedUsers.append((selectedUser.textLabel?.text)!)
-                    
-                    if FirstSelected {
-                        SelectedUsers.remove(at: 0)
-                        FirstSelected = false
-                    }
-                    
-                    FilteredUsers = Array(Set(FilteredUsers).subtracting(SelectedUsers))
-                    DispatchQueue.main.asyncAfter(deadline: (DispatchTime.now()+0.15), execute: {tableView.reloadData()})
-                    
-                }
-            }
-        }
-    }
-    
     // MARK: - Search Bar Actions
     
     // Use the search bar to search users
@@ -114,7 +66,6 @@ class AllFriendsViewController: UIViewController, UITableViewDelegate, UITableVi
         else if (searchBar.text!.contains("@") && searchBar.text!.count > 5){
             Searching = true
             FilteredUsers = users.filter({$0.localizedCaseInsensitiveContains(searchBar.text!)})
-            FilteredUsers = Array(Set(FilteredUsers).subtracting(SelectedUsers))
             
         }
         else{
@@ -129,7 +80,6 @@ class AllFriendsViewController: UIViewController, UITableViewDelegate, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         user_id = TabBarViewController.User.uid
-        print(user_id)
 
         let response = GetFriends(user_id: user_id)
         if (response["empty"] as! Bool) == false{
@@ -148,18 +98,10 @@ class AllFriendsViewController: UIViewController, UITableViewDelegate, UITableVi
     // MARK: - Segue Function
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        //        Add particpants to project and move to the project view
-        if (segue.identifier == "AddParticipants"){
-            if (UsersCanBeAdded){
-                let vc = segue.destination as! ProjectViewController
-                vc.user_id = user_id
-                vc.project_id = project_id
-            }
-        } // Go back to the project view
-        else if (segue.identifier == "BackToProject"){
-            let vc = segue.destination as! ProjectViewController
+        
+        if (segue.identifier == "BackToDashboard"){
+            let vc = segue.destination as! DashboardViewController
             vc.user_id = user_id
-            vc.project_id = project_id
         }
     }
 }

@@ -90,7 +90,7 @@ if(isset($_REQUEST['queryType'])) {
 				break;
 
 			case SEND_REQUEST:
-			    $query = "INSERT INTO friends(first_id, second_id, answered) VALUES(?, (SELECT user_id FROM users WHERE email=(?)), false)";
+			    $query = "INSERT INTO friends(first_friend, second_friend, answered) VALUES(?, (SELECT user_id FROM users WHERE email=(?)), false)";
 
 				if(!$statement = $connection->prepare($query) ) {
 					echo "Prepare failed : (" . $connection->errno . ") " . $connection->error;
@@ -103,8 +103,7 @@ if(isset($_REQUEST['queryType'])) {
 				if(!$statement->execute()) {
 					$return = array("created"=>false);
 				} else {
-					$inserted_project = $statement->insert_id;
-					$return = array("created"=>true,"project_id"=>$inserted_project);
+					$return = array("created"=>true);
 				}
 
 				break;

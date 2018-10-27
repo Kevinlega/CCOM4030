@@ -351,3 +351,33 @@ public func SaveToKeychain(email: String, password: String) {
         print("Error saving password")
     }
 }
+
+// MARK: - Answer a Request
+// Insert new users to the project
+
+public func AnswerRequest(user_id: Int, SelectedUsersEmail: [String] ) -> NSDictionary {
+    
+    let QueryType = "2"
+    let url = URL(string: "http://54.81.239.120/updateAPI.php")
+    var request = URLRequest(url:url!)
+    var FailedEmail = [String()]
+    
+    request.httpMethod = "POST"
+    
+    for email in SelectedUsersEmail {
+        
+        let post = "queryType=\(QueryType)&uid=\(user_id)&email=\(email)"
+        request.httpBody = post.data(using: String.Encoding.utf8)
+        let response = ConnectToAPI(request: request)
+        
+        if response["updated"] as! Bool == false{
+            FailedEmail.append(email)
+        }
+    }
+    if FailedEmail.count == 1{
+        return ["success": true]
+    }
+    else{
+        return ["success": false, "Failed": FailedEmail]
+    }
+}

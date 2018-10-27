@@ -66,7 +66,7 @@ class DashboardViewController: UIViewController, UICollectionViewDelegate, UICol
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         let response = GetProjects(user_id: user_id)
         if response["empty"] as! Bool == false{
             self.name = response["project_name"] as! NSArray

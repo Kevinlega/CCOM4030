@@ -4,7 +4,8 @@
     ini_set('display_startup_errors', TRUE);
     
     define("UPDATE_PASSWORD", 0);
-    define("VERIFY_USER", 1);
+    define("VERIFY_USER",     1);
+    define("ANSWER_REQUEST",  2);
     include_once "config.php";
 	
     if(!isset($_REQUEST['queryType'])) exit();
@@ -52,6 +53,26 @@
 		$return = array("updated" => false);
 	}
     }
+    else if($queryType == ANSWER_REQUEST){
+    	if(!isset($_REQUEST['uid'])) 	exit();
+		if(!isset($_REQUEST['email'])) 	exit();
+
+		$query = "UPDATE friends SET answered = true WHERE second_friend = (?) AND first_friend = (SELECT user_id from users WHERE email = (?))";
+
+		$statement = $connection->prepare($query);
+		$statement->bind_param('is', $user_id, $email);
+	        
+		$email = $_REQUEST["email"];
+	    $user_id = $_REQUEST["uid"];
+
+		$statement->execute();
+
+		if($statement->affected_rows == 1) {
+			$return = array("updated" => true);
+		} else {
+			$return = array("updated" => false);
+		}
+	}
 
     echo json_encode($return);
     

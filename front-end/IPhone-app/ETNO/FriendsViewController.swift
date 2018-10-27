@@ -35,13 +35,10 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     
-    // MARK: - Add Participant Action (Button Press)
+    // MARK: - Send Friend Request Action (Button Press)
     // Verify if we have users to add and alert if not
     
     @IBAction func SendFriendRequest(_ sender: Any) {
-    }
-    
-    @IBAction func CanWeAddUsers(_ sender: Any) {
         if (SelectedUsers.count > 0 && !FirstSelected){
             UsersCanBeAdded = true
         }
@@ -49,6 +46,7 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
             self.present(Alert(title: "Error", message: "No one selected.", Dismiss: "Dismiss"),animated: true, completion: nil)
         }
     }
+    
     
     // MARK: - Modify the Tableview
     // Update the view of the table
@@ -123,16 +121,20 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
             request.httpMethod = "POST"
             let post = "queryType=\(QueryType)&email=\(searchBar.text!)&uid=\(user_id)"
             request.httpBody = post.data(using: String.Encoding.utf8)
-            
             response = ConnectToAPI(request: request)
+            
+            FilteredUsers = []
+            FilteredUsersEmail = []
+            
             if ((response["empty"] as! Bool) == false){
-                FilteredUsers.append(response["name"] as! String)
-                FilteredUsersEmail.append(searchBar.text!)
+                self.FilteredUsers.append(response["name"] as! String)
+                self.FilteredUsersEmail.append(searchBar.text!)
             }
         }
         else{
             Searching = false
             FilteredUsers = []
+            FilteredUsersEmail = []
         }
         tableView.reloadData()
     }

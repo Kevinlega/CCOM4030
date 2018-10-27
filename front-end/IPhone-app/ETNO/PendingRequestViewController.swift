@@ -26,6 +26,7 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
     var FilteredUsers = [String()]
     // Users selected by the admin to add to the project
     var SelectedUsers = [String()]
+    var SelectedUsersEmail = [String()]
     
     // Flags to know if the list was empty and if the admin is searching for users.
     var FirstSelected = true
@@ -36,24 +37,6 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     
-    
-    // MARK: - Add Participant Action (Button Press)
-    // Verify if we have users to add and alert if not
-    
-    @IBAction func sendAnswer(_ sender: Any) {
-    }
-    
-    @IBAction func CanWeAddUsers(_ sender: Any) {
-        
-        if (SelectedUsers.count > 0 && !FirstSelected){
-            UsersCanBeAdded = true
-        }
-        else{
-            self.present(Alert(title: "Error", message: "No participant selected.", Dismiss: "Dismiss"),animated: true, completion: nil)
-        }
-    }
-    
-    
     // MARK: - Modify the Tableview
     // Update the view of the table
     
@@ -61,7 +44,7 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
         if Searching{
             return FilteredUsers.count
         }
-        return SelectedUsers.count
+        return pendingUsers.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -70,7 +53,7 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
             cell.textLabel?.text = FilteredUsers[indexPath.row]
         }
         else{
-            cell.textLabel?.text = SelectedUsers[indexPath.row]
+            cell.textLabel?.text = pendingUsers[indexPath.row]
         }
         
         return cell
@@ -80,7 +63,21 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
         if !Searching{
             if let selectedUser = tableView.cellForRow(at: indexPath){
                 let indexToDelete = SelectedUsers.firstIndex(of: (selectedUser.textLabel?.text)!)
-                SelectedUsers.remove(at: indexToDelete!)
+                if indexToDelete != nil{
+                    SelectedUsers.remove(at: indexToDelete!)
+                }
+                else{
+                    SelectedUsers.append((selectedUser.textLabel?.text)!)
+                    let emailIndex = pendingUsers.firstIndex(of: (selectedUser.textLabel?.text)!)
+                    SelectedUsersEmail.append(pendingEmail[emailIndex!])
+                    
+                    if FirstSelected {
+                        SelectedUsers.remove(at: 0)
+                        SelectedUsersEmail.remove(at: 0)
+                        FirstSelected = false
+                    }
+                }
+                
                 DispatchQueue.main.asyncAfter(deadline: (DispatchTime.now()+0.15), execute: {tableView.reloadData()})
             }
         }
@@ -90,10 +87,13 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
             if let selectedUser = tableView.cellForRow(at: indexPath){
                 if !(SelectedUsers.contains((selectedUser.textLabel?.text)!)){
                     
+                     let emailIndex = pendingUsers.firstIndex(of: (selectedUser.textLabel?.text)!)
+                    SelectedUsersEmail.append(pendingEmail[emailIndex!])
                     SelectedUsers.append((selectedUser.textLabel?.text)!)
                     
                     if FirstSelected {
                         SelectedUsers.remove(at: 0)
+                        SelectedUsersEmail.remove(at: 0)
                         FirstSelected = false
                     }
                     
@@ -131,7 +131,6 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
     override func viewDidLoad() {
         super.viewDidLoad()
         user_id = TabBarViewController.User.uid
-        print(user_id)
 
         let response = GetPendingRequest(user_id: user_id)
         if response["empty"] as! Bool == false{
@@ -151,10 +150,17 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Send friend request
-        if (segue.identifier == "SendFriendRequest"){
-            if(UsersCanBeAdded){
-                let vc = segue.destination as! DashboardViewController
-                vc.user_id = user_id
+        if (segue.identifier == "SendFriendRequestAnswer"){
+            if(SelectedUsers.count > 0 && !FirstSelected){
+                let response = AnswerRequest(user_id: user_id, SelectedUsersEmail: SelectedUsersEmail)
+                print(response)
+                if (response["success"] as! Bool) == true{
+                    let vc = segue.destination as! DashboardViewController
+                    vc.user_id = user_id
+                }
+            }
+            else{
+                self.present(Alert(title: "Error", message: "No participant selected.", Dismiss: "Dismiss"),animated: true, completion: nil)
             }
         } // Go back to the Dashboard view
         else if (segue.identifier == "BackToDashboard"){
