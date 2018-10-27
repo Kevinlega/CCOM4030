@@ -32,12 +32,16 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
     var Searching = false
     
     // Connections to the app view
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     
     
     // MARK: - Add Participant Action (Button Press)
     // Verify if we have users to add and alert if not
+    
+    @IBAction func sendAnswer(_ sender: Any) {
+    }
     
     @IBAction func CanWeAddUsers(_ sender: Any) {
         
@@ -126,6 +130,9 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        user_id = TabBarViewController.User.uid
+        print(user_id)
+
         let response = GetPendingRequest(user_id: user_id)
         if response["empty"] as! Bool == false{
             pendingUsers = response["name"] as! [String]

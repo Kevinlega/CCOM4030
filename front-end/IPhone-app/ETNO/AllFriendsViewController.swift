@@ -31,11 +31,16 @@ class AllFriendsViewController: UIViewController, UITableViewDelegate, UITableVi
     var Searching = false
     
     // Connections to the app view
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     
     // MARK: - Add Participant Action (Button Press)
     // Verify if we have users to add and alert if not
+    
+    @IBAction func EliminateFriend(_ sender: Any) {
+    }
+    
     
     @IBAction func CanWeAddUsers(_ sender: Any) {
         
@@ -123,6 +128,9 @@ class AllFriendsViewController: UIViewController, UITableViewDelegate, UITableVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        user_id = TabBarViewController.User.uid
+        print(user_id)
+
         let response = GetFriends(user_id: user_id)
         if (response["empty"] as! Bool) == false{
             users = response["name"] as! [String]

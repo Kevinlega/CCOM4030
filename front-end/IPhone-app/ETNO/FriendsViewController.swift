@@ -31,11 +31,15 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     // Connections to the app view
     
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     
     // MARK: - Add Participant Action (Button Press)
     // Verify if we have users to add and alert if not
+    
+    @IBAction func SendFriendRequest(_ sender: Any) {
+    }
     
     @IBAction func CanWeAddUsers(_ sender: Any) {
         if (SelectedUsers.count > 0 && !FirstSelected){
@@ -117,11 +121,11 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
             var request = URLRequest(url:url!)
             
             request.httpMethod = "POST"
-            let post = "queryType=\(QueryType)&email=\(searchBar.text!)"
+            let post = "queryType=\(QueryType)&email=\(searchBar.text!)&uid=\(user_id)"
             request.httpBody = post.data(using: String.Encoding.utf8)
             
             response = ConnectToAPI(request: request)
-            if ((response["empty"] as! Bool) != false){
+            if ((response["empty"] as! Bool) == false){
                 FilteredUsers.append(response["name"] as! String)
                 FilteredUsersEmail.append(searchBar.text!)
             }
@@ -137,7 +141,8 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(user_id)
+        user_id = TabBarViewController.User.uid
+
         // Do any additional setup after loading the view.
     }
     

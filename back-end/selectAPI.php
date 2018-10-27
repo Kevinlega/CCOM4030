@@ -26,6 +26,8 @@ if(isset($_REQUEST['queryType'])) {
 
 	switch($queryType) {
 		case CHECK_IF_USER_EXISTS :
+			if(!isset($_REQUEST["email"])) exit();
+
 			$email = $_REQUEST["email"];
 			$return = array("registered" => false);
 
@@ -47,6 +49,8 @@ if(isset($_REQUEST['queryType'])) {
 			break;
 
 		case USERS_NOT_IN_PROJECT :
+			if(!isset($_REQUEST["pid"]) || !isset($_REQUEST["uid"])) exit();
+
 			$project_id = $_REQUEST["pid"];
 			$user_id = $_REQUEST["uid"];
 			$emails = array();
@@ -85,6 +89,8 @@ if(isset($_REQUEST['queryType'])) {
 			break;
 
 		case GET_USER_ID_WITH_EMAIL:
+			if(!isset($_REQUEST["email"])) exit();
+
 			$email = $_REQUEST["email"];
 
 			$query = "SELECT user_id 
@@ -101,6 +107,8 @@ if(isset($_REQUEST['queryType'])) {
 			break;
 
 		case PROJECT_USER_PARTICIPATES:
+			if(!isset($_REQUEST["uid"])) exit();
+
 			$user_id = $_REQUEST["uid"];
 			$name = array();
 			$id = array();
@@ -130,6 +138,8 @@ if(isset($_REQUEST['queryType'])) {
 			break;
 
 		case GET_HASH_AND_SALT:
+			if(!isset($_REQUEST["email"])) exit();
+		
 			$email = $_REQUEST["email"];
 
 			$query = "SELECT hashed_password, salt, initialValue 
@@ -151,11 +161,15 @@ if(isset($_REQUEST['queryType'])) {
 			break;
 
 		case GET_NAME_WITH_EMAIL:
+			if(!isset($_REQUEST["email"]) || !isset($_REQUEST["uid"])) exit();
+
 			$email = $_REQUEST["email"];
-			$query = "SELECT name FROM users WHERE email=(?)";
+			$user_id = $_REQUEST["uid"];
+
+			$query = "SELECT name FROM users WHERE email=(?) AND user_id<>(?)";
 
 			$statement = $connection->prepare($query);			// Prepare the query statement. (for sanitation)
-			$statement->bind_param('s', $email);				// Bind the parameters with the sql query.
+			$statement->bind_param('si', $email,$user_id);				// Bind the parameters with the sql query.
 			$statement->execute();								// Execute the now sanitized query.
 
 			$statement->bind_result($name);	    	            // Asign the fetch value to these new variables.
@@ -172,9 +186,11 @@ if(isset($_REQUEST['queryType'])) {
 			break;
 
 		case GET_ALL_FRIENDS_WITH_USER_ID:
+			if(!isset($_REQUEST["uid"])) exit();
+
 			$user_id = $_REQUEST["uid"];
-			$name = array();
-			$email = array();
+			$names = array();
+			$emails = array();
 
 			$query = "SELECT name, email FROM users 
 				  WHERE users.user_id IN (
@@ -192,18 +208,20 @@ if(isset($_REQUEST['queryType'])) {
 			$statement->bind_result($name, $email);		// Asign the fetch value to these new variables.
 
 			while($statement->fetch()) {
-				$name[] = "$name";
-				$email[] = "$email";
+				$names[] = $name;
+				$emails[] = $email;
 			}
 			
-			if(count($name) > 0) {
-				$return = array("empty" => false,"name" => $name,"email" => $email);
+			if(count($names) > 0) {
+				$return = array("empty" => false,"name" => $names,"email" => $emails);
 			} else {
 				$return = array("empty" => true);
 			}
 			break;
 
 		case GET_PENDING_REQUEST:
+			if(!isset($_REQUEST["uid"])) exit();
+
 			$user_id = $_REQUEST["uid"];
 			$name_pending = array();
 			$email_pending = array();
@@ -220,8 +238,8 @@ if(isset($_REQUEST['queryType'])) {
 			$statement->bind_result($name, $email);		// Asign the fetch value to these new variables.
 
 			while($statement->fetch()) {
-				$name_pending[] = "$name";
-				$email_pending[] = "$email";
+				$name_pending[] = $name;
+				$email_pending[] = $email;
 			}
 			
 			if(count($name_unanswered) > 0) {
@@ -233,7 +251,8 @@ if(isset($_REQUEST['queryType'])) {
 			break;
 		
 		case GET_ADMIN_ID:
-			
+			if(!isset($_REQUEST["pid"])) exit();
+
 			$project_id = $_REQUEST["pid"];
 			$query = "SELECT admin FROM projects WHERE project_id=(?)";
 

@@ -9,13 +9,16 @@
 import UIKit
 
 class TabBarViewController: UITabBarController {
-
+    
     var user_id = Int()
     
-    
+    struct User {
+       static var uid = Int()
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(user_id)
+        User.uid = user_id
+        
         // Do any additional setup after loading the view.
     }
 }

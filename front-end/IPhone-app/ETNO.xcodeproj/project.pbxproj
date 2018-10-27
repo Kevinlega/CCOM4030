@@ -72,6 +72,7 @@
 		0ABE28D321642A33001C2385 /* CreateAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountViewController.swift; sourceTree = "<group>"; };
 		0ABE28D7216430AB001C2385 /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
 		0ABE28DB216431CA001C2385 /* AddParticipantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddParticipantViewController.swift; sourceTree = "<group>"; };
+		0AE263E02183B3C500E617C8 /* ETNO.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ETNO.entitlements; sourceTree = "<group>"; };
 		0AE8F27F2180F97000298297 /* PendingRequestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingRequestViewController.swift; sourceTree = "<group>"; };
 		0AE8F2812180FA5600298297 /* AllFriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllFriendsViewController.swift; sourceTree = "<group>"; };
 		0AFA5FDA217FE2D000CB360D /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
@@ -135,13 +136,14 @@
 		0A9B78B1215DA51300F48859 /* ETNO */ = {
 			isa = PBXGroup;
 			children = (
-				0A29A49E21838F5300B35D25 /* KeychainConfiguration.swift */,
-				0A29A49F21838F5300B35D25 /* KeychainPasswordItem.swift */,
-				0A9B78B2215DA51300F48859 /* AppDelegate.swift */,
+				0AE263E02183B3C500E617C8 /* ETNO.entitlements */,
 				0A9B78B6215DA51300F48859 /* Main.storyboard */,
+				0A9B78BB215DA51500F48859 /* LaunchScreen.storyboard */,
 				0A9B78B9215DA51500F48859 /* Assets.xcassets */,
 				0A9B78BE215DA51500F48859 /* Info.plist */,
-				0A9B78BB215DA51500F48859 /* LaunchScreen.storyboard */,
+				0A9B78B2215DA51300F48859 /* AppDelegate.swift */,
+				0A29A49E21838F5300B35D25 /* KeychainConfiguration.swift */,
+				0A29A49F21838F5300B35D25 /* KeychainPasswordItem.swift */,
 				0ABE28D321642A33001C2385 /* CreateAccountViewController.swift */,
 				0ABE28D7216430AB001C2385 /* DashboardViewController.swift */,
 				0ABE28DB216431CA001C2385 /* AddParticipantViewController.swift */,
@@ -149,11 +151,11 @@
 				0A4A29A32166521C00DF49EF /* ProjectViewController.swift */,
 				0A421B89216EDD0E00DA7452 /* LoginViewController.swift */,
 				0A5807A021724978009874A8 /* ChangePasswordViewController.swift */,
-				0A73FFFD2173D70100BB0664 /* ReusedFunctions.swift */,
 				0AFA5FDA217FE2D000CB360D /* FriendsViewController.swift */,
 				0AE8F27F2180F97000298297 /* PendingRequestViewController.swift */,
 				0AE8F2812180FA5600298297 /* AllFriendsViewController.swift */,
 				0A8B596021837B3B009EEDC6 /* TabBarViewController.swift */,
+				0A73FFFD2173D70100BB0664 /* ReusedFunctions.swift */,
 			);
 			path = ETNO;
 			sourceTree = "<group>";
@@ -248,6 +250,11 @@
 					0A9B78AE215DA51300F48859 = {
 						CreatedOnToolsVersion = 9.4.1;
 						LastSwiftMigration = 1000;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+						};
 					};
 					0A9B78C2215DA51500F48859 = {
 						CreatedOnToolsVersion = 9.4.1;
@@ -500,6 +507,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ETNO/ETNO.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = WNLDE44E2U;
@@ -514,7 +522,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRIP_INSTALLED_PRODUCT = YES;
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -522,6 +530,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ETNO/ETNO.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = WNLDE44E2U;
@@ -536,7 +545,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRIP_INSTALLED_PRODUCT = YES;
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

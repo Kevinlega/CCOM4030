@@ -63,13 +63,13 @@ class LoginViewController: UIViewController {
         else if (segue.identifier == "Dashboard"){
             if CanSendLogin{
                 var response : NSDictionary = NSDictionary()
+
                 if BiometricAuthentication{
                     response = CheckLogin(email: emailKeyChain, psw: passwordKeyChain,Biometric: BiometricAuthentication)
                 }
                 else{
                     response = CheckLogin(email: emailField.text!, psw: passwordField.text!,Biometric: BiometricAuthentication)
                 }
-                
                 if (response["registered"] as! Bool) == true{
                     let vc = segue.destination as! DashboardViewController
                     vc.user_id = response["uid"] as! Int
@@ -91,8 +91,8 @@ class LoginViewController: UIViewController {
         do{
             self.passwordKeyChain = try passwordItem.readPassword()
             // Authenticate user using stored password from keychain. (Remember email is already registered and password is already hashed.)
-            BiometricAuthentication = true
-            self.performSegue(withIdentifier: "Dashboard", sender: nil)
+            self.BiometricAuthentication = true
+            self.CanSendLogin = true
             
         } catch KeychainPasswordItem.KeychainError.noPassword {
             print("No saved password")
@@ -112,20 +112,16 @@ class LoginViewController: UIViewController {
         
         if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil){
             guard let email = UserDefaults.standard.object(forKey: "lastAccessedUserName") as? String else {return}
-            CanSendLogin = true
             context.evaluatePolicy(LAPolicy.deviceOwnerAuthenticationWithBiometrics, localizedReason: email, reply: { (authSuccessful, authError) in
                 if authSuccessful{
                     self.emailKeyChain = email
                     self.LoadPassword(email)
-                    print (self.user_id)
-                }
-                else{
+                    
+                    DispatchQueue.main.async{
+                        self.performSegue(withIdentifier: "Dashboard", sender: nil)
+                    }
                 }
             })
         }
-            // Device does not support biometric login.
-        else{}
-        print (BiometricAuthentication)
-        print (self.user_id)
     }
 }
