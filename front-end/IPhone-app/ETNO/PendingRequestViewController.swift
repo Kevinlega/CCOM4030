@@ -44,7 +44,16 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
         if Searching{
             return FilteredUsers.count
         }
-        return pendingUsers.count
+        else if !FirstSelected{
+            if pendingUsers[0] == ""{
+                return 0
+            } else {
+                return pendingUsers.count
+            }
+        }
+        else{
+            return 0
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -134,6 +143,7 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
 
         let response = GetPendingRequest(user_id: user_id)
         if response["empty"] as! Bool == false{
+            FirstSelected = true
             pendingUsers = response["name"] as! [String]
             pendingEmail = response["email"] as! [String]
         }

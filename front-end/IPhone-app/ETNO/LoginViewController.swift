@@ -71,8 +71,15 @@ class LoginViewController: UIViewController {
                     response = CheckLogin(email: emailField.text!, psw: passwordField.text!,Biometric: BiometricAuthentication)
                 }
                 if (response["registered"] as! Bool) == true{
-                    let vc = segue.destination as! DashboardViewController
-                    vc.user_id = response["uid"] as! Int
+                    if response["verified"] as! Bool == true{
+                        let vc = segue.destination as! DashboardViewController
+                        vc.user_id = response["uid"] as! Int
+                    }
+                    else{
+                        performSegue(withIdentifier: "NotVerified", sender: nil)
+                    }
+                    
+                    
                 }
                 else{
                     self.present(Alert(title: "Error", message: "Credentials are incorrect.", Dismiss: "Dismiss"),animated: true, completion: nil)

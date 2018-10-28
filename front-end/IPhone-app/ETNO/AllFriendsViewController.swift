@@ -40,7 +40,16 @@ class AllFriendsViewController: UIViewController, UITableViewDelegate, UITableVi
         if Searching{
             return FilteredUsers.count
         }
-        return users.count
+        else if !FirstSelected{
+            if users[0] == ""{
+                return 0
+            } else {
+                return users.count
+            }
+        }
+        else{
+            return 0
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

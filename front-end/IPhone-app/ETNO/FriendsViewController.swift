@@ -55,7 +55,17 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
         if Searching{
             return FilteredUsers.count
         }
-        return SelectedUsers.count
+        else if !FirstSelected{
+            if SelectedUsers[0] == ""{
+                return 0
+            }
+            else{
+                return SelectedUsers.count
+            }
+        }
+        else {
+            return 0
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

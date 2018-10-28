@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A0836CA218555AD00E79E50 /* NotVerifiedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0836C9218555AD00E79E50 /* NotVerifiedViewController.swift */; };
 		0A29A4A021838F5300B35D25 /* KeychainConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A29A49E21838F5300B35D25 /* KeychainConfiguration.swift */; };
 		0A29A4A121838F5300B35D25 /* KeychainPasswordItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A29A49F21838F5300B35D25 /* KeychainPasswordItem.swift */; };
 		0A29A4A42183908600B35D25 /* LocalAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A29A4A32183908600B35D25 /* LocalAuthentication.framework */; };
@@ -48,6 +49,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0A0836C9218555AD00E79E50 /* NotVerifiedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotVerifiedViewController.swift; sourceTree = "<group>"; };
 		0A29A49E21838F5300B35D25 /* KeychainConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainConfiguration.swift; sourceTree = "<group>"; };
 		0A29A49F21838F5300B35D25 /* KeychainPasswordItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainPasswordItem.swift; sourceTree = "<group>"; };
 		0A29A4A32183908600B35D25 /* LocalAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LocalAuthentication.framework; path = System/Library/Frameworks/LocalAuthentication.framework; sourceTree = SDKROOT; };
@@ -145,17 +147,18 @@
 				0A29A49E21838F5300B35D25 /* KeychainConfiguration.swift */,
 				0A29A49F21838F5300B35D25 /* KeychainPasswordItem.swift */,
 				0ABE28D321642A33001C2385 /* CreateAccountViewController.swift */,
+				0A421B89216EDD0E00DA7452 /* LoginViewController.swift */,
 				0ABE28D7216430AB001C2385 /* DashboardViewController.swift */,
-				0ABE28DB216431CA001C2385 /* AddParticipantViewController.swift */,
 				0A963BA2216EA7EA00EA187B /* CreateAProjectViewController.swift */,
 				0A4A29A32166521C00DF49EF /* ProjectViewController.swift */,
-				0A421B89216EDD0E00DA7452 /* LoginViewController.swift */,
 				0A5807A021724978009874A8 /* ChangePasswordViewController.swift */,
+				0ABE28DB216431CA001C2385 /* AddParticipantViewController.swift */,
 				0AFA5FDA217FE2D000CB360D /* FriendsViewController.swift */,
 				0AE8F27F2180F97000298297 /* PendingRequestViewController.swift */,
 				0AE8F2812180FA5600298297 /* AllFriendsViewController.swift */,
 				0A8B596021837B3B009EEDC6 /* TabBarViewController.swift */,
 				0A73FFFD2173D70100BB0664 /* ReusedFunctions.swift */,
+				0A0836C9218555AD00E79E50 /* NotVerifiedViewController.swift */,
 			);
 			path = ETNO;
 			sourceTree = "<group>";
@@ -328,6 +331,7 @@
 				0A29A4A121838F5300B35D25 /* KeychainPasswordItem.swift in Sources */,
 				0A421B8A216EDD0E00DA7452 /* LoginViewController.swift in Sources */,
 				0AFA5FDB217FE2D000CB360D /* FriendsViewController.swift in Sources */,
+				0A0836CA218555AD00E79E50 /* NotVerifiedViewController.swift in Sources */,
 				0A4A29A42166521C00DF49EF /* ProjectViewController.swift in Sources */,
 				0AE8F2822180FA5600298297 /* AllFriendsViewController.swift in Sources */,
 				0ABE28DC216431CA001C2385 /* AddParticipantViewController.swift in Sources */,

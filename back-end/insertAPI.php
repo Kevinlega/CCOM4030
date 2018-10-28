@@ -39,15 +39,15 @@ if(isset($_REQUEST['queryType'])) {
 				break;
 
 		    case ADD_USER_PROJECT:
-				$query = "INSERT INTO user_project (project_id,user_id) VALUES (?, ?)";
+				$query = "INSERT INTO user_project (project_id,user_id) VALUES (?, (SELECT user_id FROM users WHERE email = (?)))";
 
 				if(!$statement = $connection->prepare($query)) {
 					echo "Prepare failed: (" . $connection->errno . ") " . $connection->error;
 				}
-				$statement->bind_param("ii", $project_id, $user_id);
+				$statement->bind_param("is", $project_id, $email);
 
 				$project_id = $_REQUEST["pid"];
-				$user_id = $_REQUEST["uid"];
+				$email = $_REQUEST["email"];
 
 				if(!$statement->execute()) {
 					$return = array("registered"=>false);
@@ -67,7 +67,8 @@ if(isset($_REQUEST['queryType'])) {
 				$location = $_REQUEST['location'];
 				$description = $_REQUEST['description'];
 				$user_id = $_REQUEST['user_id'];
-				$folder_link = $_REQUEST['folder_link'];
+				$folder_link = shell_exec("/usr/bin/python /var/www/new_dir.py");
+				$folder_link = str_replace("\n", "", $folder_link);
 
 				if(!$statement->execute()) {
 					$return = array("created"=>false);
@@ -103,7 +104,8 @@ if(isset($_REQUEST['queryType'])) {
 				if(!$statement->execute()) {
 					$return = array("created"=>false);
 				} else {
-					$return = array("created"=>true);
+					$inserted_project = $statement->insert_id;
+					$return = array("created"=>true,"project_id"=>$inserted_project);
 				}
 
 				break;

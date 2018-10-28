@@ -38,12 +38,12 @@
     } else if($queryType == VERIFY_USER) {
 	if(!isset($_REQUEST['uid']))	exit();
         
-	$query = "UPDATE users SET verified=1 WHERE user_id = (?)";
+	$query = "UPDATE users SET verified=1 WHERE email = (?)";
 	
 	$statement = $connection->prepare($query);
-	$statement->bind_param('i', $user_id);
+	$statement->bind_param('s', $email);
         
-        $user_id = $_REQUEST["uid"];
+        $email = $_REQUEST["email"];
 
 	$statement->execute();
 

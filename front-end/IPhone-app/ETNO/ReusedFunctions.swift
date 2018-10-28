@@ -251,8 +251,7 @@ public func CheckLogin(email: String, psw: String, Biometric: Bool) -> NSDiction
         request.httpBody = post.data(using: String.Encoding.utf8);
         
         response = ConnectToAPI(request: request)
-        
-        return ["registered":true, "uid": response["uid"] as! Int]
+        return ["registered":true, "uid": response["uid"] as! Int, "verified": response["verified"] as! Bool]
     }
     else {
         return ["registered": false]
@@ -329,13 +328,13 @@ public func GetFriends(user_id: Int) -> NSDictionary {
 
 public func GetParticipants(project_id: Int, user_id: Int) -> NSDictionary{
     
-    let QueryType = "1";
-    let url = URL(string: "http://54.81.239.120/selectAPI.php");
+    let QueryType = "1"
+    let url = URL(string: "http://54.81.239.120/selectAPI.php")
     var request = URLRequest(url:url!)
     
     request.httpMethod = "POST"
-    let post = "queryType=\(QueryType)&pid=\(project_id)&uid=\(user_id)";
-    request.httpBody = post.data(using: String.Encoding.utf8);
+    let post = "queryType=\(QueryType)&pid=\(project_id)&uid=\(user_id)"
+    request.httpBody = post.data(using: String.Encoding.utf8)
     
     return ConnectToAPI(request: request)
 }
@@ -379,5 +378,31 @@ public func AnswerRequest(user_id: Int, SelectedUsersEmail: [String] ) -> NSDict
     }
     else{
         return ["success": false, "Failed": FailedEmail]
+    }
+}
+
+
+
+// MARK: - Insert Users
+// Insert new users to the project
+
+public func InsertParticipants(SelectedEmail: [String], project_id: Int){
+    
+    let QueryType = "1";
+    let url = URL(string: "http://54.81.239.120/insertAPI.php");
+    var request = URLRequest(url:url!)
+    
+    request.httpMethod = "POST"
+    
+    for email in SelectedEmail {
+        
+        let post = "queryType=\(QueryType)&pid=\(project_id)&email=\(email)"
+        request.httpBody = post.data(using: String.Encoding.utf8)
+        
+        let response = ConnectToAPI(request: request)
+        
+        if (response["registered"] as! Bool) == false{
+            print("bad")
+        }
     }
 }
