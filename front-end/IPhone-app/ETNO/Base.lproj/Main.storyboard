@@ -314,7 +314,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="c8C-lG-G11"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Pending Request" id="Sij-LL-0jy"/>
+                    <tabBarItem key="tabBarItem" title="Pending Request" image="Image-5" landscapeImage="Image-5" selectedImage="Image-5" id="Sij-LL-0jy"/>
                     <connections>
                         <outlet property="searchBar" destination="vdz-AX-ZhK" id="3Of-9z-uk9"/>
                         <outlet property="tableView" destination="I3E-Wn-yz2" id="3gw-ZN-WXT"/>
@@ -381,7 +381,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Z1I-qY-Ae6"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Friends" id="0qr-qv-HSe"/>
+                    <tabBarItem key="tabBarItem" title="Friends" image="Image-2" landscapeImage="Image-2" selectedImage="Image-2" id="0qr-qv-HSe"/>
                     <connections>
                         <outlet property="searchBar" destination="kXE-SX-IRV" id="fCt-BU-7yE"/>
                         <outlet property="tableView" destination="54M-lc-Bpk" id="9GI-Cj-G7k"/>
@@ -460,7 +460,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="8wn-Gb-6n4"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Search" id="ZzK-Vp-H99"/>
+                    <tabBarItem key="tabBarItem" title="Search" image="Image-3" landscapeImage="Image-3" selectedImage="Image-3" id="ZzK-Vp-H99"/>
                     <connections>
                         <outlet property="searchBar" destination="GSF-xw-d8e" id="Ica-z5-af8"/>
                         <outlet property="tableView" destination="naF-Py-kBb" id="qLI-pE-HO7"/>
@@ -478,6 +478,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
                         <segue destination="Lsn-gq-jNx" kind="relationship" relationship="viewControllers" id="Y0D-rn-zbR"/>
@@ -872,7 +873,7 @@
                                     <constraint firstAttribute="width" constant="53" id="hC3-lq-iCQ"/>
                                     <constraint firstAttribute="height" constant="53" id="ktr-qv-ZQ5"/>
                                 </constraints>
-                                <state key="normal" image="Image-2"/>
+                                <state key="normal" image="Image-4"/>
                                 <connections>
                                     <action selector="importGallery:" destination="Ukw-4a-vco" eventType="touchUpInside" id="wxV-jI-orh"/>
                                 </connections>
@@ -1025,11 +1026,14 @@
     <resources>
         <image name="Image" width="256" height="256"/>
         <image name="Image-1" width="256" height="256"/>
-        <image name="Image-2" width="981" height="846"/>
+        <image name="Image-2" width="24" height="24"/>
+        <image name="Image-3" width="37.5" height="37.5"/>
+        <image name="Image-4" width="512" height="512"/>
+        <image name="Image-5" width="18" height="18"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="chT-jX-6aO"/>
-        <segue reference="UWL-vV-kQq"/>
+        <segue reference="G2f-z4-n5c"/>
         <segue reference="YDh-3o-jHY"/>
     </inferredMetricsTieBreakers>
 </document>
