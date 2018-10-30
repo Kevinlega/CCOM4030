@@ -39,6 +39,11 @@ class ProjectViewController: UIViewController, UINavigationControllerDelegate, U
             else {
             print("Camera not available")
         }
+        
+        let imageData = imageView.image!.pngData()
+        let compresedImage = UIImage(data: imageData!)
+        UIImageWriteToSavedPhotosAlbum(compresedImage!, nil, nil, nil)
+    
     }
 
     
