@@ -10,7 +10,6 @@ __version__ = "1.0.0"
 __credits__ = ["Bryan Pesquera", "David Ortiz", "Enrique Rodriguez", "Kevin Legarreta", "Luis Mieses"]
 __copyright__ = "Copyright 2018, Grafia"
 
-
 from uuid import uuid4                      # Used for naming project directories with random identifiers.
 from os import mkdir                        # Used for creating the directory.
 import json                                 # Used for outputing the directory name.
