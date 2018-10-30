@@ -3,7 +3,7 @@
 //  ETNO
 //
 //  Created by Kevin Legarreta on 10/2/18.
-//  Copyright © 2018 Los 5. All rights reserved.
+//  Copyright © 2018 Los Duendes Malvados. All rights reserved.
 //
 
 import UIKit
@@ -11,7 +11,7 @@ import UIKit
 class CreateAProjectViewController: UIViewController {
     
     // MARK: - Variables
-    
+    var project_id = Int()
     var user_id = Int()
     var CanProjectBeAdded = false
     
@@ -29,65 +29,14 @@ class CreateAProjectViewController: UIViewController {
         
         if (ProjectDescription!.isEmpty || ProjectLocation!.isEmpty || ProjectName!.isEmpty ){
             
-            let alertController = UIAlertController(title: "Error", message: "All fields are requiered.", preferredStyle: UIAlertController.Style.alert)
-            alertController.addAction(UIAlertAction.init(title: "Dismiss", style: UIAlertAction.Style.destructive, handler: {(alert: UIAlertAction!) in print("Bad")}))
-            
-            self.present(alertController, animated: true, completion: nil)
+            self.present(Alert(title: "Error", message: "All fields are requiered.", Dismiss: "Dismiss"),animated: true, completion: nil)
         }
         else{
             CanProjectBeAdded = true
         }
     }
     
-    
-    
-    // MARK: - Creates the project
-    
-    func CreateProject(){
-        let QueryType = "2"
-        let name = projectName.text!
-        let description = projectDescription.text!
-        let location = projectLocation.text!
-        let folder_link = "the_link"
-        var done = false;
-        let url = URL(string: "http://54.81.239.120/createProjectAPI.php");
-        var request = URLRequest(url:url!)
-        request.httpMethod = "POST"
-        let post = "queryType=\(QueryType)&name=\(name)&description=\(description)&location=\(location)&folder_link=\(folder_link)&user_id=\(user_id)";
-        print(post)
-        request.httpBody = post.data(using: String.Encoding.utf8);
-        
-        let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-            
-            if (error != nil) {
-                print("error=\(error!)")
-                return
-            }
-            // print("response = \(response!)")
-            do {
-                let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSDictionary
-                
-                if let parseJSON = json {
-                    let queryResponse = (parseJSON["created"] as? Bool)!
-                    if (queryResponse == true){
-                        print("Project created successfully.")
-                    }
-                    else{
-                        print("Uh Oh")
-                    }
-                }
-            }
-            catch {
-                print(error)
-            }
-            done = true;
-        }
-        task.resume()
-        repeat {
-            RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.1))
-        } while !done
-        return
-    }
+
     
     // MARK: - Default Functions
 
@@ -112,14 +61,14 @@ class CreateAProjectViewController: UIViewController {
         }
         else if (segue.identifier == "CreateProject"){
             if CanProjectBeAdded{
-                CreateProject()
-                let vc = segue.destination as! DashboardViewController
-                vc.user_id = user_id
+                let response = CreateProject(user_id: user_id,name: projectName.text!, description: projectDescription.text!, location: projectLocation.text!)
                 
+                if (response["created"] as! Bool) ==  true{
+                    let vc = segue.destination as! ProjectViewController
+                    vc.user_id = user_id
+                    vc.project_id = response["project_id"] as! Int
+                }
             }
-            
-            
         }
     }
-    
 }

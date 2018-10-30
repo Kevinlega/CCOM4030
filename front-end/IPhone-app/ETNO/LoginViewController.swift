@@ -3,22 +3,25 @@
 //  ETNO
 //
 //  Created by Kevin Legarreta on 10/10/18.
-//  Copyright © 2018 Los 5. All rights reserved.
+//  Copyright © 2018 Los Duendes Malvados. All rights reserved.
 //
 
 import UIKit
+import LocalAuthentication
 
 class LoginViewController: UIViewController {
 
     // MARK: - Variables
     //    This will be equal to database response
     var user_id = Int()
+    var emailKeyChain = String()
+    var passwordKeyChain = String()
     
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
     
     var CanSendLogin = false
-    
+    var BiometricAuthentication = false
     
     // MARK: - Verify if Login can Happen
     @IBAction func CanLogin(_ sender: Any) {
@@ -27,115 +30,23 @@ class LoginViewController: UIViewController {
         let password = passwordField.text
         
         if (password!.isEmpty || email!.isEmpty  ){
-            
-            let alertController = UIAlertController(title: "Error", message: "All fields are requiered.", preferredStyle: UIAlertController.Style.alert)
-            alertController.addAction(UIAlertAction.init(title: "Dismiss", style: UIAlertAction.Style.destructive, handler: {(alert: UIAlertAction!) in print("Bad")}))
-            
-            self.present(alertController, animated: true, completion: nil)
+            self.present(Alert(title: "Error", message: "All fields are requiered.", Dismiss: "Dismiss"),animated: true, completion: nil)
         }
         else{
             CanSendLogin = true
         }
     }
     
-    // MARK: - Login Handler
-    func CheckLogin() -> Bool{
-        var QueryType = "4"
-        let email = emailField.text
-        var password = passwordField.text
-        var hashed_password = String()
-        var salt = String()
-        
-        var done = false;
-        let url = URL(string: "http://54.81.239.120/selectAPI.php");
-        var request = URLRequest(url:url!)
-        request.httpMethod = "POST"
-        let post = "queryType=\(QueryType)&email=\(email!)";
-        print(post)
-        request.httpBody = post.data(using: String.Encoding.utf8);
-        
-        let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-            
-            if (error != nil) {
-                print("error=\(error!)")
-                return
-            }
-            // print("response = \(response!)")
-            do {
-                let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSDictionary
-                
-                if let parseJSON = json {
-                    hashed_password = parseJSON["hashed_password"] as! String
-                    salt = parseJSON["salt"] as! String
-                }
-            }
-            catch {
-                print("hi")
-            }
-            done = true;
-        }
-        task.resume()
-        repeat {
-            RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.5))
-        } while !done
-        
-        password = saltAndHash(password: password!, salt: salt)
-        
-        if (password == hashed_password){
-            QueryType = "2";
-            let url = URL(string: "http://54.81.239.120/selectAPI.php");
-            var request = URLRequest(url:url!)
-            
-            request.httpMethod = "POST"
-            let post = "queryType=\(QueryType)&email=\(email!)";
-            
-            request.httpBody = post.data(using: String.Encoding.utf8);
-            
-            let group = DispatchGroup()
-            group.enter()
-            
-            let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-                do
-                {
-                    
-                    let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String]
-                    self.user_id = Int(json[0])!
-                    group.leave()
-                    
-                }catch{
-                }
-            }
-            task.resume()
-            group.wait()
-            
-            
-            return true
-        }
-        else {
-            return false
-        }
-    }
-    
-    
-    // MARK: - Password Handlers
-    // Self explanatory, returns a salted and hashed password
-    func saltAndHash(password: String, salt: String) -> String{
-        let hashedPassword = password + salt;
-        return hashedPassword
-//        return String(hashedPassword.hashValue)
-    }
-    
-    
     // MARK: - Default Functions
     override func viewDidLoad() {
-        super.viewDidLoad()
-        
         // Do any additional setup after loading the view, typically from a nib.
+        BiometricLogin()
+        super.viewDidLoad()
     }
     
     override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+        super.didReceiveMemoryWarning()
     }
     
     
@@ -151,21 +62,73 @@ class LoginViewController: UIViewController {
         }
         else if (segue.identifier == "Dashboard"){
             if CanSendLogin{
-                if CheckLogin(){
-                    let vc = segue.destination as! DashboardViewController
-                    vc.user_id = user_id
+                var response : NSDictionary = NSDictionary()
+
+                if BiometricAuthentication{
+                    response = CheckLogin(email: emailKeyChain, psw: passwordKeyChain,Biometric: BiometricAuthentication)
                 }
                 else{
-                    let alertController = UIAlertController(title: "Error", message: "Credentials are incorrect.", preferredStyle: UIAlertController.Style.alert)
-                    alertController.addAction(UIAlertAction.init(title: "Dismiss", style: UIAlertAction.Style.destructive, handler: {(alert: UIAlertAction!) in print("Bad")}))
+                    response = CheckLogin(email: emailField.text!, psw: passwordField.text!,Biometric: BiometricAuthentication)
+                }
+                if (response["registered"] as! Bool) == true{
+                    if response["verified"] as! Bool == true{
+                        let vc = segue.destination as! DashboardViewController
+                        vc.user_id = response["uid"] as! Int
+                    }
+                    else{
+                        performSegue(withIdentifier: "NotVerified", sender: nil)
+                    }
                     
-                    self.present(alertController, animated: true, completion: nil)
+                    
+                }
+                else{
+                    self.present(Alert(title: "Error", message: "Credentials are incorrect.", Dismiss: "Dismiss"),animated: true, completion: nil)
                 }
                 
             }
+        }
+    }
+    
+    // MARK: - TOUCH/FACE ID
+    // Salvame papi dios
+    
+    // Get password from keychain
+    func LoadPassword(_ email: String){
+        let passwordItem = KeychainPasswordItem(service: KeychainConfiguration.serviceName, account: email, accessGroup: KeychainConfiguration.accessGroup)
+        do{
+            self.passwordKeyChain = try passwordItem.readPassword()
+            // Authenticate user using stored password from keychain. (Remember email is already registered and password is already hashed.)
+            self.BiometricAuthentication = true
+            self.CanSendLogin = true
             
-            
-            
+        } catch KeychainPasswordItem.KeychainError.noPassword {
+            print("No saved password")
+        } catch {
+            print("Unhandled error")
+        }
+    }
+    
+    // MARK: - Biometric login
+    // If user presses biometric login button:
+    // Present biometric login window
+    // Take user to his dashboard if he is authenticated.
+    
+    func BiometricLogin(){
+        //  Request biometric authentication, we look for last accessed email in app and display authentication window.
+        let context = LAContext()
+        
+        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil){
+            guard let email = UserDefaults.standard.object(forKey: "lastAccessedUserName") as? String else {return}
+            context.evaluatePolicy(LAPolicy.deviceOwnerAuthenticationWithBiometrics, localizedReason: email, reply: { (authSuccessful, authError) in
+                if authSuccessful{
+                    self.emailKeyChain = email
+                    self.LoadPassword(email)
+                    
+                    DispatchQueue.main.async{
+                        self.performSegue(withIdentifier: "Dashboard", sender: nil)
+                    }
+                }
+            })
         }
     }
 }

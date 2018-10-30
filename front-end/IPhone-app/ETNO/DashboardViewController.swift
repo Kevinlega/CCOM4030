@@ -3,7 +3,7 @@
 //  ETNO
 //
 //  Created by Kevin Legarreta on 10/2/18.
-//  Copyright © 2018 Los 5. All rights reserved.
+//  Copyright © 2018 Los Duendes Malvados. All rights reserved.
 //
 
 import UIKit
@@ -29,11 +29,12 @@ class DashboardViewController: UIViewController, UICollectionViewDelegate, UICol
     var NoProject = false
     var CantLeave = true
 
-    
     // MARK: - CollectionView Handlers
-
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if NoProject{
+            return 0
+        }
         return name.count
     }
     
@@ -46,60 +47,39 @@ class DashboardViewController: UIViewController, UICollectionViewDelegate, UICol
         return cell
     }
     
-    
-    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.project_id = Int(id[indexPath.row] as! String)!
         performSegue(withIdentifier: "ViewProject", sender: nil)
     }
     
-    
-    // MARK: - Connection to Database
-    func GetProjects() {
-        let QueryType = "3";
-        var done = false;
-        let url = URL(string: "http://54.81.239.120/selectAPI.php");
-        var request = URLRequest(url:url!)
-        request.httpMethod = "POST"
-        let post = "queryType=\(QueryType)&uid=\(user_id)";
-        print(post)
-        request.httpBody = post.data(using: String.Encoding.utf8);
-        
-        let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-            do {
-                let json = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? NSDictionary
-                
-                if let parseJSON = json {
-                    if parseJSON!["empty"] as! String == "no"{
-                        self.name = parseJSON!["project_name"] as! NSArray
-                        self.id = parseJSON!["project_id"] as! NSArray
-                    }
-                    else{
-                        self.NoProject = true
-                    }
-                }
-            }
-            done = true;
-        }
-        task.resume()
-        repeat {
-            RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.1))
-        } while !done
-    }
-    
     // MARK: - Default Functions
     override func loadViewIfNeeded() {
-        GetProjects()
+        let response = GetProjects(user_id: user_id)
+        if response["empty"] as! Bool == false{
+            self.name = response["project_name"] as! NSArray
+            self.id = response["project_id"] as! NSArray
+        }
+        else{
+            self.NoProject = true
+        }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        GetProjects()
+                
+        let response = GetProjects(user_id: user_id)
+        if response["empty"] as! Bool == false{
+            self.name = response["project_name"] as! NSArray
+            self.id = response["project_id"] as! NSArray
+        }
+        else{
+            self.NoProject = true
+        }
         
 //        let width = ((collectionView!.frame.width) - leftAndRightPaddings) / numberOfItemsPerRow
 //        let layout = UICollectionViewLayout as! UICollectionViewFlowLayout
 //        layout.itemSize = CGSize(width: width, height: width + heightAdjustment)
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -115,14 +95,16 @@ class DashboardViewController: UIViewController, UICollectionViewDelegate, UICol
             let vc = segue.destination as! ProjectViewController
             vc.user_id = user_id
             vc.project_id = project_id
-            
-         
         }
         else if (segue.identifier == "Logout"){
             let _ = segue.destination as! LoginViewController
         }
         else if (segue.identifier == "CreateProject"){
             let vc = segue.destination as! CreateAProjectViewController
+            vc.user_id = user_id
+        }
+        else if (segue.identifier == "Friends"){
+            let vc = segue.destination as! TabBarViewController
             vc.user_id = user_id
         }
     }
