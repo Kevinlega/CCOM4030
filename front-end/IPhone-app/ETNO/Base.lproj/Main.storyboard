@@ -632,7 +632,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="E4v-LO-j0b" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="248" y="854"/>
+            <point key="canvasLocation" x="214" y="800"/>
         </scene>
         <!--CreateA Project View Controller-->
         <scene sceneID="IBT-aq-LRW">
@@ -822,7 +822,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OmP-i8-EBW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4417" y="-780"/>
+            <point key="canvasLocation" x="5738" y="-1006"/>
         </scene>
         <!--Project View Controller-->
         <scene sceneID="Oi4-5m-nIf">
@@ -1041,9 +1041,8 @@
         <image name="Image-5" width="18" height="18"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="5qV-Xp-Sn9"/>
         <segue reference="chT-jX-6aO"/>
-        <segue reference="YSk-mB-5ei"/>
-        <segue reference="YDh-3o-jHY"/>
+        <segue reference="tM9-RE-h5g"/>
+        <segue reference="wOM-C1-r7n"/>
     </inferredMetricsTieBreakers>
 </document>
