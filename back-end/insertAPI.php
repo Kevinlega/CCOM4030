@@ -62,13 +62,13 @@ if(isset($_REQUEST['queryType'])) {
 					echo "Prepare failed : (" . $connection->errno . ") " . $connection->error;
 				}
 				$statement->bind_param('ssssi', $name, $location, $description, $folder_link,$user_id);
+				$json = json_decode(shell_exec("/usr/bin/python /var/www/new_dir.py"), true);
 
 				$name = $_REQUEST['name'];
 				$location = $_REQUEST['location'];
 				$description = $_REQUEST['description'];
 				$user_id = $_REQUEST['user_id'];
-				$folder_link = shell_exec("/usr/bin/python /var/www/new_dir.py");
-				$folder_link = str_replace("\n", "", $folder_link);
+				$folder_link = $json["folder_link"];
 
 				if(!$statement->execute()) {
 					$return = array("created"=>false);

@@ -148,6 +148,7 @@
 				0A29A49F21838F5300B35D25 /* KeychainPasswordItem.swift */,
 				0ABE28D321642A33001C2385 /* CreateAccountViewController.swift */,
 				0A421B89216EDD0E00DA7452 /* LoginViewController.swift */,
+				0A0836C9218555AD00E79E50 /* NotVerifiedViewController.swift */,
 				0ABE28D7216430AB001C2385 /* DashboardViewController.swift */,
 				0A963BA2216EA7EA00EA187B /* CreateAProjectViewController.swift */,
 				0A4A29A32166521C00DF49EF /* ProjectViewController.swift */,
@@ -158,7 +159,6 @@
 				0AE8F2812180FA5600298297 /* AllFriendsViewController.swift */,
 				0A8B596021837B3B009EEDC6 /* TabBarViewController.swift */,
 				0A73FFFD2173D70100BB0664 /* ReusedFunctions.swift */,
-				0A0836C9218555AD00E79E50 /* NotVerifiedViewController.swift */,
 			);
 			path = ETNO;
 			sourceTree = "<group>";
