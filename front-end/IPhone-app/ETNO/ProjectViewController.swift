@@ -38,14 +38,18 @@ class ProjectViewController: UIViewController, UINavigationControllerDelegate, U
             }
             else {
             print("Camera not available")
-        }
-        
-        let imageData = imageView.image!.pngData()
-        let compresedImage = UIImage(data: imageData!)
-        UIImageWriteToSavedPhotosAlbum(compresedImage!, nil, nil, nil)
-    
+        }        
     }
 
+    
+    @IBAction func savePhoto(_ sender: Any) {
+        guard let selectedImage = imageView.image else {
+            print("Image not found!")
+            return
+        }
+        UIImageWriteToSavedPhotosAlbum(selectedImage, self, nil, nil)
+    }
+    
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
