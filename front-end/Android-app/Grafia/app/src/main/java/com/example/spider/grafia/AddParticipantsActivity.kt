@@ -22,19 +22,15 @@ class AddParticipantsActivity : AppCompatActivity() {
     var FilteredNames = JSONArray()
     var FilteredEmail = JSONArray()
 
-//    var names = JSONArray()
-//    var emails = JSONArray()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_participants)
 
         // retrieve data from another view
 
-//        val userId = intent.getStringExtra("userId")
-//        val projectId  = intent.getStringExtra("projectId")
-        val userId = 4
-        val projectId = 1
+        val userId = intent.getIntExtra("userId",-1)
+        val projectId  = intent.getIntExtra("projectId",-1)
+
 
         val listView = findViewById<ListView>(R.id.listView)
         val mContext = this
@@ -58,27 +54,37 @@ class AddParticipantsActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                var empty: Boolean
                 if (downloadData.names.length() > 0) {
                     if (newText!!.isNotEmpty()) {
-                        println(downloadData.names)
+                        empty = true
                         val search = newText.toLowerCase()
                         for (i in 0..(downloadData.names.length()-1)) {
                             if ((downloadData.names[i] as String).toLowerCase().contains(search)) {
-                                FilteredNames.put(downloadData.names[i] as String)
-                                FilteredEmail.put(downloadData.emails[i] as String)
+                                var found = false
+                                for(j in 0..(FilteredEmail.length()-1)){
+                                    if(FilteredEmail[j] == downloadData.emails[i]){
+                                        found = true
+                                        empty = false
+                                    }
+                                }
+                                if(!found){
+                                    empty = false
+                                    FilteredNames.put(downloadData.names[i] as String)
+                                    FilteredEmail.put(downloadData.emails[i] as String)
+                                }
                             }
-
                         }
+
+                        if(empty){
+                            FilteredNames = JSONArray()
+                            FilteredEmail = JSONArray()
+                        }
+
                     } else {
-                        for (i in 0..(downloadData.names.length()-1)) {
-                            FilteredEmail.remove(0)
-                            FilteredNames.remove(0)
-                        }
-
-                        for (i in 0..(downloadData.names.length()-1)) {
-                            FilteredNames.put(downloadData.names[i] as String)
-                            FilteredEmail.put(downloadData.emails[i] as String)
-                        }
+                        empty = true
+                        FilteredNames = downloadData.names
+                        FilteredEmail = downloadData.emails
                     }
                     listView.adapter = ListViewAdapter(mContext,FilteredNames as JSONArray, FilteredEmail as JSONArray,selectedEmails )
                 }
@@ -90,16 +96,15 @@ class AddParticipantsActivity : AppCompatActivity() {
         BackToProject.setOnClickListener {
                 val intent = Intent(this@AddParticipantsActivity, ProjectActivity::class.java)
                 // To pass any data to next activity
-//            intent.putExtra("keyIdentifier", value)
+                intent.putExtra("userId", userId)
+                intent.putExtra("projectId",projectId)
                 // start your next activity
                 startActivity(intent)
             }
 
         AddParticipants.setOnClickListener {
             val intent = Intent(this@AddParticipantsActivity, ProjectActivity::class.java)
-            // To pass any data to next activity
-//            intent.putExtra("keyIdentifier", value)
-            // start your next activity
+
             if(downloadData.selectedEmails.size > 0){
 
                 for (i in 0..(selectedEmails.size-1)){
@@ -117,6 +122,10 @@ class AddParticipantsActivity : AppCompatActivity() {
                         println(e.message)
                     }
                 }
+                // To pass any data to next activity
+                intent.putExtra("userId", userId)
+                intent.putExtra("projectId",projectId)
+                // start your next activity
                 startActivity(intent)
             }
             else{
