@@ -1,6 +1,5 @@
 package com.example.spider.grafia
 
-import android.app.Person
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -10,37 +9,35 @@ import kotlinx.android.synthetic.main.activity_add_participants.*
 
 
 import android.os.AsyncTask
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.ListView
-import android.widget.TextView
 import org.json.JSONArray
 import org.json.JSONObject
 import java.net.URL
-import android.graphics.Color.parseColor
-
+import android.view.*
+import android.widget.*
 
 
 class AddParticipantsActivity : AppCompatActivity() {
 
     var selectedEmails: MutableList<String> = ArrayList()
+    var FilteredNames = JSONArray()
+    var FilteredEmail = JSONArray()
 
+//    var names = JSONArray()
+//    var emails = JSONArray()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_participants)
 
-
-        val listView = findViewById<ListView>(R.id.listView)
-
         // retrieve data from another view
 
-        val userId = intent.getStringExtra("userId")
-        val projectId  = intent.getStringExtra("projectId")
+//        val userId = intent.getStringExtra("userId")
+//        val projectId  = intent.getStringExtra("projectId")
+        val userId = 4
+        val projectId = 1
 
-
+        val listView = findViewById<ListView>(R.id.listView)
+        val mContext = this
         val downloadData = Connect(this,0,listView, selectedEmails)
 
         try
@@ -52,6 +49,42 @@ class AddParticipantsActivity : AppCompatActivity() {
         {
             println(e.message)
         }
+
+        val search = findViewById<SearchView>(R.id.searchBar)
+
+        search.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (downloadData.names.length() > 0) {
+                    if (newText!!.isNotEmpty()) {
+                        println(downloadData.names)
+                        val search = newText.toLowerCase()
+                        for (i in 0..(downloadData.names.length()-1)) {
+                            if ((downloadData.names[i] as String).toLowerCase().contains(search)) {
+                                FilteredNames.put(downloadData.names[i] as String)
+                                FilteredEmail.put(downloadData.emails[i] as String)
+                            }
+
+                        }
+                    } else {
+                        for (i in 0..(downloadData.names.length()-1)) {
+                            FilteredEmail.remove(0)
+                            FilteredNames.remove(0)
+                        }
+
+                        for (i in 0..(downloadData.names.length()-1)) {
+                            FilteredNames.put(downloadData.names[i] as String)
+                            FilteredEmail.put(downloadData.emails[i] as String)
+                        }
+                    }
+                    listView.adapter = ListViewAdapter(mContext,FilteredNames as JSONArray, FilteredEmail as JSONArray,selectedEmails )
+                }
+                return true
+            }
+            })
 
         // Segue trigger
         BackToProject.setOnClickListener {
@@ -169,8 +202,9 @@ class AddParticipantsActivity : AppCompatActivity() {
                 list = listView
             }
 
-            var names =  JSONArray()
+            var names = JSONArray()
             var emails =  JSONArray()
+
             override fun doInBackground(vararg p0: String?): String {
 
                 return downloadJSON(p0[0])
