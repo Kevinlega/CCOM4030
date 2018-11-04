@@ -20,7 +20,7 @@ class CreateProjectActivity : AppCompatActivity() {
         }
 
         CreateProject.setOnClickListener {
-            val intent = Intent(this@CreateProjectActivity, DashboardActivity::class.java)
+            val intent = Intent(this@CreateProjectActivity, ProjectActivity::class.java)
             // To pass any data to next activity
 //            intent.putExtra("keyIdentifier", value)
 //             start your next activity
