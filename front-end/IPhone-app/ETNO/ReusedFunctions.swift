@@ -34,13 +34,12 @@ public func Alert(title: String, message: String, Dismiss: String) -> UIAlertCon
     return alertController
 }
 
-// MARK: - Get the Last Bit
+// MARK: - LFSR Algorithm
 public func theLowestBit(newState: UInt) -> Character{
     let lastBit = String(newState,radix: 2)
     return lastBit.last!
 }
 
-// MARK: - Change the InitialValue
 public func feedback(initialValue: UInt) -> UInt{
     var newState = initialValue
     
@@ -55,7 +54,6 @@ public func feedback(initialValue: UInt) -> UInt{
     return newState
 }
 
-// MARK: - LFSR Algorithm
 public func LFSR(data: String, initialValue: UInt)-> String {
 
     var newState = initialValue

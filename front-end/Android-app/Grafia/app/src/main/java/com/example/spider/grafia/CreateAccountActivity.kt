@@ -27,46 +27,46 @@ class CreateAccountActivity : AppCompatActivity(){
     }
 
     //Change the InitialValue
-//    fun feedback(initialValue: UInt): UInt{
-//        var newState = initialValue
-//        var count = 0
-//        while(count < 10) {
-//            if ((newState and 1) == 0.toUInt()){
-//                newState = newState shr 1
-//            }
-//            else {
-//                newState = (newState shr 1) xor 0x85913829
-//            }
-//            count += 1
-//        }
-//        return newState
-//    }
+    fun feedback(initialValue: UInt): UInt{
+        var newState = initialValue
+        var count = 0
+        while(count < 10) {
+            if ((newState and 1.toUInt()) == 0.toUInt()){
+                newState = newState shr 1
+            }
+            else {
+                newState = (newState shr 1) xor 0x85913829.toUInt()
+            }
+            count += 1
+        }
+        return newState
+    }
 
-    // LSFR Algorithm
-//    fun LSFR(salt:String,initialValue:UInt): String{
-//        var newState = initialValue
-//        var hexadecimal: UInt
-//        var output = ""
-//        var char: UInt
-//
-//        salt.forEach { character ->
-//            newState = feedback(initialValue)
-//            char = character.toByte().toUInt()
-//            hexadecimal = newState xor (char and 0xFF.toUInt())
-//            output += hexadecimal.toString()
-//        }
-//        return output
-//    }
+    // LFSR Algorithm
+    fun LFSR(salt:String,initialValue:UInt): String{
+        var newState = initialValue
+        var hexadecimal: UInt
+        var output = ""
+        var char: UInt
+
+        salt.forEach { character ->
+            newState = feedback(initialValue)
+            char = character.toByte().toUInt()
+            hexadecimal = newState xor (char and 0xFF.toUInt())
+            output += hexadecimal.toString()
+        }
+        return output
+    }
 
     // Generates a salt and hashes a function
     fun saltAndHash(password:String,salt:String,initialValue: UInt): String{
         val salted = password + salt
-        //return LSFR(salted,initialValue)
-        return salted
+//        salted = LFSR(salted,initialValue)
+        return salted.hashCode().toString()
     }
 
     // Checks if an email is already registered.
-    fun IsRegistered(email:String): Boolean{
+    fun isRegistered(email:String): Boolean{
         val query = 0
         val connectToAPI = Connect(this)
         try{
@@ -76,12 +76,11 @@ class CreateAccountActivity : AppCompatActivity(){
         }
         catch (error: Exception){}
 
-        println(connectToAPI.registered)
         return connectToAPI.registered
 
     }
 
-    fun CheckLogin(name:String, password:String,confirm:String,email:String): Boolean{
+    fun checkLogin(name:String, password:String,confirm:String,email:String): Boolean{
         var canLogin = true
         if(name.isNullOrBlank() || password.isNullOrBlank() || confirm.isNullOrBlank() || email.isNullOrBlank()){
             canLogin = false
@@ -103,15 +102,9 @@ class CreateAccountActivity : AppCompatActivity(){
         return canLogin
     }
 
-    fun Register(name:String, password:String, email:String, salt: String, initialValue: UInt): Boolean{
+    fun register(name:String, password:String, email:String, salt: String, initialValue: UInt): Boolean{
         val query = 0
         val connectToAPI = Connect(this)
-        println(name)
-        println(password)
-        println(salt)
-        println(email)
-        println(initialValue)
-        println(2222222222222222)
 
         try{
             val url = "http://54.81.239.120/insertAPI.php?queryType=$query&name=$name&password=$password&email=$email&salt=$salt&initialValue=$initialValue"
@@ -147,15 +140,16 @@ class CreateAccountActivity : AppCompatActivity(){
             val email = Email.text.toString()
             val password = Password.text.toString()
             val confirm = ConfirmPassword.text.toString()
-            if(CheckLogin(name,password,confirm,email)) {
-                if (!IsRegistered(email)){
+            if(checkLogin(name,password,confirm,email)) {
+                if (!isRegistered(email)){
                     val initialValue = UIGenerator(0,101)
                     var salt = java.util.UUID.randomUUID().toString().replace("-", "")
+
+//                    salt = LFSR(salt,initialValue)
+
                     val hashedPassword = saltAndHash(password,salt,initialValue)
-                    println(salt)
-                    println(hashedPassword)
-                    println(initialValue)
-                    if(Register(name,hashedPassword,email,salt,initialValue)){
+
+                    if(register(name,hashedPassword,email,salt,initialValue)){
                         val intent = Intent(this@CreateAccountActivity, LoginActivity::class.java)
                         startActivity(intent)
                     }
