@@ -4,8 +4,41 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_login.*
+import java.lang.Exception
+import java.lang.StringBuilder
+import java.security.MessageDigest
 
 class LoginActivity : AppCompatActivity() {
+
+    private fun byteArrayToHexString(array: Array<Byte>): String{
+
+        var result = StringBuilder(array.size * 2)
+
+        for (byte in array){
+            val toAppend = String.format("%2X", byte).replace(" ","0")
+            result.append(toAppend)
+        }
+        result.setLength(result.length)
+
+        return result.toString()
+    }
+
+    private fun md5(data: String):String {
+
+        var result = ""
+
+        try {
+
+            val md5 = MessageDigest.getInstance("MD5")
+            val md5HashBytes = md5.digest(data.toByteArray()).toTypedArray()
+
+            result = byteArrayToHexString(md5HashBytes)
+
+        }catch (e: Exception){}
+
+        return result
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

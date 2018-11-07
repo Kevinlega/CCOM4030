@@ -42,7 +42,7 @@ class LoginViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         BiometricLogin()
         super.viewDidLoad()
-    }
+        }
     
     override func didReceiveMemoryWarning() {
         // Dispose of any resources that can be recreated.

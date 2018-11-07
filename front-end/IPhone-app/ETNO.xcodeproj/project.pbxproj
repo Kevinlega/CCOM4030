@@ -78,6 +78,7 @@
 		0AE8F27F2180F97000298297 /* PendingRequestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingRequestViewController.swift; sourceTree = "<group>"; };
 		0AE8F2812180FA5600298297 /* AllFriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllFriendsViewController.swift; sourceTree = "<group>"; };
 		0AFA5FDA217FE2D000CB360D /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
+		3003345F21925A7300BD1C11 /* Grafia-BridgingHeader.h .h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Grafia-BridgingHeader.h .h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +140,7 @@
 			isa = PBXGroup;
 			children = (
 				0AE263E02183B3C500E617C8 /* ETNO.entitlements */,
+				3003345F21925A7300BD1C11 /* Grafia-BridgingHeader.h .h */,
 				0A9B78B6215DA51300F48859 /* Main.storyboard */,
 				0A9B78BB215DA51500F48859 /* LaunchScreen.storyboard */,
 				0A9B78B9215DA51500F48859 /* Assets.xcassets */,
@@ -525,6 +527,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRIP_INSTALLED_PRODUCT = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/spider/Desktop/Software/CCOM4030/front-end/IPhone-app/ETNO/Grafia-BridgingHeader.h .h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -548,6 +551,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRIP_INSTALLED_PRODUCT = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/spider/Desktop/Software/CCOM4030/front-end/IPhone-app/ETNO/Grafia-BridgingHeader.h .h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

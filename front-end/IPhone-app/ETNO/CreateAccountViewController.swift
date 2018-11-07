@@ -83,13 +83,12 @@ class CreateAccountViewController: UIViewController {
                 let UserName = Name.text
                 let UserEmail = Email.text
                 
-                let initialValue = generateRandomUInt()
-                let Salt = saltGenerator(length: 5, initialValue: initialValue)
-                UserPassword = LFSR(data: UserPassword!, initialValue: initialValue)
+
+                let Salt = saltGenerator(length: 5)
                 UserPassword = saltAndHash(password: UserPassword!,salt: Salt)
                 
                 SaveToKeychain(email: UserEmail!, password: UserPassword!)
-                if CreateAccount(name: UserName!, email: UserEmail!,password: UserPassword!, salt: Salt, initialValue: initialValue){
+                if CreateAccount(name: UserName!, email: UserEmail!,password: UserPassword!, salt: Salt){
                     let _ = segue.destination as! LoginViewController
                 }
                 else{

@@ -47,7 +47,6 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    
     // MARK: - Modify the Tableview
     // Update the view of the table
     

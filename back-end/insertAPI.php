@@ -24,13 +24,12 @@ switch($queryType) {
 			$email = $_REQUEST["email"];
 			$password = $_REQUEST["password"];
 			$salt = $_REQUEST["salt"];
-			$initialValue = $_REQUEST["initialValue"];
-			$query = "INSERT INTO users (name,email,hashed_password,salt,initialValue) VALUES (?, ?, ?, ?,?)";
+			$query = "INSERT INTO users (name,email,hashed_password,salt) VALUES (?, ?, ?,?)";
 
 			if(!$statement = $connection->prepare($query)) {
 				echo "Prepare failed: (" . $connection->errno . ") " . $connection->error; 
 			}
-			$statement->bind_param("ssssi", $name, $email, $password, $salt,$initialValue);
+			$statement->bind_param("ssss", $name, $email, $password, $salt);
 
 			if(!$statement->execute()) {
 				$return = array("registered"=>false);

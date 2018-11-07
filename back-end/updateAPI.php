@@ -15,20 +15,17 @@ if($queryType == UPDATE_PASSWORD) {
 	if(!isset($_REQUEST['email'])) 		exit();
 	if(!isset($_REQUEST['password'])) 	exit();
 	if(!isset($_REQUEST['salt'])) 		exit();
-	if(!isset($_REQUEST['initialValue'])) 	exit();
 
 	$query = "UPDATE users 
-		  SET hashed_password = (?), initialValue = (?), salt = (?)  
+		  SET hashed_password = (?), salt = (?)  
 		  WHERE email = (?)";
 
 	$statement = $connection->prepare($query);
-	$statement->bind_param('siss', $password, $initialValue, $salt, $email);
+	$statement->bind_param('sss', $password, $salt, $email);
 
 	$email = $_REQUEST["email"];
 	$password = $_REQUEST["password"];
 	$salt = $_REQUEST["salt"];
-	$initialValue = $_REQUEST["initialValue"];
-
 	$statement->execute();
 
 	if($statement->affected_rows == 1) {

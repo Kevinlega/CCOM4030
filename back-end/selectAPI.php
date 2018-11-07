@@ -136,20 +136,20 @@ switch($queryType) {
 	
 		$email = $_REQUEST["email"];
 
-		$query = "SELECT hashed_password, salt, initialValue 
+		$query = "SELECT hashed_password, salt 
 			  FROM users 
 			  WHERE email=(?)";
 
 		$statement = $connection->prepare($query);			// Prepare the query statement. (for sanitation)
 		$statement->bind_param('s', $email);				// Bind the parameters with the sql query.
 		$statement->execute();						// Execute the now sanitized query.
-		$statement->bind_result($hashed_password, $salt, $initialValue);// Asign the fetch value to these new variables.
+		$statement->bind_result($hashed_password, $salt);// Asign the fetch value to these new variables.
 		$statement->fetch();
 
 		if(empty($hashed_password))
 			$return = array("empty"=>true);
 		else
-			$return = array("empty"=> false,"hashed_password" => $hashed_password,"salt" => $salt, "initialValue"=> $initialValue);
+			$return = array("empty"=> false,"hashed_password" => $hashed_password,"salt" => $salt);
 		break;
 
 	case GET_NAME_WITH_EMAIL:

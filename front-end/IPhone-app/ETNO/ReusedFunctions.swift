@@ -13,15 +13,14 @@ import UIKit
 // Self explanatory, returns a salted and hashed password
 public func saltAndHash(password: String, salt: String) -> String{
     let hashedPassword = password + salt
-    return String(hashedPassword.hash)
+    return (String(hashedPassword).md5!)
 }
 
 // Generates salt for password
-public func saltGenerator(length: Int,initialValue: UInt) -> String{
+public func saltGenerator(length: Int) -> String{
     let characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTXUVXYZ0123456789"
     let key = (0..<length).compactMap{_ in characters.randomElement()}
-    var  salt = String(key)
-    salt = LFSR(data: salt, initialValue: initialValue)
+    let  salt = String(key)
     return salt;
 }
 
@@ -32,47 +31,6 @@ public func Alert(title: String, message: String, Dismiss: String) -> UIAlertCon
     alertController.addAction(UIAlertAction.init(title: Dismiss, style: UIAlertAction.Style.destructive, handler: {(alert: UIAlertAction!) in print("Bad")}))
     
     return alertController
-}
-
-// MARK: - LFSR Algorithm
-public func theLowestBit(newState: UInt) -> Character{
-    let lastBit = String(newState,radix: 2)
-    return lastBit.last!
-}
-
-public func feedback(initialValue: UInt) -> UInt{
-    var newState = initialValue
-    
-    for _ in 1...10{
-        if theLowestBit(newState: newState) == "0"{
-            newState = newState>>1
-        }
-        else{
-            newState = (newState>>1) ^ 0x85913829
-        }
-    }
-    return newState
-}
-
-public func LFSR(data: String, initialValue: UInt)-> String {
-
-    var newState = initialValue
-    var hexadecimal : String
-    var output = ""
-    
-    for letter in data {
-        newState = feedback(initialValue: newState)
-        let char = String(letter).unicodeScalars
-        let charInt = UInt(char[char.startIndex].value)
-        hexadecimal = String(newState ^ (charInt & UInt(0xFF)))
-        output.append(hexadecimal)
-    }
-    return output
-}
-
-// MARK: - Generate Random InitialValue for LFSR
-public func generateRandomUInt() -> UInt{
-    return UInt.random(in: 0..<4294967295)
 }
 
 // MARK: - Connect to API
@@ -115,14 +73,14 @@ public func isRegistered(email: String) -> Bool{
 }
 
 // MARK: - Changes the Password
-public func ChangePassword(email: String, password: String, initialValue: UInt,salt: String) {
+public func ChangePassword(email: String, password: String, salt: String) {
     
     // Create the request to the API
     let QueryType = "0"
     let url = URL(string: "http://54.81.239.120/updateAPI.php")
     var request = URLRequest(url:url!)
     request.httpMethod = "POST"
-    let post = "queryType=\(QueryType)&email=\(email)&password=\(password)&initialValue=\(initialValue)&salt=\(salt)"
+    let post = "queryType=\(QueryType)&email=\(email)&password=\(password)&salt=\(salt)"
     request.httpBody = post.data(using: String.Encoding.utf8)
 
     let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in }
@@ -132,7 +90,7 @@ public func ChangePassword(email: String, password: String, initialValue: UInt,s
 // MARK: - Creates the Account
 // Create an account
 
-public func CreateAccount(name: String, email: String, password: String, salt: String, initialValue: UInt) -> Bool{
+public func CreateAccount(name: String, email: String, password: String, salt: String) -> Bool{
     
     // Create the request to the API
     var response : NSDictionary = NSDictionary()
@@ -142,7 +100,7 @@ public func CreateAccount(name: String, email: String, password: String, salt: S
     var request = URLRequest(url:url!)
     request.httpMethod = "POST"
 
-    let post = "queryType=\(QueryType)&name=\(name)&email=\(email)&password=\(password)&salt=\(salt)&initialValue=\(initialValue))"
+    let post = "queryType=\(QueryType)&name=\(name)&email=\(email)&password=\(password)&salt=\(salt)"
 
     request.httpBody = post.data(using: String.Encoding.utf8)
     
@@ -210,7 +168,6 @@ public func CheckLogin(email: String, psw: String, Biometric: Bool) -> NSDiction
     var password = psw
     var hashed_password = String()
     var salt = String()
-    var initialValue : UInt
     
     var response : NSDictionary
     
@@ -227,7 +184,6 @@ public func CheckLogin(email: String, psw: String, Biometric: Bool) -> NSDiction
     if (response["empty"] as! Bool) == false{
         hashed_password = response["hashed_password"] as! String
         salt = response["salt"] as! String
-        initialValue = response["initialValue"] as! UInt
     }
     else{
         return ["registered": false]
@@ -235,7 +191,6 @@ public func CheckLogin(email: String, psw: String, Biometric: Bool) -> NSDiction
     
     
     if !Biometric{
-        password = LFSR(data: password, initialValue: initialValue)
         password = saltAndHash(password: password, salt: salt)
     }
     
@@ -402,5 +357,21 @@ public func InsertParticipants(SelectedEmail: [String], project_id: Int){
         if (response["registered"] as! Bool) == false{
             print("bad")
         }
+    }
+}
+
+//MARK: - String md5
+public extension String {
+    
+    var md5: String? {
+        guard let data = self.data(using: String.Encoding.utf8) else { return nil }
+        
+        let hash = data.withUnsafeBytes { (bytes: UnsafePointer<Data>) -> [UInt8] in
+            var hash: [UInt8] = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))
+            CC_MD5(bytes, CC_LONG(data.count), &hash)
+            return hash
+        }
+        
+        return (hash.map { String(format: "%02x", $0) }.joined()) as String
     }
 }
