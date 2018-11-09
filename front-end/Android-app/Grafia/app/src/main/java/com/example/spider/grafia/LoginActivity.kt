@@ -44,6 +44,8 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        supportActionBar!!.setTitle("Grafía Login")
+
         loginButton.setOnClickListener {
 //            if verified
             val intent = Intent(this@LoginActivity, DashboardActivity::class.java)

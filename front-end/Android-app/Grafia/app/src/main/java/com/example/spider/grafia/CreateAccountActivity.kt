@@ -121,6 +121,7 @@ class CreateAccountActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_account)
 
+        supportActionBar!!.setTitle("Create Account")
 
         // When 'Create Account' button is pressed:
         // 1) Input validation:

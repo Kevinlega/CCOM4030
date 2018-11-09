@@ -11,11 +11,14 @@ class DashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 
+        supportActionBar!!.setTitle("Dashboard")
+
         logout.setOnClickListener {
             val intent = Intent(this@DashboardActivity, LoginActivity::class.java)
             // To pass any data to next activity
 //            intent.putExtra("keyIdentifier", value)
 //             start your next activity
+            finish()
             startActivity(intent)
         }
 

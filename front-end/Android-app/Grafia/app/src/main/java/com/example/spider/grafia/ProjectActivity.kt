@@ -11,6 +11,9 @@ class ProjectActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project)
 
+        supportActionBar!!.setTitle("Project Name")
+
+
         BackToDashboard.setOnClickListener {
             val intent = Intent(this@ProjectActivity, DashboardActivity::class.java)
             // To pass any data to next activity

@@ -26,6 +26,8 @@ class AddParticipantsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_participants)
 
+        supportActionBar!!.setTitle("Add Participants")
+
         // retrieve data from another view
 
         val userId = intent.getIntExtra("userId",-1)
@@ -46,7 +48,7 @@ class AddParticipantsActivity : AppCompatActivity() {
             println(e.message)
         }
 
-        val search = findViewById<SearchView>(R.id.searchBar)
+        val search = findViewById<SearchView>(R.id.searchBarFriends)
 
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -82,11 +84,10 @@ class AddParticipantsActivity : AppCompatActivity() {
                         }
 
                     } else {
-                        empty = true
                         FilteredNames = downloadData.names
                         FilteredEmail = downloadData.emails
                     }
-                    listView.adapter = ListViewAdapter(mContext,FilteredNames as JSONArray, FilteredEmail as JSONArray,selectedEmails )
+                    listView.adapter = ListViewAdapter(mContext,FilteredNames , FilteredEmail,selectedEmails )
                 }
                 return true
             }
@@ -116,7 +117,6 @@ class AddParticipantsActivity : AppCompatActivity() {
 
                         val url = "http://54.81.239.120/insertAPI.php?queryType=1&pid=$projectId&email=$email"
                         insertData.execute(url)
-
                     }catch (e: Exception)
                     {
                         println(e.message)
@@ -126,10 +126,11 @@ class AddParticipantsActivity : AppCompatActivity() {
                 intent.putExtra("userId", userId)
                 intent.putExtra("projectId",projectId)
                 // start your next activity
+                Toast.makeText(this, "Participants added.", Toast.LENGTH_SHORT).show()
                 startActivity(intent)
             }
             else{
-                println("bye")
+                Toast.makeText(this, "No participants selected.", Toast.LENGTH_SHORT).show()
             }
 
         }

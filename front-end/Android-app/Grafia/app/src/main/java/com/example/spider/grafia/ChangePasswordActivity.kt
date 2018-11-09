@@ -11,6 +11,8 @@ class ChangePasswordActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_change_password)
 
+        supportActionBar!!.setTitle("Change Password")
+
         ChangePassword.setOnClickListener {
             val intent = Intent(this@ChangePasswordActivity, LoginActivity::class.java)
             // To pass any data to next activity

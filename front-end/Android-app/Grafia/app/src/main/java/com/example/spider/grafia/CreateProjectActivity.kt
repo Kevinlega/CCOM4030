@@ -19,6 +19,9 @@ class CreateProjectActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_project)
 
+        supportActionBar!!.setTitle("Create Project")
+
+
         //var user_id=intent.getStringExtra("user_id")
         val userId = intent.getStringExtra("userId")
 
