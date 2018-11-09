@@ -17,6 +17,8 @@ import org.json.JSONObject
 import java.net.URL
 import android.view.*
 import android.widget.*
+import java.lang.StringBuilder
+import java.security.MessageDigest
 
 class CreateAccountActivity : AppCompatActivity(){
 
@@ -26,43 +28,41 @@ class CreateAccountActivity : AppCompatActivity(){
         return random.toUInt()
     }
 
-    //Change the InitialValue
-    fun feedback(initialValue: UInt): UInt{
-        var newState = initialValue
-        var count = 0
-        while(count < 10) {
-            if ((newState and 1.toUInt()) == 0.toUInt()){
-                newState = newState shr 1
-            }
-            else {
-                newState = (newState shr 1) xor 0x85913829.toUInt()
-            }
-            count += 1
+    private fun byteArrayToHexString(array: Array<Byte>): String{
+
+        var result = StringBuilder(array.size * 2)
+
+        for (byte in array){
+            val toAppend = String.format("%2X", byte).replace(" ","0")
+            result.append(toAppend)
         }
-        return newState
+        result.setLength(result.length)
+
+        return result.toString()
     }
 
-    // LFSR Algorithm
-    fun LFSR(salt:String,initialValue:UInt): String{
-        var newState = initialValue
-        var hexadecimal: UInt
-        var output = ""
-        var char: UInt
+    private fun md5(data: String):String {
 
-        salt.forEach { character ->
-            newState = feedback(initialValue)
-            char = character.toByte().toUInt()
-            hexadecimal = newState xor (char and 0xFF.toUInt())
-            output += hexadecimal.toString()
-        }
-        return output
+        var result = ""
+
+        try {
+
+            val md5 = MessageDigest.getInstance("MD5")
+            val md5HashBytes = md5.digest(data.toByteArray()).toTypedArray()
+
+            result = byteArrayToHexString(md5HashBytes)
+
+        }catch (e: java.lang.Exception){}
+
+        return result
     }
+
 
     // Generates a salt and hashes a function
     fun saltAndHash(password:String,salt:String,initialValue: UInt): String{
         val salted = password + salt
 //        salted = LFSR(salted,initialValue)
-        return salted.hashCode().toString()
+        return md5(salted)
     }
 
     // Checks if an email is already registered.

@@ -22,7 +22,11 @@ class FriendsActivity : AppCompatActivity() {
     var selectedEmails: MutableList<String> = ArrayList()
     var FilteredNames = JSONArray()
     var FilteredEmail = JSONArray()
-//    var userId = -1
+    var userId = -1
+//    val listView = findViewById<ListView>(R.id.listaFriends)
+//    var downloadData = ConnectFriends(this,-1,listView,selectedEmails)
+
+
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_search -> {
@@ -46,99 +50,7 @@ class FriendsActivity : AppCompatActivity() {
                 ButtonAction2.visibility = View.VISIBLE
                 ButtonAction.setText("Accept Request")
                 ButtonAction2.setText("Reject Request")
-
-                 // Below is this view actions
-                val listView = findViewById<ListView>(R.id.listaFriends)
-                val downloadData = ConnectFriends(this,1,listView,selectedEmails)
-                val user = 1
-                try
-                {
-                    val url = "http://54.81.239.120/selectAPI.php?queryType=7&uid=$user"
-                    downloadData.execute(url)
-
-                }catch (e: Exception)
-                {
-                    println(e.message)
-                }
-
-                val search = findViewById<SearchView>(R.id.searchBarFriends)
-
-                search.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-                    override fun onQueryTextSubmit(query: String?): Boolean {
-                        return true
-                    }
-
-                    override fun onQueryTextChange(newText: String?): Boolean {
-                        var empty: Boolean
-                        if (downloadData.names.length() > 0) {
-                            if (newText!!.isNotEmpty()) {
-                                empty = true
-                                val search = newText.toLowerCase()
-                                for (i in 0..(downloadData.names.length()-1)) {
-                                    if ((downloadData.names[i] as String).toLowerCase().contains(search)) {
-                                        var found = false
-                                        for(j in 0..(FilteredEmail.length()-1)){
-                                            if(FilteredEmail[j] == downloadData.emails[i]){
-                                                found = true
-                                                empty = false
-                                            }
-                                        }
-                                        if(!found){
-                                            empty = false
-                                            FilteredNames.put(downloadData.names[i] as String)
-                                            FilteredEmail.put(downloadData.emails[i] as String)
-                                        }
-                                    }
-                                }
-
-                                if(empty){
-                                    FilteredNames = JSONArray()
-                                    FilteredEmail = JSONArray()
-                                }
-
-                            } else {
-                                FilteredNames = downloadData.names
-                                FilteredEmail = downloadData.emails
-                            }
-                            listView.adapter = ListFriendAdapter(this@FriendsActivity,FilteredNames, FilteredEmail,selectedEmails)
-                        }
-                        return true
-                    }
-                })
-
-                ButtonAction.setOnClickListener {
-                    if(selectedEmails.size > 0){
-
-                        for (i in 0..(selectedEmails.size-1)){
-                            try
-                            {
-//                                val insertData = ConnectFriends(this,2,listView, selectedEmails)
-//
-//                                val email = selectedEmails.get(i)
-//
-//                                val url = "http://54.81.239.120/updateAPI.php?queryType=2&uid=$userId&email=$email"
-//                                insertData.execute(url)
-                            }catch (e: Exception)
-                            {
-                                println(e.message)
-                            }
-                        }
-
-                        Toast.makeText(this, "Accepted Request.", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(this, "No Request to Accept.", Toast.LENGTH_SHORT).show()
-                    }
-
-                }
-
-                ButtonAction2.setOnClickListener {
-                    if(selectedEmails.size > 0) {
-                        Toast.makeText(this, "Rejected Request.", Toast.LENGTH_SHORT).show()
-                    }else {
-                        Toast.makeText(this, "No Request to Reject.", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
+                pendingRequest()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_friends -> {
@@ -147,9 +59,6 @@ class FriendsActivity : AppCompatActivity() {
                 ButtonAction2.visibility = View.INVISIBLE
 
                 // Below is this view actions
-
-
-
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -160,10 +69,10 @@ class FriendsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_friends)
 
-        val userId = intent.getIntExtra("userId",-1)
+        userId = intent.getIntExtra("userId",-1)
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        navigation.selectedItemId = R.id.navigation_pending
+        navigation.selectedItemId = R.id.navigation_friends
         navigation.selectedItemId = R.id.navigation_search
 
         Return.setOnClickListener {
@@ -172,6 +81,100 @@ class FriendsActivity : AppCompatActivity() {
 //            intent.putExtra("userId", userId)
             // start your next activity
             startActivity(intent)
+        }
+    }
+
+    fun pendingRequest(){
+        // Below is this view actions
+        val listView = findViewById<ListView>(R.id.listaFriends)
+
+        val downloadData = ConnectFriends(this,1,listView,selectedEmails)
+        try
+        {
+            val url = "http://54.81.239.120/selectAPI.php?queryType=7&uid=$userId"
+            downloadData.execute(url)
+
+        }catch (e: Exception)
+        {
+            println(e.message)
+        }
+
+        val search = findViewById<SearchView>(R.id.searchBarFriends)
+
+        search.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                var empty: Boolean
+                if (downloadData.names.length() > 0) {
+                    if (newText!!.isNotEmpty()) {
+                        empty = true
+                        val search = newText.toLowerCase()
+                        for (i in 0..(downloadData.names.length()-1)) {
+                            if ((downloadData.names[i] as String).toLowerCase().contains(search)) {
+                                var found = false
+                                for(j in 0..(FilteredEmail.length()-1)){
+                                    if(FilteredEmail[j] == downloadData.emails[i]){
+                                        found = true
+                                        empty = false
+                                    }
+                                }
+                                if(!found){
+                                    empty = false
+                                    FilteredNames.put(downloadData.names[i] as String)
+                                    FilteredEmail.put(downloadData.emails[i] as String)
+                                }
+                            }
+                        }
+
+                        if(empty){
+                            FilteredNames = JSONArray()
+                            FilteredEmail = JSONArray()
+                        }
+
+                    } else {
+                        FilteredNames = downloadData.names
+                        FilteredEmail = downloadData.emails
+                    }
+                    listView.adapter = ListFriendAdapter(this@FriendsActivity,FilteredNames, FilteredEmail,selectedEmails)
+                }
+                return true
+            }
+        })
+
+        ButtonAction.setOnClickListener {
+            if(selectedEmails.size > 0){
+
+                for (i in 0..(selectedEmails.size-1)){
+                    try
+                    {
+                                val insertData = ConnectFriends(this,2,listView, selectedEmails)
+
+                                val email = selectedEmails.get(i)
+
+                                val url = "http://54.81.239.120/updateAPI.php?queryType=2&uid=$userId&email=$email"
+                                insertData.execute(url)
+                    }catch (e: Exception)
+                    {
+                        println(e.message)
+                    }
+                }
+
+                Toast.makeText(this, "Accepted Request.", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "No Request to Accept.", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+
+        ButtonAction2.setOnClickListener {
+            if(selectedEmails.size > 0) {
+                Toast.makeText(this, "Rejected Request.", Toast.LENGTH_SHORT).show()
+            }else {
+                Toast.makeText(this, "No Request to Reject.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -282,13 +285,14 @@ class FriendsActivity : AppCompatActivity() {
                             list.adapter = ListFriendAdapter(mContext, names, emails, selectedEmails)
 
                         }
-                    } else {
-//                        var reg = jSONObject.getBoolean("registered")
-//                        if (reg) {
-//                            println("Success")
-//                        } else {
-//                            println("bad")
-//                        }
+                    } else if(type == 2){
+                        var updated = jSONObject.getBoolean("updated")
+                        if (updated) {
+                            println("Success")
+                        } else{
+                            println("Failed")
+                        }
+
                     }
                 } catch (e: Exception) {
                     println(e.message)

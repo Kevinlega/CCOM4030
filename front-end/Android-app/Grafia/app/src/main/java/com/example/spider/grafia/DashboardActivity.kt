@@ -33,7 +33,7 @@ class DashboardActivity : AppCompatActivity() {
         Friends.setOnClickListener {
             val intent = Intent(this@DashboardActivity, FriendsActivity::class.java)
             // To pass any data to next activity
-//            intent.putExtra("keyIdentifier", value)
+            intent.putExtra("userId", 0)
 //             start your next activity
             startActivity(intent)
         }
