@@ -100,7 +100,7 @@ switch($queryType) {
 			if(!$statement = $connection->prepare($query) ) {
 				echo "Prepare failed : (" . $connection->errno . ") " . $connection->error;
 			}
-			$statement->bind_param('ss', $first_id, $second_id);
+			$statement->bind_param('is', $first_id, $second_id);
 
 			$first_id = $_REQUEST['uid'];
 			$second_id = $_REQUEST['email'];
@@ -108,8 +108,7 @@ switch($queryType) {
 			if(!$statement->execute()) {
 				$return = array("created"=>false);
 			} else {
-				$inserted_project = $statement->insert_id;
-				$return = array("created"=>true,"project_id"=>$inserted_project);
+				$return = array("created"=>true);
 			}
 
 			break;

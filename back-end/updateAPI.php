@@ -6,6 +6,7 @@
 define("UPDATE_PASSWORD", 0);
 define("VERIFY_USER",     1);
 define("ANSWER_REQUEST",  2);
+define("DECLINE_REQUEST", 3);
 include_once "config.php";
 
 if(!isset($_REQUEST['queryType'])) exit();
@@ -66,6 +67,28 @@ if($queryType == UPDATE_PASSWORD) {
 
 	$statement = $connection->prepare($query);
 	$statement->bind_param('is', $user_id, $email);
+
+	$email = $_REQUEST["email"];
+	$user_id = $_REQUEST["uid"];
+
+	$statement->execute();
+
+	if($statement->affected_rows == 1) {
+		$return = array("updated" => true);
+	} else {
+		$return = array("updated" => false);
+	}
+}else if($queryType == DECLINE_REQUEST) {
+	if(!isset($_REQUEST['uid'])) 	exit();
+	if(!isset($_REQUEST['email'])) 	exit();
+
+	$query = "DELETE FROM friends 
+			WHERE first_friend=(SELECT user_id 
+				from users where email=(?)) 
+					and second_friend=(?)";
+
+	$statement = $connection->prepare($query);
+	$statement->bind_param('si', $email, $user_id);
 
 	$email = $_REQUEST["email"];
 	$user_id = $_REQUEST["uid"];

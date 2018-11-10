@@ -256,10 +256,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xg7-MG-vNT">
-                                <rect key="frame" x="289" y="44" width="75" height="40"/>
+                                <rect key="frame" x="293" y="44" width="71" height="40"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="23"/>
-                                <state key="normal" title="Answer"/>
+                                <state key="normal" title="Accept"/>
                                 <connections>
+                                    <action selector="SendRequest:" destination="ZKY-JL-827" eventType="touchUpInside" id="Ph5-OY-qE0"/>
                                     <segue destination="9oE-wu-JnM" kind="show" identifier="SendFriendRequestAnswer" id="M9A-UH-uc0"/>
                                 </connections>
                             </button>
@@ -295,6 +296,16 @@
                                 <state key="normal" title="Back"/>
                                 <connections>
                                     <segue destination="9oE-wu-JnM" kind="show" identifier="BackToDashboard" id="G2f-z4-n5c"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Eqo-TG-U6h">
+                                <rect key="frame" x="156" y="44" width="63" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="23"/>
+                                <state key="normal" title="Reject"/>
+                                <connections>
+                                    <action selector="RemoveRequest:" destination="ZKY-JL-827" eventType="touchUpInside" id="fBD-z8-9AM"/>
+                                    <segue destination="9oE-wu-JnM" kind="show" identifier="RejectRequest" id="6qV-4X-dS7"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -439,7 +450,6 @@
                                 <state key="normal" title="Send Request"/>
                                 <connections>
                                     <action selector="SendFriendRequest:" destination="Lsn-gq-jNx" eventType="touchUpInside" id="lEG-kS-nMi"/>
-                                    <action selector="SendRequest:" destination="Lsn-gq-jNx" eventType="touchUpInside" id="xNG-yQ-pi8"/>
                                     <segue destination="9oE-wu-JnM" kind="show" identifier="SendFriendRequest" id="tM9-RE-h5g"/>
                                 </connections>
                             </button>
@@ -1042,7 +1052,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="chT-jX-6aO"/>
-        <segue reference="tM9-RE-h5g"/>
+        <segue reference="6qV-4X-dS7"/>
         <segue reference="wOM-C1-r7n"/>
     </inferredMetricsTieBreakers>
 </document>

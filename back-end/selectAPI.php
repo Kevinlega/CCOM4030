@@ -4,15 +4,16 @@
  */
 include_once "config.php";
 
-define("CHECK_IF_USER_EXISTS", 		   0);	// @param: email -> user email to check in the database.
-define("USERS_NOT_IN_PROJECT", 		   1);	// @param: pid   -> email of users who are not in a given project.
+define("CHECK_IF_USER_EXISTS", 		       0);	// @param: email -> user email to check in the database.
+define("USERS_NOT_IN_PROJECT", 		       1);	// @param: pid   -> email of users who are not in a given project.
 define("GET_USER_ID_WITH_EMAIL",           2);	// @param: email -> given a user's email, get the id of that user in the database.
 define("PROJECT_USER_PARTICIPATES",        3);  // @param: uid   -> given a user id, get a json of all the projects the user participates in.
-define("GET_HASH_AND_SALT", 		   4);	// @param: email -> displays a json of the hash and salt for the given email in the database.
+define("GET_HASH_AND_SALT", 		       4);	// @param: email -> displays a json of the hash and salt for the given email in the database.
 define("GET_NAME_WITH_EMAIL",              5);  // @param: email -> displays a json of the name associated with the email address.
 define("GET_ALL_FRIENDS_WITH_USER_ID",     6);  // @param: uid   -> displays a json of the names and emails of the friends a uid has.
 define("GET_PENDING_REQUEST",              7);  // @param: uid   -> Shows all the pending requests.
 define("GET_ADMIN_ID",                     8);  // @param: pid   -> given a project id, get the admin(uid) of said project.
+define("GET_NAME_WITH_EMAIL_ANDROID",      9);
 
 
 if(!isset($_REQUEST['queryType'])) exit();
@@ -253,6 +254,31 @@ switch($queryType) {
 		$statement->fetch();
 
 		$return = array("admin" => $admin);
+
+		break;
+
+	case GET_NAME_WITH_EMAIL_ANDROID:
+		if(!isset($_REQUEST["email"]) || !isset($_REQUEST["uid"])) exit();
+
+		$email = $_REQUEST["email"];
+		$user_id = $_REQUEST["uid"];
+
+		$query = "SELECT name 
+			  FROM users 
+			  WHERE email=(?) AND user_id<>(?)";
+
+		$statement = $connection->prepare($query);			// Prepare the query statement. (for sanitation)
+		$statement->bind_param('si', $email,$user_id);			// Bind the parameters with the sql query.
+		$statement->execute();						// Execute the now sanitized query.
+		$statement->bind_result($name);	    	            		// Asign the fetch value to these new variables.
+		$statement->fetch();
+
+		if(empty($name))
+			$empty = true;
+		else
+			$empty = false;
+
+		$return = array("name" => [$name],"empty"=>$empty,"email"=>[$email]);
 
 		break;
 

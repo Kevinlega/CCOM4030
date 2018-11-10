@@ -10,7 +10,7 @@ class DashboardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
-
+        val userId = 1
         supportActionBar!!.setTitle("Dashboard")
 
         logout.setOnClickListener {
@@ -33,7 +33,7 @@ class DashboardActivity : AppCompatActivity() {
         Friends.setOnClickListener {
             val intent = Intent(this@DashboardActivity, FriendsActivity::class.java)
             // To pass any data to next activity
-            intent.putExtra("userId", 0)
+            intent.putExtra("userId", 1)
 //             start your next activity
             startActivity(intent)
         }
