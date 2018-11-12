@@ -897,6 +897,14 @@
                                     <action selector="savePhoto:" destination="Ukw-4a-vco" eventType="touchUpInside" id="4Ez-vk-t6S"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cVI-tW-Vud">
+                                <rect key="frame" x="16" y="96" width="51" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button" image="Image-6"/>
+                                <connections>
+                                    <segue destination="IoW-dB-d6j" kind="show" identifier="AudioSegue" id="xRM-3K-qFE"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -927,6 +935,60 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jMa-eg-uar" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3093.5999999999999" y="35.467980295566505"/>
+        </scene>
+        <!--Audio View Controller-->
+        <scene sceneID="LxZ-Ga-6o0">
+            <objects>
+                <viewController id="IoW-dB-d6j" customClass="AudioViewController" customModule="ETNO" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="U6R-tr-FHz">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dJ9-tJ-uji">
+                                <rect key="frame" x="77" y="375" width="59" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Record"/>
+                                <connections>
+                                    <action selector="RecordButton:" destination="IoW-dB-d6j" eventType="touchUpInside" id="v7b-l8-Ok7"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rkr-8m-2yR">
+                                <rect key="frame" x="259" y="375" width="60" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Play"/>
+                                <connections>
+                                    <action selector="PlayButton:" destination="IoW-dB-d6j" eventType="touchUpInside" id="lqB-fa-Vct"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Record Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uJa-yx-sZZ">
+                                <rect key="frame" x="139" y="271" width="97" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SPN-Ut-jIo">
+                                <rect key="frame" x="28" y="44" width="52" height="41"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <state key="normal" title="Back"/>
+                                <connections>
+                                    <segue destination="Ukw-4a-vco" kind="show" identifier="BackToProject" id="JPq-AB-AU8"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="bYU-eM-SbG"/>
+                    </view>
+                    <connections>
+                        <outlet property="PlayRef" destination="rkr-8m-2yR" id="WJv-V4-TJI"/>
+                        <outlet property="RecordRef" destination="dJ9-tJ-uji" id="fN3-ZP-RJr"/>
+                        <outlet property="RecordingTime" destination="uJa-yx-sZZ" id="Drv-pR-eZs"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="r9N-nn-9de" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4708" y="34.729064039408868"/>
         </scene>
         <!--Change Password View Controller-->
         <scene sceneID="0FX-1g-jFI">
@@ -1049,10 +1111,11 @@
         <image name="Image-3" width="37.5" height="37.5"/>
         <image name="Image-4" width="512" height="512"/>
         <image name="Image-5" width="18" height="18"/>
+        <image name="Image-6" width="256" height="256"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="chT-jX-6aO"/>
-        <segue reference="6qV-4X-dS7"/>
+        <segue reference="JPq-AB-AU8"/>
+        <segue reference="YSk-mB-5ei"/>
         <segue reference="wOM-C1-r7n"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -92,10 +92,13 @@ class ProjectViewController: UIViewController, UINavigationControllerDelegate, U
             let vc = segue.destination as! AddParticipantViewController
             vc.user_id = user_id
             vc.project_id = project_id
-        }
-        else if (segue.identifier == "BackToDashboard"){
+        } else if (segue.identifier == "BackToDashboard"){
             let vc = segue.destination as! DashboardViewController
             vc.user_id = user_id
+        } else if (segue.identifier == "AudioSegue"){
+            let vc = segue.destination as! AudioViewController
+            vc.user_id = user_id
+            vc.project_id = project_id
         }
     }
 }
