@@ -1,16 +1,19 @@
 //
-//  ProjectViewController.swift
+//  CameraViewController.swift
 //  ETNO
 //
-//  Created by Kevin Legarreta on 10/4/18.
-//  Copyright © 2018 Los Duendes Malvados. All rights reserved.
+//  Created by Kevin Legarreta on 11/12/18.
+//  Copyright © 2018 Los 5. All rights reserved.
 //
 
 import UIKit
 
-class ProjectViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+class CameraViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+        
     
-    
+    // MARK: - Variables
+    var user_id = Int()
+    var project_id = Int()
     @IBOutlet weak var imageView: UIImageView!
     
     @IBAction func importGallery(_ sender: Any) {
@@ -28,19 +31,19 @@ class ProjectViewController: UIViewController, UINavigationControllerDelegate, U
     }
     
     @IBAction func openCamera(_ sender: Any) {
-    
+        
         let cameraController = UIImagePickerController()
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
-                cameraController.delegate = self
-                cameraController.sourceType = .camera;
-                cameraController.allowsEditing = false
-                self.present(cameraController, animated: true, completion: nil )
-            }
-            else {
+            cameraController.delegate = self
+            cameraController.sourceType = .camera;
+            cameraController.allowsEditing = false
+            self.present(cameraController, animated: true, completion: nil )
+        }
+        else {
             print("Camera not available")
-        }        
+        }
     }
-
+    
     
     @IBAction func savePhoto(_ sender: Any) {
         guard let selectedImage = imageView.image else {
@@ -60,47 +63,23 @@ class ProjectViewController: UIViewController, UINavigationControllerDelegate, U
         picker.dismiss(animated: true, completion: nil)
         
     }
-
+    
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }
-
-    
-    
-    // MARK: - Variables
-    var user_id = Int()
-    var project_id = Int()
-    var is_admin = Bool()
-    @IBOutlet weak var AddParticipant: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        is_admin = CheckAdmin(project_id: project_id, user_id: user_id)
-        if !is_admin{
-            AddParticipant.isHidden = true
-        }
-        // Do any additional setup after loading the view.
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if (segue.identifier == "AddParticipants"){
-            let vc = segue.destination as! AddParticipantViewController
-            vc.user_id = user_id
-            vc.project_id = project_id
-        } else if (segue.identifier == "BackToDashboard"){
-            let vc = segue.destination as! DashboardViewController
-            vc.user_id = user_id
-        } else if (segue.identifier == "AudioSegue"){
-            let vc = segue.destination as! AudioViewController
-            vc.user_id = user_id
-            vc.project_id = project_id
-        } else if (segue.identifier == "CameraSegue"){
-            let vc = segue.destination as! CameraViewController
+        if (segue.identifier == "BackToProject"){
+            let vc = segue.destination as! ProjectViewController
             vc.user_id = user_id
             vc.project_id = project_id
         }

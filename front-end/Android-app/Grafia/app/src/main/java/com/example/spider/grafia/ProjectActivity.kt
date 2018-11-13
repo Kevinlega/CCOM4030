@@ -30,31 +30,20 @@ class ProjectActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        Camera.setOnClickListener {
+            val intent = Intent(this@ProjectActivity, CameraActivity::class.java)
+            // To pass any data to next activity
+//            intent.putExtra("keyIdentifier", value)
+//             start your next activity
+            startActivity(intent)
+        }
 
-//        SaveImage.setOnClickListener {
-//            val intent = Intent(this@ProjectActivity, DashboardActivity::class.java)
-//            // To pass any data to next activity
-////            intent.putExtra("keyIdentifier", value)
-////             start your next activity
-//            startActivity(intent)
-//        }
-
-//        Camera.setOnClickListener {
-//            val intent = Intent(this@ProjectActivity, DashboardActivity::class.java)
-//            // To pass any data to next activity
-////            intent.putExtra("keyIdentifier", value)
-////             start your next activity
-//            startActivity(intent)
-//        }
-
-//        Gallery.setOnClickListener {
-//            val intent = Intent(this@ProjectActivity, DashboardActivity::class.java)
-//            // To pass any data to next activity
-////            intent.putExtra("keyIdentifier", value)
-////             start your next activity
-//            startActivity(intent)
-//        }
-
-
+        Voice.setOnClickListener {
+            val intent = Intent(this@ProjectActivity, VoiceActivity::class.java)
+            // To pass any data to next activity
+//            intent.putExtra("keyIdentifier", value)
+//             start your next activity
+            startActivity(intent)
+        }
     }
 }
