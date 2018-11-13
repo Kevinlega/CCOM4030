@@ -32,7 +32,7 @@ class FriendsActivity : AppCompatActivity() {
         setuid(intent.getIntExtra("userId",-1))
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        navigation.selectedItemId = R.id.navigation_friends
+        navigation.selectedItemId = R.id.navigation_pending
         navigation.selectedItemId = R.id.navigation_search
 
         Return.setOnClickListener {

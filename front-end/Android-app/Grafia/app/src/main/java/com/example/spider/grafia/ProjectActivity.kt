@@ -13,6 +13,12 @@ class ProjectActivity : AppCompatActivity() {
 
         supportActionBar!!.setTitle("Project Name")
 
+        val userId = intent.getIntExtra("userId",-1)
+        val projectId = intent.getIntExtra("pId",-1)
+
+
+        println(userId)
+        println(projectId)
 
         BackToDashboard.setOnClickListener {
             val intent = Intent(this@ProjectActivity, DashboardActivity::class.java)
