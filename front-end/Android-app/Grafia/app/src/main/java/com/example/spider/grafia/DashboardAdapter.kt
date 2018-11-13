@@ -27,7 +27,7 @@ class DashboardAdapter(private val project: MutableList<Int>, private val name: 
             val intent = Intent(mContext, ProjectActivity::class.java)
             // To pass any data to next activity
             intent.putExtra("userId", userId)
-//            intent.putExtra("pId",getItem(position))
+            intent.putExtra("pId",getItem(position))
 //             start your next activity
             mContext.startActivity(intent)
         }
@@ -35,7 +35,7 @@ class DashboardAdapter(private val project: MutableList<Int>, private val name: 
 
 
     fun getItem(position: Int): Int {
-        return projects_id.get(position) as Int
+        return (projects_id.get(position) as String).toInt()
 
     }
 

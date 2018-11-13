@@ -97,8 +97,6 @@ class DashboardActivity : AppCompatActivity() {
                             project.add(i,R.drawable.folder_icon)
                         }
 
-                        print("AAAA")
-                        println(projects)
                         rview.adapter = DashboardAdapter(project, names,projects,mContext,userId)
                     }
                 }

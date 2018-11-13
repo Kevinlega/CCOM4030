@@ -11,7 +11,7 @@ class ProjectActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project)
 
-        supportActionBar!!.setTitle("Project Name")
+        supportActionBar!!.title = "Project Name"
 
         val userId = intent.getIntExtra("userId",-1)
         val projectId = intent.getIntExtra("pId",-1)
