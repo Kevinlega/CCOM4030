@@ -6,27 +6,15 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.EditText
 import kotlinx.android.synthetic.main.activity_create_account.*
-import android.content.DialogInterface
-import android.content.DialogInterface.BUTTON_NEUTRAL
-import android.support.v7.app.AlertDialog
-import java.util.Random
 import android.os.AsyncTask
-import android.os.SystemClock
-import org.json.JSONArray
 import org.json.JSONObject
 import java.net.URL
-import android.view.*
 import android.widget.*
 import java.lang.StringBuilder
 import java.security.MessageDigest
+import java.util.concurrent.TimeUnit
 
 class CreateAccountActivity : AppCompatActivity(){
-
-    // Generates a random non-negative integer in [from, to - 1]
-    fun UIGenerator(from:Int, to:Int): UInt{
-        val random = Random().nextInt(to - from) + from
-        return random.toUInt()
-    }
 
     private fun byteArrayToHexString(array: Array<Byte>): String{
 
@@ -59,65 +47,55 @@ class CreateAccountActivity : AppCompatActivity(){
 
 
     // Generates a salt and hashes a function
-    fun saltAndHash(password:String,salt:String,initialValue: UInt): String{
+    private fun saltAndHash(password:String,salt:String): String{
         val salted = password + salt
-//        salted = LFSR(salted,initialValue)
         return md5(salted)
     }
 
     // Checks if an email is already registered.
-    fun isRegistered(email:String): Boolean{
+    private fun isRegistered(email:String): Boolean{
         val query = 0
-        val connectToAPI = Connect(this)
+        val connectToAPI = Connect(this,0)
         try{
             val url = "http://54.81.239.120/selectAPI.php?queryType=$query&email=$email"
             println(url)
             connectToAPI.execute(url)
         }
         catch (error: Exception){}
+        connectToAPI.get(1,TimeUnit.MINUTES)
 
         return connectToAPI.registered
 
     }
 
-    fun checkLogin(name:String, password:String,confirm:String,email:String): Boolean{
+    private fun checkLogin(name:String, password:String,confirm:String,email:String): Boolean{
         var canLogin = true
         if(name.isNullOrBlank() || password.isNullOrBlank() || confirm.isNullOrBlank() || email.isNullOrBlank()){
             canLogin = false
-            val alertDialog = AlertDialog.Builder(this)
-            alertDialog.setTitle("Wrong input data")
-            alertDialog.setMessage("All fields are required")
-            alertDialog.setNeutralButton("OK", { dialogInterface: DialogInterface, i: Int -> })
-            alertDialog.show()
+            Toast.makeText(this, "All Fields are Required.", Toast.LENGTH_LONG).show()
         }
 
         if(password != confirm){
             canLogin = false
-            val alertDialog = AlertDialog.Builder(this)
-            alertDialog.setTitle("Wrong input data")
-            alertDialog.setMessage("Passwords don't match")
-            alertDialog.setNeutralButton("OK", { dialogInterface: DialogInterface, i: Int -> })
-            alertDialog.show()
+            Toast.makeText(this, "Passwords Do Not Match.", Toast.LENGTH_LONG).show()
         }
         return canLogin
     }
 
-    fun register(name:String, password:String, email:String, salt: String, initialValue: UInt): Boolean{
+    private fun register(name:String, password:String, email:String, salt: String){
         val query = 0
-        val connectToAPI = Connect(this)
+        val connectToAPI = Connect(this,1)
 
         try{
-            val url = "http://54.81.239.120/insertAPI.php?queryType=$query&name=$name&password=$password&email=$email&salt=$salt&initialValue=$initialValue"
+            val url = "http://54.81.239.120/insertAPI.php?queryType=$query&name=$name&password=$password&email=$email&salt=$salt"
             println(url)
             connectToAPI.execute(url)
         }
         catch (error: Exception){}
-        println(connectToAPI.registered)
-        return connectToAPI.registered
     }
 
 
-    override fun onCreate(savedInstanceState: Bundle?){
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_account)
 
@@ -130,7 +108,7 @@ class CreateAccountActivity : AppCompatActivity(){
         // 2) No redundancies:
         //   a) Email must not already be registered
         // 3) If previous conditions are met, insert user in database.
-        CreateAccount.setOnClickListener{
+        CreateAccount.setOnClickListener {
 
             // Get input from user forms.
             val Name = findViewById(R.id.caName) as EditText
@@ -141,27 +119,13 @@ class CreateAccountActivity : AppCompatActivity(){
             val email = Email.text.toString()
             val password = Password.text.toString()
             val confirm = ConfirmPassword.text.toString()
-            if(checkLogin(name,password,confirm,email)) {
-                if (!isRegistered(email)){
-                    val initialValue = UIGenerator(0,101)
+            if (checkLogin(name, password, confirm, email)) {
+                if (!isRegistered(email)) {
                     var salt = java.util.UUID.randomUUID().toString().replace("-", "")
 
-//                    salt = LFSR(salt,initialValue)
+                    val hashedPassword = saltAndHash(password, salt)
 
-                    val hashedPassword = saltAndHash(password,salt,initialValue)
-
-                    if(register(name,hashedPassword,email,salt,initialValue)){
-                        val intent = Intent(this@CreateAccountActivity, LoginActivity::class.java)
-                        startActivity(intent)
-                    }
-                }
-                else{
-                    val alertDialog = AlertDialog.Builder(this)
-                    alertDialog.setTitle("Duplicate input data")
-                    alertDialog.setMessage("User Already Registered")
-                    alertDialog.setNeutralButton("OK", { dialogInterface: DialogInterface, i: Int -> })
-                    alertDialog.show()
-
+                    register(name, hashedPassword, email, salt)
                 }
             }
         }
@@ -170,7 +134,7 @@ class CreateAccountActivity : AppCompatActivity(){
     // Connect class that checks if user is registered,
     // if not, registers said user.
     companion object {
-        class Connect(context: Context): AsyncTask<String, Void, String>(){
+        class Connect(private val mContext: Context, private val type : Int): AsyncTask<String, Void, String>(){
 
             var registered = false
 
@@ -187,6 +151,21 @@ class CreateAccountActivity : AppCompatActivity(){
                     val jSONObject = JSONObject(result)
                     println(jSONObject)
                     registered = jSONObject.getBoolean("registered")
+
+                    if(type == 1) {
+
+                        if(registered) {
+
+                            val intent = Intent(mContext, LoginActivity::class.java)
+                            mContext.startActivity(intent)
+                            Toast.makeText(mContext, "Account Created.", Toast.LENGTH_SHORT).show()
+
+                        }else{
+                            Toast.makeText(mContext, "Account Not Created.", Toast.LENGTH_SHORT).show()
+
+                        }
+                    }
+
                 }
                 catch (error: Exception){}
                 super.onPostExecute(result)

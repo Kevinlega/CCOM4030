@@ -44,8 +44,7 @@ class DashboardActivity : AppCompatActivity() {
         logout.setOnClickListener {
             val intent = Intent(this@DashboardActivity, LoginActivity::class.java)
             // To pass any data to next activity
-//            intent.putExtra("keyIdentifier", value)
-//             start your next activity
+            // start your next activity
             finish()
             startActivity(intent)
         }
@@ -53,15 +52,15 @@ class DashboardActivity : AppCompatActivity() {
         CreateProject.setOnClickListener {
             val intent = Intent(this@DashboardActivity, CreateProjectActivity::class.java)
             // To pass any data to next activity
-//            intent.putExtra("keyIdentifier", value)
-//             start your next activity
+            intent.putExtra("userId", userId)
+            // start your next activity
             startActivity(intent)
         }
 
         Friends.setOnClickListener {
             val intent = Intent(this@DashboardActivity, FriendsActivity::class.java)
             // To pass any data to next activity
-            intent.putExtra("userId", 1)
+            intent.putExtra("userId", userId)
 //             start your next activity
             startActivity(intent)
         }
