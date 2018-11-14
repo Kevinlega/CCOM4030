@@ -13,6 +13,8 @@ class VoiceActivity : AppCompatActivity() {
 
         supportActionBar!!.setTitle("Voice Recorder")
 
+        val userId = intent.getIntExtra("userId",-1)
+        val projectId = intent.getIntExtra("pId",-1)
 
         backToProject2.setOnClickListener {
             val intent = Intent(this@VoiceActivity, ProjectActivity::class.java)

@@ -8,28 +8,65 @@ import kotlinx.android.synthetic.main.activity_camera.*
 import java.io.File
 import java.lang.Exception
 import android.graphics.Bitmap
+import android.graphics.Matrix
+import android.net.Uri
+import android.os.Environment
 import android.provider.MediaStore
+import android.support.v4.content.FileProvider
 import android.widget.Toast
+import android.content.ContentValues
+import android.Manifest.permission
+import android.support.v4.app.ActivityCompat
+import android.content.pm.PackageManager
+import android.support.v4.content.ContextCompat
+import java.util.*
 
 
 class CameraActivity : AppCompatActivity() {
 
     private var mCurrentPhotoPath = ""
+    private var saved = false
+    private var userId = -1
+    private var projectId = -1
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
 
+        userId = intent.getIntExtra("userId",-1)
+        projectId = intent.getIntExtra("pId",-1)
+
         backToProject1.setOnClickListener {
+
+            if((mCurrentPhotoPath != "") and !saved){
+                val myFile = File(mCurrentPhotoPath)
+                myFile.delete()
+                mCurrentPhotoPath = ""
+            }
+
             val intent = Intent(this@CameraActivity, ProjectActivity::class.java)
             // To pass any data to next activity
-//            intent.putExtra("keyIdentifier", value)
-//             start your next activity
+            intent.putExtra("userId", userId)
+            intent.putExtra("pid", projectId)
+            // start your next activity
             startActivity(intent)
         }
 
         openCamera.setOnClickListener {
+
+            if((mCurrentPhotoPath != "") and !saved){
+                val myFile = File(mCurrentPhotoPath)
+                myFile.delete()
+                mCurrentPhotoPath = ""
+                saved = false
+            }
             dispatchTakePictureIntent()
+        }
+
+        openGallery.setOnClickListener {
+
+            dispatchPicPictureIntent()
         }
 
         saveImage.setOnClickListener {
@@ -39,24 +76,23 @@ class CameraActivity : AppCompatActivity() {
             } else{
                 Toast.makeText(this, "Nothing to Save.", Toast.LENGTH_SHORT).show()
             }
-
         }
 
     }
     private fun dispatchTakePictureIntent() {
-        Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             // Ensure that there's a camera activity to handle the intent
             takePictureIntent.resolveActivity(packageManager)?.also {
                 // Create the File where the photo should go
                 val photoFile: File? =  try {
-                    createImageFile()
+                    createTempImageFile()
                 } catch (t: Exception){null}
                 // Continue only if the File was successfully created
                 photoFile?.also {
-                    val photoURI: android.net.Uri = android.support.v4.content.FileProvider.getUriForFile(
+                    val photoURI: Uri = FileProvider.getUriForFile(
                         this@CameraActivity,
                         "com.example.spider.grafia", it )
-                    takePictureIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, photoURI)
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
 
                     startActivityForResult(takePictureIntent, 1)
                     }
@@ -64,17 +100,36 @@ class CameraActivity : AppCompatActivity() {
            }
         }
 
+    private fun dispatchPicPictureIntent(){
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), 2)
+    }
+
         override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
             if (requestCode == 1 && resultCode == RESULT_OK) {
-                setPic()
+                BitmapFactory.decodeFile(mCurrentPhotoPath)?.also { bitmap ->
+                    imageView.setImageBitmap(rotatePic(bitmap))
+                }
+            } else if (requestCode == 2 && resultCode == RESULT_OK){
+                if(mCurrentPhotoPath != ""){
+                    val myFile = File(mCurrentPhotoPath)
+                    myFile.delete()
+                    mCurrentPhotoPath = ""
+                }
+                val photoUri = data?.data
+                if (photoUri != null) {
+                    val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, photoUri)
+                    imageView.setImageBitmap(rotatePic(bitmap))
+                }
             }
         }
 
-//    @Throws(IOException::class)
-    private fun createImageFile(): File {
+    private fun createTempImageFile(): File {
             // Create an image file name
             val timeStamp: String = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
-            val storageDir: File = getExternalFilesDir(android.os.Environment.DIRECTORY_PICTURES)
+            val storageDir: File = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
             return File.createTempFile(
                 "JPEG_${timeStamp}_", /* prefix */
                 ".jpg", /* suffix */
@@ -85,37 +140,47 @@ class CameraActivity : AppCompatActivity() {
             }
         }
 
-
-    private fun setPic() {
+    private fun rotatePic(bitmap: Bitmap) : Bitmap {
         // Get the dimensions of the View
-        val targetW = imageView.width
-        val targetH= imageView.height
 
+            val matrix = Matrix()
 
-        BitmapFactory.decodeFile(mCurrentPhotoPath)?.also { bitmap ->
-
-
-            val matrix = android.graphics.Matrix()
-
-            matrix.postRotate(90f)
+            if (bitmap.width > bitmap.height) {
+                matrix.postRotate(90f)
+            }
 
             val scaledBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.width, bitmap.height, true)
 
-            val rotatedBitmap =
-                Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.width, scaledBitmap.height, matrix, true)
-
-            imageView.setImageBitmap(rotatedBitmap)
-        }
+            return Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.width, scaledBitmap.height, matrix, true)
     }
+
+
 
     private fun galleryAddPic() {
-        val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
-        val f = File(mCurrentPhotoPath)
-        val contentUri = android.net.Uri.fromFile(f)
-        mediaScanIntent.data = contentUri
-        this.sendBroadcast(mediaScanIntent)
+
+        if (ContextCompat.checkSelfPermission(
+                this,
+                permission.WRITE_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(permission.WRITE_EXTERNAL_STORAGE), 1
+            )
+        } else {
+                // Save image to gallery via bitmap
+                BitmapFactory.decodeFile(mCurrentPhotoPath)?.also { bitmap ->
+
+                    MediaStore.Images.Media.insertImage(contentResolver,rotatePic(bitmap),"test","test")
+
+                }
+
+            saved = true
+
+            // save via file path
+            // val file = File(mCurrentPhotoPath)
+            // MediaStore.Images.Media.insertImage(contentResolver,file.absolutePath,"test","test")
+        }
     }
-
-
-
 }

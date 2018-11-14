@@ -16,22 +16,19 @@ class ProjectActivity : AppCompatActivity() {
         val userId = intent.getIntExtra("userId",-1)
         val projectId = intent.getIntExtra("pId",-1)
 
-
-        println(userId)
-        println(projectId)
-
         BackToDashboard.setOnClickListener {
             val intent = Intent(this@ProjectActivity, DashboardActivity::class.java)
             // To pass any data to next activity
-//            intent.putExtra("keyIdentifier", value)
-//             start your next activity
+            intent.putExtra("userId", userId)
+            // start your next activity
             startActivity(intent)
         }
 
         AddUsers.setOnClickListener {
             val intent = Intent(this@ProjectActivity, AddParticipantsActivity::class.java)
             // To pass any data to next activity
-//            intent.putExtra("keyIdentifier", value)
+            intent.putExtra("userId", userId)
+            intent.putExtra("pid", projectId)
 //             start your next activity
             startActivity(intent)
         }
@@ -39,7 +36,8 @@ class ProjectActivity : AppCompatActivity() {
         Camera.setOnClickListener {
             val intent = Intent(this@ProjectActivity, CameraActivity::class.java)
             // To pass any data to next activity
-//            intent.putExtra("keyIdentifier", value)
+            intent.putExtra("userId", userId)
+            intent.putExtra("pid", projectId)
 //             start your next activity
             startActivity(intent)
         }
@@ -47,7 +45,8 @@ class ProjectActivity : AppCompatActivity() {
         Voice.setOnClickListener {
             val intent = Intent(this@ProjectActivity, VoiceActivity::class.java)
             // To pass any data to next activity
-//            intent.putExtra("keyIdentifier", value)
+            intent.putExtra("userId", userId)
+            intent.putExtra("pid", projectId)
 //             start your next activity
             startActivity(intent)
         }

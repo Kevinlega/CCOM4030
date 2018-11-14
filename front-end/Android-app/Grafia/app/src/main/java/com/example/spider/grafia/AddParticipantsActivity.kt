@@ -31,7 +31,7 @@ class AddParticipantsActivity : AppCompatActivity() {
         // retrieve data from another view
 
         val userId = intent.getIntExtra("userId",-1)
-        val projectId  = intent.getIntExtra("projectId",-1)
+        val projectId = intent.getIntExtra("pId",-1)
 
 
         val listView = findViewById<ListView>(R.id.listView)
