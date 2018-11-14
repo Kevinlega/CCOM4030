@@ -12,60 +12,21 @@ import java.net.URL
 import android.widget.*
 import java.lang.StringBuilder
 import java.security.MessageDigest
-import java.util.concurrent.TimeUnit
 
-class CreateAccountActivity : AppCompatActivity(){
-
-    private fun byteArrayToHexString(array: Array<Byte>): String{
-
-        var result = StringBuilder(array.size * 2)
-
-        for (byte in array){
-            val toAppend = String.format("%2X", byte).replace(" ","0")
-            result.append(toAppend)
-        }
-        result.setLength(result.length)
-
-        return result.toString()
-    }
-
-    private fun md5(data: String):String {
-
-        var result = ""
-
-        try {
-
-            val md5 = MessageDigest.getInstance("MD5")
-            val md5HashBytes = md5.digest(data.toByteArray()).toTypedArray()
-
-            result = byteArrayToHexString(md5HashBytes)
-
-        }catch (e: java.lang.Exception){}
-
-        return result
-    }
-
-
-    // Generates a salt and hashes a function
-    private fun saltAndHash(password:String,salt:String): String{
-        val salted = password + salt
-        return md5(salted)
-    }
+open class CreateAccountActivity : AppCompatActivity(){
 
     // Checks if an email is already registered.
-    private fun isRegistered(email:String): Boolean{
+    private fun isRegistered(email:String,name: String,password: String){
         val query = 0
-        val connectToAPI = Connect(this,0)
+        val connectToAPI = Connect(this,0,name,email,password)
         try{
             val url = "http://54.81.239.120/selectAPI.php?queryType=$query&email=$email"
             println(url)
+
             connectToAPI.execute(url)
+
         }
         catch (error: Exception){}
-        connectToAPI.get(1,TimeUnit.MINUTES)
-
-        return connectToAPI.registered
-
     }
 
     private fun checkLogin(name:String, password:String,confirm:String,email:String): Boolean{
@@ -81,19 +42,6 @@ class CreateAccountActivity : AppCompatActivity(){
         }
         return canLogin
     }
-
-    private fun register(name:String, password:String, email:String, salt: String){
-        val query = 0
-        val connectToAPI = Connect(this,1)
-
-        try{
-            val url = "http://54.81.239.120/insertAPI.php?queryType=$query&name=$name&password=$password&email=$email&salt=$salt"
-            println(url)
-            connectToAPI.execute(url)
-        }
-        catch (error: Exception){}
-    }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -120,13 +68,7 @@ class CreateAccountActivity : AppCompatActivity(){
             val password = Password.text.toString()
             val confirm = ConfirmPassword.text.toString()
             if (checkLogin(name, password, confirm, email)) {
-                if (!isRegistered(email)) {
-                    var salt = java.util.UUID.randomUUID().toString().replace("-", "")
-
-                    val hashedPassword = saltAndHash(password, salt)
-
-                    register(name, hashedPassword, email, salt)
-                }
+                isRegistered(email,name, password)
             }
         }
     }
@@ -134,9 +76,7 @@ class CreateAccountActivity : AppCompatActivity(){
     // Connect class that checks if user is registered,
     // if not, registers said user.
     companion object {
-        class Connect(private val mContext: Context, private val type : Int): AsyncTask<String, Void, String>(){
-
-            var registered = false
+        class Connect(private val mContext: Context, private val type : Int, private val name: String,private val email: String,private val password: String): AsyncTask<String, Void, String>(){
 
             override fun doInBackground(vararg p0: String?): String{
                 return downloadJSON(p0[0])
@@ -150,25 +90,94 @@ class CreateAccountActivity : AppCompatActivity(){
                 try{
                     val jSONObject = JSONObject(result)
                     println(jSONObject)
-                    registered = jSONObject.getBoolean("registered")
+                    val registered = jSONObject.getBoolean("registered")
 
                     if(type == 1) {
 
                         if(registered) {
 
                             val intent = Intent(mContext, LoginActivity::class.java)
-                            mContext.startActivity(intent)
                             Toast.makeText(mContext, "Account Created.", Toast.LENGTH_SHORT).show()
-
+                            mContext.startActivity(intent)
                         }else{
                             Toast.makeText(mContext, "Account Not Created.", Toast.LENGTH_SHORT).show()
 
                         }
-                    }
+                    } else{
+                        if (registered){
+                            Toast.makeText(mContext, "Account Already Exists.", Toast.LENGTH_SHORT).show()
+                        } else{
+                            val reg = Registered(name,email,password,mContext)
+                            reg.triggerRegister()
+                        }
 
+                    }
                 }
                 catch (error: Exception){}
                 super.onPostExecute(result)
+            }
+        }
+
+        private class Registered(private val name: String,private val email: String,private val password: String, private val mContext: Context) : CreateAccountActivity(){
+            override fun onCreate(savedInstanceState: Bundle?) {
+                super.onCreate(savedInstanceState)
+                setContentView(R.layout.activity_create_account)
+                supportActionBar!!.setTitle("Create Account")
+            }
+
+            fun triggerRegister() {
+
+                var salt = java.util.UUID.randomUUID().toString().replace("-", "")
+
+                val hashedPassword = saltAndHash(password, salt)
+
+                register(name, hashedPassword, email, salt)
+            }
+
+            private fun byteArrayToHexString(array: Array<Byte>): String{
+
+                var result = StringBuilder(array.size * 2)
+
+                for (byte in array){
+                    val toAppend = String.format("%2X", byte).replace(" ","0")
+                    result.append(toAppend)
+                }
+                result.setLength(result.length)
+
+                return result.toString()
+            }
+
+            private fun md5(data: String):String {
+
+                var result = ""
+
+                try {
+
+                    val md5 = MessageDigest.getInstance("MD5")
+                    val md5HashBytes = md5.digest(data.toByteArray()).toTypedArray()
+
+                    result = byteArrayToHexString(md5HashBytes)
+
+                }catch (e: java.lang.Exception){}
+
+                return result
+            }
+
+            // Generates a salt and hashes a function
+            private fun saltAndHash(password:String,salt:String): String{
+                val salted = password + salt
+                return md5(salted)
+            }
+
+            private fun register(name:String, password:String, email:String, salt: String){
+                val query = 0
+                val connectToAPI = Connect(mContext,1,name, email, password)
+
+                try{
+                    val url = "http://54.81.239.120/insertAPI.php?queryType=$query&name=$name&password=$password&email=$email&salt=$salt"
+                    println(url)
+                    connectToAPI.execute(url)
+                } catch (error: Exception){}
             }
         }
     }
