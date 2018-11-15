@@ -34,9 +34,17 @@
             android:layout_marginTop="16dp"
     />
     <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" app:srcCompat="@android:drawable/ic_btn_speak_now"
+            android:layout_width="58dp"
+            android:layout_height="52dp" app:srcCompat="@android:drawable/ic_btn_speak_now"
             android:id="@+id/Voice" android:layout_marginStart="10dp"
             app:layout_constraintStart_toEndOf="@+id/Camera" android:layout_marginTop="4dp"
-            app:layout_constraintTop_toBottomOf="@+id/BackToDashboard"/>
+            app:layout_constraintTop_toBottomOf="@+id/BackToDashboard" tools:srcCompat="@drawable/voice"
+            android:scaleType="fitXY"/>
+    <ImageButton
+            android:layout_width="51dp"
+            android:layout_height="51dp" app:srcCompat="@drawable/video"
+            android:id="@+id/Video"
+            tools:srcCompat="@drawable/video" android:scaleType="fitXY"
+            app:layout_constraintStart_toEndOf="@+id/Voice" app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="69dp" android:layout_marginStart="10dp"/>
 </android.support.constraint.ConstraintLayout>

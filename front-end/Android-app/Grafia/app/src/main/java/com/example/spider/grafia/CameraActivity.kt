@@ -14,13 +14,10 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.support.v4.content.FileProvider
 import android.widget.Toast
-import android.content.ContentValues
 import android.Manifest.permission
 import android.support.v4.app.ActivityCompat
 import android.content.pm.PackageManager
 import android.support.v4.content.ContextCompat
-import java.util.*
-
 
 class CameraActivity : AppCompatActivity() {
 
@@ -107,31 +104,31 @@ class CameraActivity : AppCompatActivity() {
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), 2)
     }
 
-        override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-            if (requestCode == 1 && resultCode == RESULT_OK) {
-                BitmapFactory.decodeFile(mCurrentPhotoPath)?.also { bitmap ->
-                    imageView.setImageBitmap(rotatePic(bitmap))
-                }
-            } else if (requestCode == 2 && resultCode == RESULT_OK){
-                if(mCurrentPhotoPath != ""){
-                    val myFile = File(mCurrentPhotoPath)
-                    myFile.delete()
-                    mCurrentPhotoPath = ""
-                }
-                val photoUri = data?.data
-                if (photoUri != null) {
-                    val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, photoUri)
-                    imageView.setImageBitmap(rotatePic(bitmap))
-                }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            BitmapFactory.decodeFile(mCurrentPhotoPath)?.also { bitmap ->
+                imageView.setImageBitmap(rotatePic(bitmap))
+            }
+        } else if (requestCode == 2 && resultCode == RESULT_OK){
+            if(mCurrentPhotoPath != ""){
+                val myFile = File(mCurrentPhotoPath)
+                myFile.delete()
+                mCurrentPhotoPath = ""
+            }
+            val photoUri = data?.data
+            if (photoUri != null) {
+                val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, photoUri)
+                imageView.setImageBitmap(rotatePic(bitmap))
             }
         }
+    }
 
     private fun createTempImageFile(): File {
             // Create an image file name
             val timeStamp: String = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
             val storageDir: File = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
             return File.createTempFile(
-                "JPEG_${timeStamp}_", /* prefix */
+                "IMAGE_${userId}_${timeStamp}_", /* prefix */
                 ".jpg", /* suffix */
                 storageDir /* directory */
             ).apply {
