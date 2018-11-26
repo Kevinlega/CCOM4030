@@ -12,17 +12,18 @@
             android:text="Back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/backToProject2" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp" app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="8dp"
-    />
+            android:id="@+id/backToProject2"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="16dp"/>
     <ImageButton
             android:layout_width="58dp"
             android:layout_height="52dp" app:srcCompat="@drawable/video"
             android:id="@+id/openVideo"
-            android:scaleType="fitXY" android:layout_marginStart="16dp"
-            app:layout_constraintStart_toEndOf="@+id/backToProject2" app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="8dp"/>
+            android:scaleType="fitXY"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp" app:layout_constraintStart_toEndOf="@+id/backToProject2"
+            android:layout_marginStart="20dp"/>
     <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" app:srcCompat="@android:drawable/ic_menu_gallery"

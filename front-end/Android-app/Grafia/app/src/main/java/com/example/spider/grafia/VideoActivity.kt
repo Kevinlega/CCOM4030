@@ -18,7 +18,6 @@ import java.lang.Exception
 import android.content.ContentValues
 import android.media.MediaMetadataRetriever
 import java.io.*
-import java.net.URI
 
 
 class VideoActivity : AppCompatActivity() {
