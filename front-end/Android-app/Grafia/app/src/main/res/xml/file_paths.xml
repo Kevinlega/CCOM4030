@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<paths>
+    <external-files-path name="tempImages" path="Pictures" />
+    <external-files-path name="saveImage" path="/InternalStorage/Pictures"/>
+    <external-files-path name="tempVideos" path="Movies" />
+    <external-files-path name="saveImage" path="/InternalStorage/Movies"/>
+
+</paths>

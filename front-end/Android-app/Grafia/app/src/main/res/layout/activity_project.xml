@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ProjectActivity">
+
+    <Button
+            android:text="Add Participant"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/AddUsers"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toEndOf="@+id/BackToDashboard"
+            android:layout_marginStart="119dp" app:layout_constraintHorizontal_bias="0.0"/>
+    <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" app:srcCompat="@android:drawable/ic_menu_camera"
+            android:id="@+id/Camera"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="28dp" android:layout_marginTop="4dp"
+            app:layout_constraintTop_toBottomOf="@+id/BackToDashboard"
+    />
+    <Button
+            android:text="Back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/BackToDashboard" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="16dp" app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="16dp"
+    />
+    <ImageButton
+            android:layout_width="58dp"
+            android:layout_height="52dp" app:srcCompat="@android:drawable/ic_btn_speak_now"
+            android:id="@+id/Voice" android:layout_marginStart="10dp"
+            app:layout_constraintStart_toEndOf="@+id/Camera" android:layout_marginTop="4dp"
+            app:layout_constraintTop_toBottomOf="@+id/BackToDashboard" tools:srcCompat="@drawable/voice"
+            android:scaleType="fitXY"/>
+    <ImageButton
+            android:layout_width="51dp"
+            android:layout_height="51dp" app:srcCompat="@drawable/video"
+            android:id="@+id/Video"
+            tools:srcCompat="@drawable/video" android:scaleType="fitXY"
+            app:layout_constraintStart_toEndOf="@+id/Voice" app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="69dp" android:layout_marginStart="10dp"/>
+</android.support.constraint.ConstraintLayout>

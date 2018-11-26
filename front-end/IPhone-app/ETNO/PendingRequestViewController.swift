@@ -13,6 +13,7 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
     // MARK: - Variables
     // Flag that indicates if the admin has users to be added
     var UsersCanBeAdded = false
+    var UsersCanBeRemoved = false
     
     // Variables passed from previous view
     var user_id = Int()
@@ -37,6 +38,28 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     
+    
+    @IBAction func SendRequest(_ sender: Any) {
+        if (SelectedUsers.count > 0 && !FirstSelected){
+            UsersCanBeAdded = true
+            UsersCanBeRemoved = false
+        }
+        else{
+            self.present(Alert(title: "Error", message: "No one selected.", Dismiss: "Dismiss"),animated: true, completion: nil)
+        }
+    }
+    
+    @IBAction func RemoveRequest(_ sender: Any) {
+        if (SelectedUsers.count > 0 && !FirstSelected){
+            UsersCanBeRemoved = true
+            UsersCanBeAdded = false
+        }
+        else{
+            self.present(Alert(title: "Error", message: "No one selected.", Dismiss: "Dismiss"),animated: true, completion: nil)
+        }
+    }
+    
+    
     // MARK: - Modify the Tableview
     // Update the view of the table
     
@@ -52,7 +75,7 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
             }
         }
         else{
-            return 0
+            return pendingUsers.count
         }
     }
     
@@ -161,7 +184,7 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Send friend request
         if (segue.identifier == "SendFriendRequestAnswer"){
-            if(SelectedUsers.count > 0 && !FirstSelected){
+            if(UsersCanBeAdded){
                 let response = AnswerRequest(user_id: user_id, SelectedUsersEmail: SelectedUsersEmail)
                 print(response)
                 if (response["success"] as! Bool) == true{
@@ -176,7 +199,15 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
         else if (segue.identifier == "BackToDashboard"){
             let vc = segue.destination as! DashboardViewController
             vc.user_id = user_id
+        } else if (segue.identifier == "RejectRequest"){
+            if(UsersCanBeRemoved){
+                let response = DeclineRequest(user_id: user_id, SelectedUsersEmail: SelectedUsersEmail)
+                print(response)
+                if (response["success"] as! Bool) == true{
+                    let vc = segue.destination as! DashboardViewController
+                    vc.user_id = user_id
+                }
+            }
         }
     }
-
 }

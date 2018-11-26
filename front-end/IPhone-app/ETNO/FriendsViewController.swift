@@ -47,7 +47,6 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    
     // MARK: - Modify the Tableview
     // Update the view of the table
     
@@ -56,11 +55,10 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
             return FilteredUsers.count
         }
         else if !FirstSelected{
-            if SelectedUsers[0] == ""{
-                return 0
-            }
-            else{
+            if (SelectedUsers.count > 0) {
                 return SelectedUsers.count
+            }else{
+                return 0
             }
         }
         else {
@@ -86,6 +84,7 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
                 let indexToDelete = SelectedUsers.firstIndex(of: (selectedUser.textLabel?.text)!)
                 SelectedUsers.remove(at: indexToDelete!)
                 SelectedUsersEmail.remove(at: indexToDelete!)
+                
                 DispatchQueue.main.asyncAfter(deadline: (DispatchTime.now()+0.15), execute: {tableView.reloadData()})
             }
         }

@@ -63,11 +63,11 @@ class ChangePasswordViewController: UIViewController {
             if UserCanBeAdded{
                 var UserPassword = NewPassword.text
                 let UserEmail = email.text
-                let initialValue = generateRandomUInt()
-                let salt = saltGenerator(length: 5,initialValue: initialValue)
-                UserPassword = LFSR(data: UserPassword!, initialValue: initialValue)
+//                let initialValue = generateRandomUInt()
+                let salt = saltGenerator(length: 5)
+//                UserPassword = LFSR(data: UserPassword!, initialValue: initialValue)
                 UserPassword = saltAndHash(password: UserPassword!, salt: salt)
-                ChangePassword(email: UserEmail!, password: UserPassword!,initialValue: initialValue,salt: salt)
+                ChangePassword(email: UserEmail!, password: UserPassword!,salt: salt)
                 let _ = segue.destination as! LoginViewController
             }
         }

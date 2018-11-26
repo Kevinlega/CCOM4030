@@ -107,7 +107,6 @@ class AllFriendsViewController: UIViewController, UITableViewDelegate, UITableVi
     // MARK: - Segue Function
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
         if (segue.identifier == "BackToDashboard"){
             let vc = segue.destination as! DashboardViewController
             vc.user_id = user_id
