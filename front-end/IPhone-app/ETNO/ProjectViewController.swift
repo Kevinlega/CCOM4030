@@ -8,64 +8,7 @@
 
 import UIKit
 
-class ProjectViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
-    
-    
-    @IBOutlet weak var imageView: UIImageView!
-    
-    @IBAction func importGallery(_ sender: Any) {
-        let imagePickerController = UIImagePickerController()
-        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary){
-            imagePickerController.delegate = self
-            imagePickerController.sourceType = .photoLibrary
-            imagePickerController.allowsEditing = false
-            self.present(imagePickerController, animated: true, completion: nil )
-        }
-        else{
-            print("photo library not available")
-        }
-        
-    }
-    
-    @IBAction func openCamera(_ sender: Any) {
-    
-        let cameraController = UIImagePickerController()
-        if UIImagePickerController.isSourceTypeAvailable(.camera) {
-                cameraController.delegate = self
-                cameraController.sourceType = .camera;
-                cameraController.allowsEditing = false
-                self.present(cameraController, animated: true, completion: nil )
-            }
-            else {
-            print("Camera not available")
-        }        
-    }
-
-    
-    @IBAction func savePhoto(_ sender: Any) {
-        guard let selectedImage = imageView.image else {
-            print("Image not found!")
-            return
-        }
-        UIImageWriteToSavedPhotosAlbum(selectedImage, self, nil, nil)
-    }
-    
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        
-        let image = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
-        
-        imageView.image = image
-        
-        picker.dismiss(animated: true, completion: nil)
-        
-    }
-
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        picker.dismiss(animated: true, completion: nil)
-    }
-
-    
+class ProjectViewController: UIViewController, UINavigationControllerDelegate{
     
     // MARK: - Variables
     var user_id = Int()

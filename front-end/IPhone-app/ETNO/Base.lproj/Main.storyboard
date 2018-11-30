@@ -860,35 +860,6 @@
                                     <segue destination="7UN-HE-faA" kind="show" identifier="AddParticipants" id="5qV-Xp-Sn9"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cxV-HH-Aer">
-                                <rect key="frame" x="136" y="95" width="49" height="53"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="Image-1"/>
-                                <connections>
-                                    <action selector="openCamera:" destination="Ukw-4a-vco" eventType="touchUpInside" id="NEW-qc-4gh"/>
-                                </connections>
-                            </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tuh-ag-SCo">
-                                <rect key="frame" x="0.0" y="169" width="375" height="609"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6fY-PA-YTe">
-                                <rect key="frame" x="75" y="96" width="53" height="53"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="Image-4"/>
-                                <connections>
-                                    <action selector="importGallery:" destination="Ukw-4a-vco" eventType="touchUpInside" id="wxV-jI-orh"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cgQ-gj-kCy">
-                                <rect key="frame" x="255" y="105" width="92" height="34"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                <state key="normal" title="Save Photo"/>
-                                <connections>
-                                    <action selector="savePhoto:" destination="Ukw-4a-vco" eventType="touchUpInside" id="4Ez-vk-t6S"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cVI-tW-Vud">
                                 <rect key="frame" x="16" y="96" width="51" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -898,7 +869,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CPf-7Z-Cqr">
-                                <rect key="frame" x="193" y="93" width="49" height="53"/>
+                                <rect key="frame" x="75" y="96" width="49" height="53"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="Image-1"/>
                                 <connections>
@@ -912,7 +883,6 @@
                     <navigationItem key="navigationItem" id="kBW-Y5-RmF"/>
                     <connections>
                         <outlet property="AddParticipant" destination="asg-2v-3RZ" id="nc6-g9-OxH"/>
-                        <outlet property="imageView" destination="tuh-ag-SCo" id="i0n-tl-gJO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jMa-eg-uar" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1155,6 +1125,7 @@
         <image name="Image-6" width="256" height="256"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="h6A-XE-KyP"/>
         <segue reference="sZg-lJ-mOI"/>
         <segue reference="YSk-mB-5ei"/>
         <segue reference="wOM-C1-r7n"/>
