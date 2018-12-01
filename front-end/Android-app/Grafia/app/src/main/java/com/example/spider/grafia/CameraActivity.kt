@@ -35,7 +35,7 @@ class CameraActivity : AppCompatActivity() {
         projectId = intent.getIntExtra("pId",-1)
 
         backToProject1.setOnClickListener {
-
+            finish()
             if((mCurrentPhotoPath != "") and !saved){
                 val myFile = File(mCurrentPhotoPath)
                 myFile.delete()
@@ -67,7 +67,7 @@ class CameraActivity : AppCompatActivity() {
         }
 
         saveImage.setOnClickListener {
-            if (mCurrentPhotoPath != ""){
+            if (mCurrentPhotoPath != "" && !saved){
                 galleryAddPic()
                 Toast.makeText(this, "Saved to Gallery.", Toast.LENGTH_SHORT).show()
             } else{
@@ -180,4 +180,28 @@ class CameraActivity : AppCompatActivity() {
             // MediaStore.Images.Media.insertImage(contentResolver,file.absolutePath,"test","test")
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (!isChangingConfigurations) {
+            deleteTempFiles(getExternalFilesDir(Environment.DIRECTORY_PICTURES))
+        }
+    }
+
+    private fun deleteTempFiles(file: File): Boolean {
+        if (file.isDirectory) {
+            val files = file.listFiles()
+            if (files != null) {
+                for (f in files) {
+                    if (f.isDirectory) {
+                        deleteTempFiles(f)
+                    } else {
+                        f.delete()
+                    }
+                }
+            }
+        }
+        return file.delete()
+    }
+
 }

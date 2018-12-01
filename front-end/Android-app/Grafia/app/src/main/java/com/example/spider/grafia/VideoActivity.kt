@@ -39,7 +39,7 @@ class VideoActivity : AppCompatActivity() {
         projectId = intent.getIntExtra("pId",-1)
 
         backToProject2.setOnClickListener {
-
+            finish()
             if((mCurrentVideoPath != "") and !saved){
                 val myFile = File(mCurrentVideoPath)
                 myFile.delete()
@@ -71,7 +71,7 @@ class VideoActivity : AppCompatActivity() {
         }
 
         saveVideo.setOnClickListener {
-            if (mCurrentVideoPath != ""){
+            if (mCurrentVideoPath != "" && !saved){
                 galleryAddVideo()
                 Toast.makeText(this, "Saved to Gallery.", Toast.LENGTH_SHORT).show()
             } else{
@@ -202,4 +202,28 @@ class VideoActivity : AppCompatActivity() {
             saved = true
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (!isChangingConfigurations) {
+            deleteTempFiles(getExternalFilesDir(Environment.DIRECTORY_MOVIES))
+        }
+    }
+
+    private fun deleteTempFiles(file: File): Boolean {
+        if (file.isDirectory) {
+            val files = file.listFiles()
+            if (files != null) {
+                for (f in files) {
+                    if (f.isDirectory) {
+                        deleteTempFiles(f)
+                    } else {
+                        f.delete()
+                    }
+                }
+            }
+        }
+        return file.delete()
+    }
+
 }

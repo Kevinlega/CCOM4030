@@ -49,9 +49,6 @@ class VoiceActivity : AppCompatActivity(){
         super.onCreate (savedInstanceState)
         setContentView (R.layout.activity_voice)
 
-
-
-
         recordVoice.setOnClickListener {
 
             recording = true
@@ -156,7 +153,7 @@ class VoiceActivity : AppCompatActivity(){
             // To pass any data to next activity
             intent.putExtra("userId", userId)
             intent.putExtra("pid", projectId)
-
+            finish()
             if((mCurrentVoicePath != "")){
                 val myFile = File(mCurrentVoicePath)
                 myFile.delete()
@@ -166,5 +163,28 @@ class VoiceActivity : AppCompatActivity(){
             // start your next activity
             startActivity(intent)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (!isChangingConfigurations) {
+            deleteTempFiles(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS))
+        }
+    }
+
+    private fun deleteTempFiles(file: File): Boolean {
+        if (file.isDirectory) {
+            val files = file.listFiles()
+            if (files != null) {
+                for (f in files) {
+                    if (f.isDirectory) {
+                        deleteTempFiles(f)
+                    } else {
+                        f.delete()
+                    }
+                }
+            }
+        }
+        return file.delete()
     }
 }
