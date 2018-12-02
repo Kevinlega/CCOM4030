@@ -46,6 +46,10 @@ class ProjectViewController: UIViewController, UINavigationControllerDelegate{
             let vc = segue.destination as! CameraViewController
             vc.user_id = user_id
             vc.project_id = project_id
+        } else if (segue.identifier == "NotesSegue"){
+            let vc = segue.destination as! NotesViewController
+            vc.user_id = user_id
+            vc.project_id = project_id
         }
     }
 }
