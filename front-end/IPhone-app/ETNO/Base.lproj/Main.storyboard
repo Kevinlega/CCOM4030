@@ -1110,6 +1110,15 @@
                                     <action selector="importGallery:" destination="jHp-Id-dk0" eventType="touchUpInside" id="IsW-vC-eH1"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X4z-wt-Emw">
+                                <rect key="frame" x="258" y="66" width="111" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="Upload Photo"/>
+                                <connections>
+                                    <action selector="Upload:" destination="jHp-Id-dk0" eventType="touchUpInside" id="4ff-pX-fW6"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="6qK-IW-CKa"/>
@@ -1230,7 +1239,7 @@
         <image name="Image-7" width="512" height="512"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="vAL-F2-jYm"/>
+        <segue reference="sZg-lJ-mOI"/>
         <segue reference="YSk-mB-5ei"/>
         <segue reference="wOM-C1-r7n"/>
     </inferredMetricsTieBreakers>

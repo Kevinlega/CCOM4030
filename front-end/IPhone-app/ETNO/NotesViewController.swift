@@ -57,20 +57,17 @@ class NotesViewController: UIViewController, UITextViewDelegate {
             // 2)No me deja conectar del storyboard a aqui asi que no puedo hacerle
             // input al textfield para que nombres el file como quieras.
             // Cuando hagas esas dos cosas, borras esto:
-            let Name = "ELPINGU"
+
             let project_path = "/var/www/projects/1/fb633b48-9850-40ca-ba37-26beb9558892" + "/docs/"
             //file name received from text field
             // Cuan dificil es conseguir un timestamp? AH APPLE?
             let dateFormatter : DateFormatter = DateFormatter()
             //        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-            dateFormatter.dateFormat = "yyyy-MMM-dd HH:mm:ss"
+            dateFormatter.dateFormat = "yyyyMMdd_HHmmss"
             let date = Date()
             let dateString = dateFormatter.string(from: date)
-            var fileName = dateString + ".txt"
+            let fileName = "NOTES_\(user_id)_" + dateString + "_.txt"
             
-            if Name != "" {
-                fileName = Name + ".txt"
-            }
             // text to save
             let text = String(Note.text)
             // construct the path, path = project path + docs (because its a text file)
