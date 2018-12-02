@@ -14,6 +14,7 @@ define("GET_ALL_FRIENDS_WITH_USER_ID",     6);  // @param: uid   -> displays a j
 define("GET_PENDING_REQUEST",              7);  // @param: uid   -> Shows all the pending requests.
 define("GET_ADMIN_ID",                     8);  // @param: pid   -> given a project id, get the admin(uid) of said project.
 define("GET_NAME_WITH_EMAIL_ANDROID",      9);
+define("GET_USER_PROJECT_PATH", 	  10);
 
 
 if(!isset($_REQUEST['queryType'])) exit();
@@ -280,6 +281,27 @@ switch($queryType) {
 
 		$return = array("name" => [$name],"empty"=>$empty,"email"=>[$email]);
 
+		break;
+	case GET_USER_PROJECT_PATH:
+		if(!isset($_REQUEST["uid"])) exit();
+
+		$user_id = $_REQUEST["uid"];
+
+		$query = "SELECT user_id 
+			  FROM users
+			  WHERE user_id=(?)";
+		
+		$statement = $connection->prepare($query);			// Prepare the query statement. (for sanitation)
+		$statement->bind_param('i', $user_id);			// Bind the parameters with the sql query.
+		$statement->execute();						// Execute the now sanitized query.
+		$statement->bind_result($uid);	    	            		// Asign the fetch value to these new variables.
+		$statement->fetch();
+		$path = $projects_path . $uid;
+		
+		if(!empty($uid))
+			$return = array("path" => $path);
+		else
+			$return = array("path" => null);
 		break;
 
 	default :
