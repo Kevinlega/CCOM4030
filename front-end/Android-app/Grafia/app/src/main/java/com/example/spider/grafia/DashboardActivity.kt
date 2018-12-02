@@ -12,7 +12,10 @@ import android.view.View
 import android.widget.GridLayout.VERTICAL
 import org.json.JSONArray
 import org.json.JSONObject
+import java.net.HttpURLConnection
 import java.net.URL
+
+
 
 class DashboardActivity : AppCompatActivity() {
 
@@ -31,8 +34,7 @@ class DashboardActivity : AppCompatActivity() {
 
         val downloadData = Connect(this@DashboardActivity, rview, userId)
 
-        try
-        {
+        try {
             val url = "http://54.81.239.120/selectAPI.php?queryType=3&uid=$userId"
             downloadData.execute(url)
 
@@ -75,6 +77,7 @@ class DashboardActivity : AppCompatActivity() {
 
             override fun doInBackground(vararg p0: String?): String{
                 return downloadJSON(p0[0])
+
             }
             private fun downloadJSON(url: String?): String{
                 return URL(url).readText()
