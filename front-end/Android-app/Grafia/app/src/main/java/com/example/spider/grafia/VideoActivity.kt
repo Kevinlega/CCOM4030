@@ -18,6 +18,7 @@ import java.lang.Exception
 import android.content.ContentValues
 import android.media.MediaMetadataRetriever
 import java.io.*
+import java.net.HttpURLConnection
 
 
 class VideoActivity : AppCompatActivity() {
@@ -240,5 +241,10 @@ class VideoActivity : AppCompatActivity() {
         }
         return file.delete()
     }
+
+
+
+
+
 
 }
