@@ -22,9 +22,6 @@ import android.os.AsyncTask
 import java.net.*
 import android.provider.DocumentsContract
 
-
-
-
 class CameraActivity : AppCompatActivity() {
 
     private var mCurrentPhotoPath = ""
@@ -129,7 +126,7 @@ class CameraActivity : AppCompatActivity() {
             BitmapFactory.decodeFile(mCurrentPhotoPath)?.also { bitmap ->
                 imageView.setImageBitmap(rotatePic(bitmap))
             }
-            
+
         } else if (requestCode == 2 && resultCode == RESULT_OK) {
             if (mCurrentPhotoPath != "") {
                 val myFile = File(mCurrentPhotoPath)
@@ -215,11 +212,8 @@ class CameraActivity : AppCompatActivity() {
         } else {
             // Save image to gallery via bitmap
             BitmapFactory.decodeFile(mCurrentPhotoPath)?.also { bitmap ->
-
                 MediaStore.Images.Media.insertImage(contentResolver, rotatePic(bitmap), "test", "test")
-
             }
-
             saved = true
         }
     }
