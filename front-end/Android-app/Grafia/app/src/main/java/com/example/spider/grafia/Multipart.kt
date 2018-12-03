@@ -1,12 +1,8 @@
 package com.example.spider.grafia
 
-import android.content.Context
-import android.graphics.BitmapFactory
-import android.widget.Toast
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
-
 
 class Multipart
 /**
@@ -21,7 +17,7 @@ constructor(url: URL) {
 
     companion object {
         private val LINE_FEED = "\r\n"
-        private val maxBufferSize = 1024 * 1024
+        private val maxBufferSize = 1024
         private val charset = "UTF-8"
     }
 
@@ -69,7 +65,7 @@ constructor(url: URL) {
      * @throws IOException
      */
     @Throws(IOException::class)
-    fun addFilePart(fieldName: String, uploadFile: File, fileName: String, fileType: String) {
+    fun addFilePart(fieldName: String, uploadFile: String, fileName: String, fileType: String) {
         writer.append("--").append(boundary).append(LINE_FEED)
         writer.append("Content-Disposition: file; name=\"").append(fieldName)
             .append("\"; filename=\"").append(fileName).append("\"").append(LINE_FEED)
@@ -77,7 +73,7 @@ constructor(url: URL) {
         writer.append(LINE_FEED)
         writer.flush()
 
-        val inputStream = FileInputStream(uploadFile)
+        val inputStream = FileInputStream(File(uploadFile))
 
         inputStream.copyTo(outputStream, maxBufferSize)
 
@@ -121,11 +117,15 @@ constructor(url: URL) {
                 val response = reader.use(BufferedReader::readText)
                 httpConnection.disconnect()
 
+                println(response)
+
                 val string: String = response[16].toString() + response[17].toString() + response[18].toString() + response[19].toString()
 
                 if (string == "true"){
                     answer = true
                 }
+            } else{
+                println("Aqui")
             }
 
         } catch (e: IOException) {

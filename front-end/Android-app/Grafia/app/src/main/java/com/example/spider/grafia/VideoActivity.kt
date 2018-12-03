@@ -17,18 +17,24 @@ import kotlinx.android.synthetic.main.activity_video.*
 import java.lang.Exception
 import android.content.ContentValues
 import android.media.MediaMetadataRetriever
+import android.os.AsyncTask
+import android.provider.DocumentsContract
 import java.io.*
-import java.net.HttpURLConnection
+import java.net.URL
 
 
 class VideoActivity : AppCompatActivity() {
 
     private var mCurrentVideoPath = ""
     private var mCurrentVideoUri : Uri = Uri.EMPTY
+    private var mCurrentPickedVideo = ""
+    private var mCurrentPickedVideoName = ""
     private var saved = false
     private var userId = -1
     private var projectId = -1
     private var restart = false
+    private var projectPath = ""
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +44,7 @@ class VideoActivity : AppCompatActivity() {
 
         userId = intent.getIntExtra("userId",-1)
         projectId = intent.getIntExtra("pId",-1)
+        projectPath = "/var/www/projects/1/fb633b48-9850-40ca-ba37-26beb9558892"
 
         backToProject2.setOnClickListener {
             finish()
@@ -63,6 +70,10 @@ class VideoActivity : AppCompatActivity() {
                 mCurrentVideoPath = ""
                 saved = false
             }
+
+            mCurrentPickedVideo = ""
+            mCurrentPickedVideoName = ""
+
             dispatchTakeVideoIntent()
         }
 
@@ -95,6 +106,10 @@ class VideoActivity : AppCompatActivity() {
         stop.setOnClickListener {
             videoView.stopPlayback()
             restart = true
+        }
+
+        uploadVideo.setOnClickListener {
+            UploadFileAsync(projectPath).execute("")
         }
 
 
@@ -143,9 +158,36 @@ class VideoActivity : AppCompatActivity() {
                 myFile.delete()
                 mCurrentVideoPath = ""
             }
+            //cambiar esto
             val videoURI = data?.data
+
+            val wholeID = DocumentsContract.getDocumentId(videoURI)
+
+            // Split at colon, use second item in the array
+            val id = wholeID.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
+
+            val column = arrayOf(MediaStore.Video.Media.DATA)
+
+            // where id is equal to
+            val sel = MediaStore.Video.Media._ID + "=?"
+
+            val cursor = this.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, column, sel, arrayOf(id), null)
+
+            var filePath = ""
+            val columnIndex = cursor.getColumnIndex(column[0])
+
+            if (cursor.moveToFirst()) {
+                filePath = cursor.getString(columnIndex)
+            }
+            cursor.close()
+
+            mCurrentPickedVideo = filePath
+
+            val timeStamp: String = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
+            mCurrentPickedVideoName = "VIDEO_${userId}_${timeStamp}_.jpg"
+
             if (videoURI != null) {
-                mCurrentVideoUri = videoURI as Uri
+                mCurrentVideoUri = videoURI
                 videoView.setVideoURI(videoURI)
             }
         }
@@ -244,7 +286,51 @@ class VideoActivity : AppCompatActivity() {
 
 
 
+    private inner class UploadFileAsync(val projectPath: String) : AsyncTask<String, Void, String>() {
 
+        override fun doInBackground(vararg params: String): String {
+
+            var path = ""
+            var name = ""
+            if (mCurrentVideoPath == "" && mCurrentPickedVideo != "") {
+                path = mCurrentPickedVideo
+                name = mCurrentPickedVideoName
+
+            } else if (mCurrentVideoPath != "" && mCurrentPickedVideoName == "" ) {
+                path = mCurrentVideoPath
+                name = path.substringAfterLast("/")
+            }
+
+
+            val multipart = Multipart(URL("http://54.81.239.120/fUploadAPI.php"))
+            multipart.addFormField("fileType", "1")
+            multipart.addFormField("path", (projectPath + "/videos/"))
+            multipart.addFilePart("file", path, name, "video/mp4")
+
+            val bool = multipart.upload()
+
+            if (bool) {
+                return "YES"
+            } else {
+                return "NO"
+            }
+
+        }
+
+        override fun onPostExecute(result: String) {
+
+            if (result == "YES") {
+                Toast.makeText(this@VideoActivity, "Uploaded!", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this@VideoActivity, "Try Again", Toast.LENGTH_LONG).show()
+            }
+
+        }
+
+        override fun onPreExecute() {}
+
+        override fun onProgressUpdate(vararg values: Void) {}
+    }
 
 
 }
