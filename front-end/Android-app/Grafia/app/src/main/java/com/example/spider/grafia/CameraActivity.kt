@@ -18,21 +18,18 @@ import android.support.v4.app.ActivityCompat
 import android.content.pm.PackageManager
 import android.support.v4.content.ContextCompat
 import java.io.*
-import java.net.HttpURLConnection
-import java.net.MalformedURLException
-import java.net.URL
 import android.os.AsyncTask
-
-
+import java.net.*
 
 
 class CameraActivity : AppCompatActivity() {
 
     private var mCurrentPhotoPath = ""
+    private var mCurrentPickedPicture = ""
     private var saved = false
     private var userId = -1
     private var projectId = -1
-
+    private var projectPath = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +37,7 @@ class CameraActivity : AppCompatActivity() {
 
         userId = intent.getIntExtra("userId",-1)
         projectId = intent.getIntExtra("pId",-1)
+        projectPath = "/var/www/projects/1/fb633b48-9850-40ca-ba37-26beb9558892"
 
         backToProject1.setOnClickListener {
             finish()
@@ -65,6 +63,8 @@ class CameraActivity : AppCompatActivity() {
                 mCurrentPhotoPath = ""
                 saved = false
             }
+            mCurrentPickedPicture = ""
+
             dispatchTakePictureIntent()
         }
 
@@ -83,31 +83,32 @@ class CameraActivity : AppCompatActivity() {
         }
 
         uploadImage.setOnClickListener {
-            val notused = uploadFile(mCurrentPhotoPath)
+
+            UploadFileAsync(projectPath).execute("")
+
         }
-
-
     }
-    private fun dispatchTakePictureIntent() {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-            // Ensure that there's a camera activity to handle the intent
-            takePictureIntent.resolveActivity(packageManager)?.also {
-                // Create the File where the photo should go
-                val photoFile: File? =  try {
-                    createTempImageFile()
-                } catch (t: Exception){null}
-                // Continue only if the File was successfully created
-                photoFile?.also {
-                    val photoURI: Uri = FileProvider.getUriForFile(
-                        this@CameraActivity,
-                        "com.example.spider.grafia", it )
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
 
-                    startActivityForResult(takePictureIntent, 1)
-                    }
+    private fun dispatchTakePictureIntent() {
+    Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+        // Ensure that there's a camera activity to handle the intent
+        takePictureIntent.resolveActivity(packageManager)?.also {
+            // Create the File where the photo should go
+            val photoFile: File? =  try {
+                createTempImageFile()
+            } catch (t: Exception){null}
+            // Continue only if the File was successfully created
+            photoFile?.also {
+                val photoURI: Uri = FileProvider.getUriForFile(
+                    this@CameraActivity,
+                    "com.example.spider.grafia", it )
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+
+                startActivityForResult(takePictureIntent, 1)
                 }
-           }
-        }
+            }
+       }
+    }
 
     private fun dispatchPicPictureIntent(){
         val intent = Intent()
@@ -128,6 +129,8 @@ class CameraActivity : AppCompatActivity() {
                 mCurrentPhotoPath = ""
             }
             val photoUri = data?.data
+            mCurrentPickedPicture = File(photoUri.toString()).absolutePath
+
             if (photoUri != null) {
                 val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, photoUri)
                 imageView.setImageBitmap(rotatePic(bitmap))
@@ -163,8 +166,6 @@ class CameraActivity : AppCompatActivity() {
             return Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.width, scaledBitmap.height, matrix, true)
     }
 
-
-
     private fun galleryAddPic() {
 
         if (ContextCompat.checkSelfPermission(
@@ -186,10 +187,6 @@ class CameraActivity : AppCompatActivity() {
                 }
 
             saved = true
-
-            // save via file path
-            // val file = File(mCurrentPhotoPath)
-            // MediaStore.Images.Media.insertImage(contentResolver,file.absolutePath,"test","test")
         }
     }
 
@@ -217,249 +214,47 @@ class CameraActivity : AppCompatActivity() {
     }
 
 
-    fun uploadFile(selectedFilePath:String):Int {
+    private inner class UploadFileAsync(val projectPath : String):AsyncTask<String, Void, String>() {
 
-        var serverResponseCode = 0
+        override fun doInBackground(vararg params:String):String {
 
-        val connection:HttpURLConnection
-        val dataOutputStream:DataOutputStream
-        val lineEnd = "\r\n"
-        val twoHyphens = "--"
-        val boundary = "*****"
+            var path = ""
 
+            if (mCurrentPhotoPath == "" && mCurrentPickedPicture != ""){
+                path = mCurrentPickedPicture
+            } else if(mCurrentPhotoPath != "" && mCurrentPickedPicture == ""){
+                path = mCurrentPhotoPath
+            }
 
-        var bytesRead:Int
-        var bytesAvailable:Int
-        var bufferSize:Int
-        var buffer:ByteArray
-        var maxBufferSize = 1 * 1024 * 1024
-        var selectedFile = File(selectedFilePath)
+            val multipart = Multipart(URL("http://54.81.239.120/fUploadAPI.php"))
+            multipart.addFormField("fileType","1")
+            multipart.addFormField("path",(projectPath + "/images/"))
+            multipart.addFilePart("file",File(path),path.substringAfterLast("/"),"image/jpg")
 
+            val bool = multipart.upload()
 
-        val parts = selectedFilePath.split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        val fileName = parts[parts.size - 1]
-
-        try
-        {
-        val fileInputStream = FileInputStream(selectedFile)
-        val url = URL("")
-        connection = url.openConnection() as HttpURLConnection
-        connection.setDoInput(true)//Allow Inputs
-        connection.setDoOutput(true)//Allow Outputs
-        connection.setUseCaches(false)//Don't use a cached Copy
-        connection.setRequestMethod("POST")
-        connection.setRequestProperty("Connection", "Keep-Alive")
-        connection.setRequestProperty("ENCTYPE", "multipart/form-data")
-        connection.setRequestProperty("Content-Type", "multipart/form-data;boundary=$boundary")
-        connection.setRequestProperty("uploaded_file", selectedFilePath)
-
-         //creating new data output stream
-                        dataOutputStream = DataOutputStream(connection.getOutputStream())
-
-         //writing bytes to data output stream
-                        dataOutputStream.writeBytes(twoHyphens + boundary + lineEnd)
-        dataOutputStream.writeBytes(
-            "Content-Disposition: form-data; name=\"uploaded_file\";filename=\""
-            + selectedFilePath + "\"" + lineEnd
-        )
-
-        dataOutputStream.writeBytes(lineEnd)
-
-         //returns no. of bytes present in fileInputStream
-                        bytesAvailable = fileInputStream.available()
-         //selecting the buffer size as minimum of available bytes or 1 MB
-                        bufferSize = Math.min(bytesAvailable, maxBufferSize)
-         //setting the buffer as byte array of size of bufferSize
-                        buffer = ByteArray(bufferSize)
-
-         //reads bytes from FileInputStream(from 0th index of buffer to buffersize)
-                        bytesRead = fileInputStream.read(buffer, 0, bufferSize)
-
-         //loop repeats till bytesRead = -1, i.e., no bytes are left to read
-                        while (bytesRead > 0)
-        {
-         //write the bytes read from inputstream
-                            dataOutputStream.write(buffer, 0, bufferSize)
-        bytesAvailable = fileInputStream.available()
-        bufferSize = Math.min(bytesAvailable, maxBufferSize)
-        bytesRead = fileInputStream.read(buffer, 0, bufferSize)
-        }
-
-        dataOutputStream.writeBytes(lineEnd)
-        dataOutputStream.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd)
-
-        serverResponseCode = connection.getResponseCode()
-        val serverResponseMessage = connection.getResponseMessage()
-
-
-         //response code of 200 indicates the server status OK
-                        if (serverResponseCode == 200)
-        {
-        }
-
-         //closing the input and output streams
-
-
-
-
-        fileInputStream.close()
-        dataOutputStream.flush()
-        dataOutputStream.close()
-
-
+            if (bool){return "YES"
+            } else{ return "NO"}
 
         }
-        catch (e: FileNotFoundException) {
-        e.printStackTrace()
-        runOnUiThread { Toast.makeText(this@CameraActivity, "File Not Found", Toast.LENGTH_SHORT).show() }
-        }
-        catch (e:MalformedURLException) {
-        e.printStackTrace()
-        Toast.makeText(this@CameraActivity, "URL error!", Toast.LENGTH_SHORT).show()
+
+        override fun onPostExecute(result:String) {
+
+            if (result == "YES"){
+                Toast.makeText(this@CameraActivity,"Uploaded!", Toast.LENGTH_LONG).show()
+            } else{
+                Toast.makeText(this@CameraActivity,"Try Again", Toast.LENGTH_LONG).show()
+            }
 
         }
-        catch (e:IOException) {
-        e.printStackTrace()
-        Toast.makeText(this@CameraActivity, "Cannot Read/Write File!", Toast.LENGTH_SHORT).show()
-        }
 
-        return serverResponseCode
+        override fun onPreExecute() {}
+
+        override fun onProgressUpdate(vararg values:Void) {}
     }
-
-
-
-      private inner class UploadFileAsync:AsyncTask<String, Void, String>() {
-
-            override fun doInBackground(vararg params:String):String {
-
-            try
-            {
-            val sourceFileUri = "/mnt/sdcard/abc.png"
-
-            var conn:HttpURLConnection? = null
-            var dos:DataOutputStream? = null
-            val lineEnd = "\r\n"
-            val twoHyphens = "--"
-            val boundary = "*****"
-            var bytesRead:Int
-            var bytesAvailable:Int
-            var bufferSize:Int
-            var buffer:ByteArray
-            val maxBufferSize = 1 * 1024 * 1024
-            val sourceFile = File(sourceFileUri)
-
-            if (sourceFile.isFile)
-            {
-
-            try
-            {
-            val upLoadServerUri = "http://website.com/abc.php?"
-
-             // open a URL connection to the Servlet
-                                val fileInputStream = FileInputStream(
-            sourceFile)
-            val url = URL(upLoadServerUri)
-
-             // Open a HTTP connection to the URL
-                                conn = url.openConnection() as HttpURLConnection
-                conn!!.doInput = true // Allow Inputs
-                conn!!.doOutput = true // Allow Outputs
-                conn!!.useCaches = false // Don't use a Cached Copy
-                conn!!.requestMethod = "POST"
-            conn!!.setRequestProperty("Connection", "Keep-Alive")
-            conn!!.setRequestProperty("ENCTYPE",
-            "multipart/form-data")
-            conn!!.setRequestProperty("Content-Type",
-                "multipart/form-data;boundary=$boundary"
-            )
-            conn!!.setRequestProperty("bill", sourceFileUri)
-
-            dos = DataOutputStream(conn!!.outputStream)
-
-            dos!!.writeBytes(twoHyphens + boundary + lineEnd)
-            dos!!.writeBytes(
-                "Content-Disposition: form-data; name=\"bill\";filename=\""
-                + sourceFileUri + "\"" + lineEnd
-            )
-
-            dos!!.writeBytes(lineEnd)
-
-             // create a buffer of maximum size
-                                bytesAvailable = fileInputStream.available()
-
-            bufferSize = Math.min(bytesAvailable, maxBufferSize)
-            buffer = ByteArray(bufferSize)
-
-             // read file and write it into form...
-                                bytesRead = fileInputStream.read(buffer, 0, bufferSize)
-
-            while (bytesRead > 0)
-            {
-
-            dos!!.write(buffer, 0, bufferSize)
-            bytesAvailable = fileInputStream.available()
-            bufferSize = Math
-            .min(bytesAvailable, maxBufferSize)
-            bytesRead = fileInputStream.read(buffer, 0,
-            bufferSize)
-
-            }
-
-             // send multipart form data necesssary after file
-                                // data...
-                                dos!!.writeBytes(lineEnd)
-            dos!!.writeBytes((twoHyphens + boundary + twoHyphens
-            + lineEnd))
-
-             // Responses from the server (code and message)
-
-            val serverResponseCode = conn!!.responseCode
-            val serverResponseMessage = conn!!
-            .responseMessage
-
-            if (serverResponseCode === 200)
-            {
-
-             // messageText.setText(msg);
-                                    //Toast.makeText(ctx, "File Upload Complete.",
-                                    //      Toast.LENGTH_SHORT).show();
-
-                                    // recursiveDelete(mDirectory1);
-
-                                }
-
-             // close the streams //
-                                fileInputStream.close()
-            dos!!.flush()
-            dos!!.close()
-
-            }
-            catch (e:Exception) {
-
-             // dialog.dismiss();
-                                e.printStackTrace()
-
-            }
-
-             // dialog.dismiss();
-
-                        } // End else block
-
-
-            }
-            catch (ex:Exception) {
-             // dialog.dismiss();
-
-                        ex.printStackTrace()
-            }
-
-            return "Executed"
-            }
-
-            override fun onPostExecute(result:String) {}
-
-            override fun onPreExecute() {}
-
-            override fun onProgressUpdate(vararg values:Void) {}
-      }
 }
+
+
+
+
+
