@@ -60,5 +60,15 @@ class ProjectActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        Notes.setOnClickListener {
+            val intent = Intent(this@ProjectActivity, NotesActivity::class.java)
+            // To pass any data to next activity
+            intent.putExtra("userId", userId)
+            intent.putExtra("pid", projectId)
+//             start your next activity
+            startActivity(intent)
+        }
+
+
     }
 }

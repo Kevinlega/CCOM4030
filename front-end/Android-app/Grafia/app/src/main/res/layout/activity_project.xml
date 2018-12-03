@@ -47,4 +47,10 @@
             tools:srcCompat="@drawable/video" android:scaleType="fitXY"
             app:layout_constraintStart_toEndOf="@+id/Voice" app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="69dp" android:layout_marginStart="10dp"/>
+    <ImageButton
+            android:layout_width="52dp"
+            android:layout_height="47dp" app:srcCompat="@drawable/notes"
+            android:id="@+id/Notes" android:scaleType="fitXY"
+            android:layout_marginTop="5dp" app:layout_constraintTop_toBottomOf="@+id/AddUsers"
+            app:layout_constraintStart_toEndOf="@+id/Video" android:layout_marginStart="10dp"/>
 </android.support.constraint.ConstraintLayout>

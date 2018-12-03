@@ -41,7 +41,6 @@ switch($fileType){
 	    case IMAGE_FILE:
 
 	    	if(!isset($_REQUEST['path'])) exit();
-			if(!isset($_REQUEST[''])) exit();
 
 			// Por si hay que hacer un directorio
 			// $target_dir = "media";
@@ -50,8 +49,11 @@ switch($fileType){
 			// 	mkdir($target_dir, 0777, true);
 			// }
 
-			$target_dir = $_REQUEST['path'] . basename($_FILES["file"]["filename"]);
-			if(move_uploaded_file($_FILES["file"]["tmp"], $target_dir)){
+
+						
+
+			$target_dir = $_REQUEST['path'] . basename($_FILES["file"]["name"]);
+			if(move_uploaded_file($_FILES["file"]["tmp_name"], $target_dir)){
 				$return = array("file_created"=>true);
 			}
 			else{

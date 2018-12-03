@@ -164,43 +164,58 @@ class VideoActivity : AppCompatActivity() {
         }
     }
 
-    private fun galleryAddVideo() {
+    private fun galleryAddVideo() = if (ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) != PackageManager.PERMISSION_GRANTED
+    ) {
 
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1
+        )
+    } else {
+        // Save video to gallery
 
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1
-            )
-        } else {
-            // Save video to gallery
+        val retriever = MediaMetadataRetriever()
+        //use one of overloaded setDataSource() functions to set your data source
+        retriever.setDataSource(this, mCurrentVideoUri)
+        val time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+        val timeInMillisec = time.toLong()
+        retriever.release()
 
-            val retriever = MediaMetadataRetriever()
-            //use one of overloaded setDataSource() functions to set your data source
-            retriever.setDataSource(this, mCurrentVideoUri)
-            val time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
-            val timeInMillisec = time.toLong()
-            retriever.release()
+        // Save the name and description of a video in a ContentValues map.
+        val values = ContentValues(6)
+        values.put(MediaStore.Video.Media.MIME_TYPE, "video/mp4")
+        values.put(MediaStore.Video.Media.DATE_TAKEN, System.currentTimeMillis())
+        values.put(MediaStore.Video.Media.DURATION, timeInMillisec)
 
 
-            val out = File((mCurrentVideoPath))
 
-            val values = ContentValues(6)
-            values.put(MediaStore.Video.Media.TITLE, "My video title")
-            values.put(MediaStore.Video.Media.MIME_TYPE, "video/mp4")
-            values.put(MediaStore.Video.Media.DATA, out.absolutePath)
-            values.put(MediaStore.Video.Media.DATE_ADDED, System.currentTimeMillis())
-            values.put(MediaStore.Video.Media.DATE_TAKEN, System.currentTimeMillis())
-            values.put(MediaStore.Video.Media.DURATION, timeInMillisec)
+        // Add a new record (identified by uri) without the video, but with the values just set.
 
-            contentResolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values)
+        val uri = contentResolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values)
 
-            saved = true
+        // Now get a handle to the file for that record, and save the data into it.
+        try {
+            val istream = FileInputStream(mCurrentVideoPath)
+            val os = contentResolver.openOutputStream(uri!!)
+            val buffer = ByteArray(4096) // tweaking this number may increase performance
+            var len = istream.read(buffer)
+            while (len != -1) {
+                os!!.write(buffer, 0, len)
+                len = istream.read(buffer)
+            }
+            os!!.flush()
+            istream.close()
+            os.close()
+        } catch (e: Exception) {
         }
+
+
+        sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri))
+
+        saved = true
     }
 
     override fun onDestroy() {
