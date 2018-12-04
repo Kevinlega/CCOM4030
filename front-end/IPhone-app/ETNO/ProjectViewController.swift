@@ -14,6 +14,8 @@ class ProjectViewController: UIViewController, UINavigationControllerDelegate{
     var user_id = Int()
     var project_id = Int()
     var is_admin = Bool()
+    var project_path = String()
+    
     @IBOutlet weak var AddParticipant: UIButton!
     
     override func viewDidLoad() {
@@ -22,6 +24,21 @@ class ProjectViewController: UIViewController, UINavigationControllerDelegate{
         if !is_admin{
             AddParticipant.isHidden = true
         }
+        
+        // Create Request
+        
+        let url = URL(string: "http://54.81.239.120/selectAPI.php");
+        var request = URLRequest(url:url!)
+        request.httpMethod = "POST"
+        let post = "queryType=10&pid=\(project_id)";
+        request.httpBody = post.data(using: String.Encoding.utf8);
+        
+        let response = ConnectToAPI(request: request)
+        
+        if (response["empty"] as! Bool) == false{
+            project_path = response["path"] as! String
+        }
+        print(project_path)
         // Do any additional setup after loading the view.
     }
 

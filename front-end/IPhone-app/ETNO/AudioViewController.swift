@@ -288,7 +288,7 @@ class AudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudioRecor
             
             do {
                 // Handle response from server
-                let json = try JSONSerialization.jsonObject(with: data!, options: []) as? NSDictionary
+                let _ = try JSONSerialization.jsonObject(with: data!, options: []) as? NSDictionary
             }
             // Error handling
             catch {
