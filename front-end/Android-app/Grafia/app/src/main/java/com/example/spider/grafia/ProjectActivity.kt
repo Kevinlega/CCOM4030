@@ -124,11 +124,9 @@ class ProjectActivity : AppCompatActivity() {
                     if (!empty) {
                         projectPath = jSONObject.getString("path")
                     }
-                } else if (flag == 1){
-                    if(jSONObject.getInt("admin") != userId){
+                } else if (flag == 1) {
+                    if (jSONObject.getInt("admin") != userId) {
                         AddUsers.visibility = View.INVISIBLE
-                    } else{
-                        println("Hello")
                     }
                 }
 
