@@ -98,8 +98,7 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
         
     }
     
-    func myImageUploadRequest()
-    {
+    func myImageUploadRequest(){
         
         let myUrl = NSURL(string: "http://54.81.239.120/fUploadAPI.php");
         
