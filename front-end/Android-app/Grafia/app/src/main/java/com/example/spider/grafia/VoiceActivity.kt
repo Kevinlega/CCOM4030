@@ -3,21 +3,19 @@ package com.example.spider.grafia
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
 import android.media.MediaPlayer
 import android.media.MediaRecorder
+import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
-import android.provider.MediaStore
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import android.util.Log
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_video.*
 import kotlinx.android.synthetic.main.activity_voice.*
 import java.io.File
 import java.io.IOException
+import java.net.URL
 
 class VoiceActivity : AppCompatActivity(){
 
@@ -29,6 +27,7 @@ class VoiceActivity : AppCompatActivity(){
     private var playing = false
     private var paused = false
     private var myAudioRecorder = MediaRecorder()
+    private var projectPath = ""
 
 
     private fun createTempVoiceFile(): File {
@@ -59,13 +58,6 @@ class VoiceActivity : AppCompatActivity(){
                 mCurrentVoicePath = ""
             }
 
-            val NotUsed = createTempVoiceFile()
-            myAudioRecorder = MediaRecorder()
-            myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)
-            myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-            myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB)
-            myAudioRecorder.setOutputFile(mCurrentVoicePath)
-
             if (ContextCompat.checkSelfPermission(
                     this,
                     Manifest.permission.RECORD_AUDIO
@@ -77,6 +69,13 @@ class VoiceActivity : AppCompatActivity(){
                     arrayOf(Manifest.permission.RECORD_AUDIO), 1
                 )
             } else {
+
+                val NotUsed = createTempVoiceFile()
+                myAudioRecorder = MediaRecorder()
+                myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)
+                myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+                myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB)
+                myAudioRecorder.setOutputFile(mCurrentVoicePath)
 
 
                 myAudioRecorder.prepare()
@@ -108,7 +107,6 @@ class VoiceActivity : AppCompatActivity(){
 
                 mPlayer?.stop()
             }
-
         }
 
         playVoice.setOnClickListener {
@@ -145,8 +143,15 @@ class VoiceActivity : AppCompatActivity(){
                 mPlayer?.pause()
             }
         }
+
         userId = intent.getIntExtra("userId",-1)
         projectId = intent.getIntExtra("pId",-1)
+        projectPath = "/var/www/projects/1/fb633b48-9850-40ca-ba37-26beb9558892"
+
+        uploadVoice.setOnClickListener {
+            UploadFileAsync(projectPath).execute("")
+        }
+
 
         backToProject3.setOnClickListener {
             val intent = Intent(this@VoiceActivity, ProjectActivity::class.java)
@@ -187,4 +192,44 @@ class VoiceActivity : AppCompatActivity(){
         }
         return file.delete()
     }
+
+    private inner class UploadFileAsync(val projectPath: String) : AsyncTask<String, Void, String>() {
+
+        override fun doInBackground(vararg params: String): String {
+
+            var path = mCurrentVoicePath
+            val timeStamp: String = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
+            val name = "VOICE_${userId}_${timeStamp}_.3gp"
+
+            val multipart = Multipart(URL("http://54.81.239.120/fUploadAPI.php"))
+            multipart.addFormField("fileType", "1")
+            multipart.addFormField("path", (projectPath + "/voice/"))
+            multipart.addFilePart("file", path, name, "voice/3gp")
+
+            val bool = multipart.upload()
+
+            if (bool) {
+                return "YES"
+            } else {
+                return "NO"
+            }
+        }
+
+        override fun onPostExecute(result: String) {
+
+            if (result == "YES") {
+                Toast.makeText(this@VoiceActivity, "Uploaded!", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this@VoiceActivity, "Try Again", Toast.LENGTH_LONG).show()
+            }
+
+        }
+
+        override fun onPreExecute() {}
+
+        override fun onProgressUpdate(vararg values: Void) {}
+    }
+
+
+
 }
