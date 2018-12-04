@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import kotlinx.android.synthetic.main.activity_project.*
 import org.json.JSONObject
 import java.lang.Exception
@@ -12,6 +13,7 @@ import java.net.URL
 class ProjectActivity : AppCompatActivity() {
 
     private var projectPath = ""
+    private var userId = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,14 +21,20 @@ class ProjectActivity : AppCompatActivity() {
         val title = intent.getStringExtra("projectName")
         supportActionBar!!.title = title
 
-        val userId = intent.getIntExtra("userId",-1)
+        userId = intent.getIntExtra("userId",-1)
         val projectId = intent.getIntExtra("pId",-1)
 
 
-        val connectToAPI = Connect()
+        var connectToAPI = Connect(1)
+        try{
+            val url = "http://54.81.239.120/selectAPI.php?queryType=8&pid=$projectId"
+            connectToAPI.execute(url)
+        }
+        catch (error: Exception){}
+
+        connectToAPI = Connect(0)
         try{
             val url = "http://54.81.239.120/selectAPI.php?queryType=10&pid=$projectId"
-            println(url)
             connectToAPI.execute(url)
         }
         catch (error: Exception){}
@@ -95,7 +103,7 @@ class ProjectActivity : AppCompatActivity() {
         }
     }
 
-    private inner class Connect : AsyncTask<String, Void, String>() {
+    private inner class Connect(val flag:Int) : AsyncTask<String, Void, String>() {
 
         override fun doInBackground(vararg p0: String?): String {
             return downloadJSON(p0[0])
@@ -108,11 +116,20 @@ class ProjectActivity : AppCompatActivity() {
         override fun onPostExecute(result: String) {
             try {
                 val jSONObject = JSONObject(result)
+                if (flag == 0) {
 
-                val empty = jSONObject.getBoolean("empty")
 
-                if (!empty) {
-                    projectPath = jSONObject.getString("path")
+                    val empty = jSONObject.getBoolean("empty")
+
+                    if (!empty) {
+                        projectPath = jSONObject.getString("path")
+                    }
+                } else if (flag == 1){
+                    if(jSONObject.getInt("admin") != userId){
+                        AddUsers.visibility = View.INVISIBLE
+                    } else{
+                        println("Hello")
+                    }
                 }
 
             } catch (error: Exception) {
