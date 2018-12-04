@@ -11,11 +11,12 @@ import UIKit
 class ChangePasswordViewController: UIViewController {
 
     // MARK: - Variables
-    
+    // Receiving input from user
     @IBOutlet weak var email: UITextField!
     @IBOutlet weak var ConfirmPassword: UITextField!
     @IBOutlet weak var NewPassword: UITextField!
     
+    // Flag to prevent non registered users from making a password change request.
     var UserCanBeAdded = false
     
     // MARK: - Change Password Action
@@ -43,6 +44,7 @@ class ChangePasswordViewController: UIViewController {
     }
     
     // MARK: - Default Functions
+    // When view loads
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -54,18 +56,20 @@ class ChangePasswordViewController: UIViewController {
     }
     
     // MARK: - Segue Function
+    // Makes sure that user is registered and changes user-password.
+    // Performs segue for Login view.
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "BackToLogin"){
             let _ = segue.destination as! LoginViewController
         }
+            // If user is registered and gives valid input, hash and salt new password
+            // and insert it in database.
         else if (segue.identifier == "ChangePassword"){
             if UserCanBeAdded{
                 var UserPassword = NewPassword.text
                 let UserEmail = email.text
-//                let initialValue = generateRandomUInt()
                 let salt = saltGenerator(length: 5)
-//                UserPassword = LFSR(data: UserPassword!, initialValue: initialValue)
                 UserPassword = saltAndHash(password: UserPassword!, salt: salt)
                 ChangePassword(email: UserEmail!, password: UserPassword!,salt: salt)
                 let _ = segue.destination as! LoginViewController
