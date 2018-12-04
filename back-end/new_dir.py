@@ -23,7 +23,7 @@ import sys                                                  # argv, exit
 def main():
     ''' Main Program. '''
     user_id = sys.argv[1]
-    path = "/var/www/projects/"                             # Location where the directories will be stored.
+    path = "/var/www/html/projects/"                             # Location where the directories will be stored.
     
     user_path = os.path.join(path, user_id)                 # Location where the project directories will be stored.
     
@@ -52,7 +52,7 @@ def create_subfolders(path):
     Images, Videos, Documents, Voice Recording.
     '''
 
-    sub_folders = [ "images", "docs", "videos", "voice"]
+    sub_folders = ["images", "docs", "videos", "voice"]
 
     for folder_name in sub_folders:
         sub_folder_path = os.path.join(path, folder_name)   # i.e. "/path/to/project/images/"
