@@ -166,7 +166,7 @@ open class CreateAccountActivity : AppCompatActivity(){
             // Generates a salt and hashes a function
             private fun saltAndHash(password:String,salt:String): String{
                 val salted = password + salt
-                return md5(salted)
+                return md5(salted).toLowerCase()
             }
 
             private fun register(name:String, password:String, email:String, salt: String){

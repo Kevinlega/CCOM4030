@@ -42,13 +42,14 @@ class VideoActivity : AppCompatActivity() {
 
         videoView.visibility = View.INVISIBLE
 
-        userId = intent.getIntExtra("userId",-1)
+        userId = intent.getIntExtra("userId", -1)
         projectId = intent.getIntExtra("pId",-1)
-        projectPath = "/var/www/projects/1/fb633b48-9850-40ca-ba37-26beb9558892"
+        projectPath = intent.getStringExtra("projectPath")
+        val name = intent.getStringExtra("projectName")
 
         backToProject2.setOnClickListener {
             finish()
-            if((mCurrentVideoPath != "") and !saved){
+            if ((mCurrentVideoPath != "") and !saved) {
                 val myFile = File(mCurrentVideoPath)
                 myFile.delete()
                 mCurrentVideoPath = ""
@@ -57,14 +58,15 @@ class VideoActivity : AppCompatActivity() {
             val intent = Intent(this@VideoActivity, ProjectActivity::class.java)
             // To pass any data to next activity
             intent.putExtra("userId", userId)
-            intent.putExtra("pid", projectId)
+            intent.putExtra("pId", projectId)
+            intent.putExtra("projectName",name)
             // start your next activity
             startActivity(intent)
         }
 
         openVideo.setOnClickListener {
 
-            if((mCurrentVideoPath != "") and !saved){
+            if ((mCurrentVideoPath != "") and !saved) {
                 val myFile = File(mCurrentVideoPath)
                 myFile.delete()
                 mCurrentVideoPath = ""
@@ -83,10 +85,10 @@ class VideoActivity : AppCompatActivity() {
         }
 
         saveVideo.setOnClickListener {
-            if (mCurrentVideoPath != "" && !saved){
+            if (mCurrentVideoPath != "" && !saved) {
                 galleryAddVideo()
                 Toast.makeText(this, "Saved to Gallery.", Toast.LENGTH_SHORT).show()
-            } else{
+            } else {
                 Toast.makeText(this, "Nothing to Save.", Toast.LENGTH_SHORT).show()
             }
         }
@@ -109,10 +111,10 @@ class VideoActivity : AppCompatActivity() {
         }
 
         uploadVideo.setOnClickListener {
+            UploadFileAsync(projectPath).execute("")
         }
-
-
     }
+
     private fun dispatchTakeVideoIntent() {
         Intent(MediaStore.ACTION_VIDEO_CAPTURE).also { takePictureIntent ->
             // Ensure that there's a camera activity to handle the intent
@@ -158,6 +160,34 @@ class VideoActivity : AppCompatActivity() {
                 mCurrentVideoPath = ""
             }
             val videoURI = data?.data
+
+
+            val wholeID = DocumentsContract.getDocumentId(videoURI)
+
+            // Split at colon, use second item in the array
+            val id = wholeID.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
+
+            val column = arrayOf(MediaStore.Images.Media.DATA)
+
+            // where id is equal to
+            val sel = MediaStore.Video.Media._ID + "=?"
+
+            val cursor = this.getContentResolver().query(
+                MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                column, sel, arrayOf(id), null
+            )
+
+            var filePath = ""
+            val columnIndex = cursor.getColumnIndex(column[0])
+
+            if (cursor.moveToFirst()) {
+                filePath = cursor.getString(columnIndex)
+            }
+            cursor.close()
+            mCurrentPickedVideo = filePath
+
+            val timeStamp: String = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
+            mCurrentPickedVideoName = "VIDEO_${userId}_${timeStamp}_.mp4"
 
             if (videoURI != null) {
                 mCurrentVideoUri = videoURI
@@ -206,8 +236,6 @@ class VideoActivity : AppCompatActivity() {
         values.put(MediaStore.Video.Media.DATE_TAKEN, System.currentTimeMillis())
         values.put(MediaStore.Video.Media.DURATION, timeInMillisec)
 
-
-
         // Add a new record (identified by uri) without the video, but with the values just set.
 
         val uri = contentResolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values)
@@ -255,5 +283,51 @@ class VideoActivity : AppCompatActivity() {
             }
         }
         return file.delete()
+    }
+    private inner class UploadFileAsync(val projectPath: String) : AsyncTask<String, Void, String>() {
+
+        override fun doInBackground(vararg params: String): String {
+
+            var path = ""
+            var name = ""
+
+            if (mCurrentVideoPath == "" && mCurrentPickedVideo != "") {
+                path = mCurrentPickedVideo
+                name = mCurrentPickedVideoName
+
+            } else if (mCurrentVideoPath != "" && mCurrentPickedVideo == "") {
+                path = File(mCurrentVideoPath).absolutePath
+                name = path.substringAfterLast("/")
+            }
+
+            val multipart = Multipart(URL("http://54.81.239.120/fUploadAPI.php"))
+            multipart.addFormField("fileType", "1")
+            multipart.addFormField("path", (projectPath + "/videos/"))
+            multipart.addFilePart("file", path, name, "video/mp4")
+
+            val bool = multipart.upload()
+
+            if (bool) {
+                return "YES"
+            } else {
+                return "NO"
+            }
+        }
+
+        override fun onPostExecute(result: String) {
+
+            if (result == "YES") {
+                Toast.makeText(this@VideoActivity, "Uploaded!", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this@VideoActivity, "Try Again", Toast.LENGTH_LONG).show()
+            }
+
+        }
+
+        override fun onPreExecute() {}
+
+        override fun onProgressUpdate(vararg values: Void) {}
+
+
     }
 }

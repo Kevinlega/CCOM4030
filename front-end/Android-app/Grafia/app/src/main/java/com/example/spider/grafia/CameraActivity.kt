@@ -37,8 +37,10 @@ class CameraActivity : AppCompatActivity() {
         setContentView(R.layout.activity_camera)
 
         userId = intent.getIntExtra("userId", -1)
-        projectId = intent.getIntExtra("pId", -1)
-        projectPath = "/var/www/projects/1/fb633b48-9850-40ca-ba37-26beb9558892"
+        projectId = intent.getIntExtra("pId",-1)
+        projectPath = intent.getStringExtra("projectPath")
+        val name = intent.getStringExtra("projectName")
+
 
         backToProject1.setOnClickListener {
             finish()
@@ -51,7 +53,8 @@ class CameraActivity : AppCompatActivity() {
             val intent = Intent(this@CameraActivity, ProjectActivity::class.java)
             // To pass any data to next activity
             intent.putExtra("userId", userId)
-            intent.putExtra("pid", projectId)
+            intent.putExtra("pId", projectId)
+            intent.putExtra("projectName",name)
             // start your next activity
             startActivity(intent)
         }
@@ -104,7 +107,7 @@ class CameraActivity : AppCompatActivity() {
                 photoFile?.also {
                     val photoURI: Uri = FileProvider.getUriForFile(
                         this@CameraActivity,
-                        "com.example.spider.grafia", it
+                        "com.example.spider.grafia", photoFile
                     )
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
 
@@ -123,9 +126,13 @@ class CameraActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 1 && resultCode == RESULT_OK) {
+
             BitmapFactory.decodeFile(mCurrentPhotoPath)?.also { bitmap ->
                 imageView.setImageBitmap(rotatePic(bitmap))
             }
+
+            val timeStamp: String = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
+            mCurrentPickedPictureName = "IMAGE_${userId}_${timeStamp}_.jpg"
 
         } else if (requestCode == 2 && resultCode == RESULT_OK) {
             if (mCurrentPhotoPath != "") {
@@ -173,13 +180,14 @@ class CameraActivity : AppCompatActivity() {
         // Create an image file name
         val timeStamp: String = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
         val storageDir: File = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+
         return File.createTempFile(
             "IMAGE_${userId}_${timeStamp}_", /* prefix */
             ".jpg", /* suffix */
             storageDir /* directory */
         ).apply {
             // Save a file: path for use with ACTION_VIEW intents
-            mCurrentPhotoPath = absolutePath
+            mCurrentPhotoPath = this.absolutePath
         }
     }
 
@@ -246,14 +254,13 @@ class CameraActivity : AppCompatActivity() {
         override fun doInBackground(vararg params: String): String {
 
             var path = ""
-            var name = ""
+            var name = mCurrentPickedPictureName
+
             if (mCurrentPhotoPath == "" && mCurrentPickedPicture != "") {
                 path = mCurrentPickedPicture
-                name = mCurrentPickedPictureName
 
             } else if (mCurrentPhotoPath != "" && mCurrentPickedPicture == "") {
                 path = mCurrentPhotoPath
-                name = path.substringAfterLast("/")
             }
 
             val multipart = Multipart(URL("http://54.81.239.120/fUploadAPI.php"))

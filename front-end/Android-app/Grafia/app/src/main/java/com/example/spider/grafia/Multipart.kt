@@ -36,7 +36,7 @@ constructor(url: URL) {
         httpConnection.setChunkedStreamingMode(maxBufferSize)
         httpConnection.doInput = true
         httpConnection.doOutput = true    // indicates POST method
-        httpConnection.useCaches = false
+        httpConnection.useCaches = true
         outputStream = httpConnection.outputStream
         writer = PrintWriter(OutputStreamWriter(outputStream, charset), true)
     }
@@ -124,8 +124,6 @@ constructor(url: URL) {
                 if (string == "true"){
                     answer = true
                 }
-            } else{
-                println("Aqui")
             }
 
         } catch (e: IOException) {

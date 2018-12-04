@@ -24,8 +24,7 @@ class DashboardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dashboard)
         supportActionBar!!.setTitle("Dashboard")
 
-//        val userId = intent.getIntExtra("userId",-1)
-        val userId = 1
+        val userId = intent.getIntExtra("userId",-1)
 
         val rview= findViewById<View>(R.id.rview) as RecyclerView
 

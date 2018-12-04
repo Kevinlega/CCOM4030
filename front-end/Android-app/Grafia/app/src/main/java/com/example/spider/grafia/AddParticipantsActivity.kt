@@ -32,6 +32,8 @@ class AddParticipantsActivity : AppCompatActivity() {
 
         val userId = intent.getIntExtra("userId",-1)
         val projectId = intent.getIntExtra("pId",-1)
+        val name = intent.getStringExtra("projectName")
+
 
 
         val listView = findViewById<ListView>(R.id.listView)
@@ -99,6 +101,7 @@ class AddParticipantsActivity : AppCompatActivity() {
                 // To pass any data to next activity
                 intent.putExtra("userId", userId)
                 intent.putExtra("projectId",projectId)
+                intent.putExtra("projectName",name)
                 // start your next activity
                 startActivity(intent)
             }

@@ -146,7 +146,9 @@ class VoiceActivity : AppCompatActivity(){
 
         userId = intent.getIntExtra("userId",-1)
         projectId = intent.getIntExtra("pId",-1)
-        projectPath = "/var/www/projects/1/fb633b48-9850-40ca-ba37-26beb9558892"
+        projectPath = intent.getStringExtra("projectPath")
+        val name = intent.getStringExtra("projectName")
+
 
         uploadVoice.setOnClickListener {
             UploadFileAsync(projectPath).execute("")
@@ -157,7 +159,8 @@ class VoiceActivity : AppCompatActivity(){
             val intent = Intent(this@VoiceActivity, ProjectActivity::class.java)
             // To pass any data to next activity
             intent.putExtra("userId", userId)
-            intent.putExtra("pid", projectId)
+            intent.putExtra("pId", projectId)
+            intent.putExtra("projectName",name)
             finish()
             if((mCurrentVoicePath != "")){
                 val myFile = File(mCurrentVoicePath)
@@ -229,7 +232,4 @@ class VoiceActivity : AppCompatActivity(){
 
         override fun onProgressUpdate(vararg values: Void) {}
     }
-
-
-
 }

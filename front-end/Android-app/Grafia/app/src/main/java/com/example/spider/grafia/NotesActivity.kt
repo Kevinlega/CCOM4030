@@ -15,6 +15,9 @@ import java.net.URL
 
 class NotesActivity : AppCompatActivity() {
 
+    var projectPath = ""
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notes)
@@ -23,12 +26,16 @@ class NotesActivity : AppCompatActivity() {
 
         val userId = intent.getIntExtra("userId",-1)
         val projectId = intent.getIntExtra("pId",-1)
+        projectPath = intent.getStringExtra("projectPath")
+        val name = intent.getStringExtra("projectName")
+
 
         backToProject4.setOnClickListener {
-            val intent = Intent(this@NotesActivity, DashboardActivity::class.java)
+            val intent = Intent(this@NotesActivity, ProjectActivity::class.java)
             // To pass any data to next activity
             intent.putExtra("userId", userId)
-            intent.putExtra("projectId", projectId)
+            intent.putExtra("pId", projectId)
+            intent.putExtra("projectName",name)
             // start your next activity
             startActivity(intent)
         }
@@ -73,7 +80,7 @@ class NotesActivity : AppCompatActivity() {
     // Post al API para subir el archivo
     private fun save(text:String,name:String){
         val fileType = 0
-        val path = "/var/www/projects/1/fb633b48-9850-40ca-ba37-26beb9558892" + "/docs/" + name
+        val path = projectPath + "/docs/" + name
         val connectToAPI = Connect(this)//,fileType,path,text)
         try{
             val url = "http://54.81.239.120/fUploadAPI.php?fileType=$fileType&path=$path&text=$text"

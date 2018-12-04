@@ -42,16 +42,7 @@ switch($fileType){
 
 	    	if(!isset($_REQUEST['path'])) exit();
 
-			// Por si hay que hacer un directorio
-			// $target_dir = "media";
-
-			// if(!file_exists($target_dir)){
-			// 	mkdir($target_dir, 0777, true);
-			// }
-
-
-						
-
+	
 			$target_dir = $_REQUEST['path'] . basename($_FILES["file"]["name"]);
 			if(move_uploaded_file($_FILES["file"]["tmp_name"], $target_dir)){
 				$return = array("file_created"=>true);
