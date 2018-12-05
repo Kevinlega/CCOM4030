@@ -12,9 +12,70 @@ import org.json.JSONObject
 import java.lang.Exception
 import java.lang.StringBuilder
 import java.net.URL
-import java.security.MessageDigest
+import java.security.*
 
 class LoginActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_login)
+
+        supportActionBar!!.setTitle("Grafía Login")
+
+        loginButton.setOnClickListener {
+
+
+            val Email = findViewById<EditText>(R.id.loginEmail)
+            val Password = findViewById<EditText>(R.id.loginPassword)
+            val email = Email.text.toString()
+            val password = Password.text.toString()
+            if (checkLogin(password, email)) {
+                isRegistered(email, password)
+            }
+        }
+
+        createAccount.setOnClickListener {
+            val intent = Intent(this@LoginActivity, CreateAccountActivity::class.java)
+
+            startActivity(intent)
+        }
+        changePassword.setOnClickListener {
+            val intent = Intent(this@LoginActivity, ChangePasswordActivity::class.java)
+
+            startActivity(intent)
+        }
+    }
+
+//        fingerprint.setOnClickListener {
+//
+//            val sharedPreferences = getSharedPreferences("Grafia_Login", Context.MODE_PRIVATE)
+//
+//            val email = sharedPreferences.getString("Email", "")
+//            val password = sharedPreferences.getString("Password", "")
+//
+//            if (email.isNullOrBlank() || password.isNullOrBlank()){
+//                Toast.makeText(this@LoginActivity,"No Credentials Saved", Toast.LENGTH_SHORT).show()
+//            } else {
+//
+//
+////                    fingerprintLogin(email, password)
+//
+//
+//            }
+//        }
+//    }
+
+    // Checks if an email is already registered.
+//    private fun fingerprintLogin(email:String,password:String){
+//        val query = 4
+//        val connectToAPI = Connect(this, 2,email,password)
+//        try{
+//            val url = "http://54.81.239.120/selectAPI.php?queryType=$query&email=$email"
+//            println(url)
+//            connectToAPI.execute(url)
+//        }
+//        catch (error: Exception){}
+//    }
 
     // Checks if an email is already registered.
     private fun isRegistered(email:String,password:String){
@@ -36,54 +97,6 @@ class LoginActivity : AppCompatActivity() {
 
         return canLogin
     }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
-
-        supportActionBar!!.setTitle("Grafía Login")
-
-        loginButton.setOnClickListener {
-
-
-            val Email = findViewById<EditText>(R.id.loginEmail)
-            val Password = findViewById<EditText>(R.id.loginPassword)
-            val email = Email.text.toString()
-            val password = Password.text.toString()
-            if (checkLogin(password,email)) {
-                isRegistered(email, password)
-            }
-
-//            if verified
-//            val intent = Intent(this@LoginActivity, DashboardActivity::class.java)
-            // To pass any data to next activity
-//            intent.putExtra("keyIdentifier", value)
-//             start your next activity
-//            startActivity(intent)
-//            else
-//            val intent = Intent(this@LoginActivity,NotVerifiedActivity::class.java)
-            // To pass any data to next activity
-//            intent.putExtra("keyIdentifier", value)
-//             start your next activity
-//            startActivity(intent)
-        }
-
-        createAccount.setOnClickListener {
-            val intent = Intent(this@LoginActivity, CreateAccountActivity::class.java)
-            // To pass any data to next activity
-//            intent.putExtra("keyIdentifier", value)
-//             start your next activity
-            startActivity(intent)
-        }
-        changePassword.setOnClickListener {
-            val intent = Intent(this@LoginActivity, ChangePasswordActivity::class.java)
-            // To pass any data to next activity
-//            intent.putExtra("keyIdentifier", value)
-//             start your next activity
-            startActivity(intent)
-        }
-    }
-
 
     companion object {
         class Connect(private val mContext: Context,private val flag: Int, private val email: String, private val password: String) :
@@ -161,6 +174,24 @@ class LoginActivity : AppCompatActivity() {
                         } else {
                             Toast.makeText(mContext, "Incorrect login info, try again.", Toast.LENGTH_SHORT).show()
                         }
+                    } else if (flag == 2){
+
+                        val registered = jSONObject.getBoolean("empty")
+
+                        if (!registered) {
+
+                            val dbPassword = jSONObject.getString("hashed_password")
+
+                            if (password == dbPassword) {
+                                getUID(email)
+                            } else{
+                                Toast.makeText(mContext, "Incorrect login info, try again.", Toast.LENGTH_SHORT).show()
+                            }
+                        } else {
+                            Toast.makeText(mContext, "Incorrect login info, try again.", Toast.LENGTH_SHORT).show()
+                        }
+
+
                     } else{
                         val uid = jSONObject.getInt("uid")
                         val verified = jSONObject.getInt("verified")

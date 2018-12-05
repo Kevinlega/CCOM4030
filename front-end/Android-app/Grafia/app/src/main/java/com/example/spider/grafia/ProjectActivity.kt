@@ -101,6 +101,19 @@ class ProjectActivity : AppCompatActivity() {
 //             start your next activity
             startActivity(intent)
         }
+
+        Dummy.setOnClickListener {
+            val intent = Intent(this@ProjectActivity, DownloadVideoActivity::class.java)
+            // To pass any data to next activity
+            intent.putExtra("userId", userId)
+            intent.putExtra("pId", projectId)
+            intent.putExtra("projectPath",projectPath)
+            intent.putExtra("projectName",title)
+//             start your next activity
+            startActivity(intent)
+        }
+
+
     }
 
     private inner class Connect(val flag:Int) : AsyncTask<String, Void, String>() {

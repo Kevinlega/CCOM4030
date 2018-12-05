@@ -161,7 +161,6 @@ class VideoActivity : AppCompatActivity() {
             }
             val videoURI = data?.data
 
-
             val wholeID = DocumentsContract.getDocumentId(videoURI)
 
             // Split at colon, use second item in the array

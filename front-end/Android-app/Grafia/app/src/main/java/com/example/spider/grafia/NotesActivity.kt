@@ -5,18 +5,19 @@ import android.content.Intent
 import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_notes.*
 import org.json.JSONObject
+import java.io.File
 import java.net.URL
 
 class NotesActivity : AppCompatActivity() {
 
     var projectPath = ""
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

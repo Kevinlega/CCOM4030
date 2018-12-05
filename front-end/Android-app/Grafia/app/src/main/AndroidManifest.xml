@@ -72,6 +72,14 @@
 
         <activity android:name=".NotesActivity">
         </activity>
+        <activity android:name=".DownloadNotesActivity">
+        </activity>
+        <activity android:name=".DownloadImageActivity">
+        </activity>
+        <activity android:name=".DownloadAudioActivity">
+        </activity>
+        <activity android:name=".DownloadVideoActivity">
+        </activity>
     </application>
 
 </manifest>
