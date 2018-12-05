@@ -32,6 +32,10 @@
 		307DE85A21B44B1100071D07 /* NotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307DE85921B44B1100071D07 /* NotesViewController.swift */; };
 		30DC5F2C219A064D008E6085 /* AudioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DC5F2B219A064D008E6085 /* AudioViewController.swift */; };
 		30DE669E21B5F4B800C8DDBC /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DE669D21B5F4B800C8DDBC /* VideoViewController.swift */; };
+		30DFA5C621B7F61300A3216C /* DownloadNotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DFA5C521B7F61300A3216C /* DownloadNotesViewController.swift */; };
+		30DFA5C821B8056200A3216C /* DownloadImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DFA5C721B8056200A3216C /* DownloadImageViewController.swift */; };
+		30DFA5CA21B805A600A3216C /* DownloadVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DFA5C921B805A600A3216C /* DownloadVideoViewController.swift */; };
+		30DFA5CC21B805B300A3216C /* DownloadAudioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DFA5CB21B805B300A3216C /* DownloadAudioViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,6 +90,10 @@
 		307DE85921B44B1100071D07 /* NotesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesViewController.swift; sourceTree = "<group>"; };
 		30DC5F2B219A064D008E6085 /* AudioViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioViewController.swift; sourceTree = "<group>"; };
 		30DE669D21B5F4B800C8DDBC /* VideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
+		30DFA5C521B7F61300A3216C /* DownloadNotesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadNotesViewController.swift; sourceTree = "<group>"; };
+		30DFA5C721B8056200A3216C /* DownloadImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadImageViewController.swift; sourceTree = "<group>"; };
+		30DFA5C921B805A600A3216C /* DownloadVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadVideoViewController.swift; sourceTree = "<group>"; };
+		30DFA5CB21B805B300A3216C /* DownloadAudioViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadAudioViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,12 +172,16 @@
 				30DC5F2B219A064D008E6085 /* AudioViewController.swift */,
 				3031F431219A37F30057C4CC /* CameraViewController.swift */,
 				307DE85921B44B1100071D07 /* NotesViewController.swift */,
+				30DE669D21B5F4B800C8DDBC /* VideoViewController.swift */,
+				30DFA5C521B7F61300A3216C /* DownloadNotesViewController.swift */,
+				30DFA5C721B8056200A3216C /* DownloadImageViewController.swift */,
+				30DFA5C921B805A600A3216C /* DownloadVideoViewController.swift */,
+				30DFA5CB21B805B300A3216C /* DownloadAudioViewController.swift */,
 				0ABE28DB216431CA001C2385 /* AddParticipantViewController.swift */,
 				0AFA5FDA217FE2D000CB360D /* FriendsViewController.swift */,
 				0AE8F27F2180F97000298297 /* PendingRequestViewController.swift */,
 				0AE8F2812180FA5600298297 /* AllFriendsViewController.swift */,
 				0A8B596021837B3B009EEDC6 /* TabBarViewController.swift */,
-				30DE669D21B5F4B800C8DDBC /* VideoViewController.swift */,
 				0A73FFFD2173D70100BB0664 /* ReusedFunctions.swift */,
 			);
 			path = ETNO;
@@ -341,11 +353,14 @@
 				0A963BA3216EA7EA00EA187B /* CreateAProjectViewController.swift in Sources */,
 				0A9B78B3215DA51300F48859 /* AppDelegate.swift in Sources */,
 				0A29A4A121838F5300B35D25 /* KeychainPasswordItem.swift in Sources */,
+				30DFA5C821B8056200A3216C /* DownloadImageViewController.swift in Sources */,
+				30DFA5CC21B805B300A3216C /* DownloadAudioViewController.swift in Sources */,
 				0A421B8A216EDD0E00DA7452 /* LoginViewController.swift in Sources */,
 				0AFA5FDB217FE2D000CB360D /* FriendsViewController.swift in Sources */,
 				307DE85A21B44B1100071D07 /* NotesViewController.swift in Sources */,
 				0A0836CA218555AD00E79E50 /* NotVerifiedViewController.swift in Sources */,
 				0A4A29A42166521C00DF49EF /* ProjectViewController.swift in Sources */,
+				30DFA5C621B7F61300A3216C /* DownloadNotesViewController.swift in Sources */,
 				0AE8F2822180FA5600298297 /* AllFriendsViewController.swift in Sources */,
 				0ABE28DC216431CA001C2385 /* AddParticipantViewController.swift in Sources */,
 				0A8B596121837B3B009EEDC6 /* TabBarViewController.swift in Sources */,
@@ -354,6 +369,7 @@
 				0AE8F2802180F97000298297 /* PendingRequestViewController.swift in Sources */,
 				30DC5F2C219A064D008E6085 /* AudioViewController.swift in Sources */,
 				30DE669E21B5F4B800C8DDBC /* VideoViewController.swift in Sources */,
+				30DFA5CA21B805A600A3216C /* DownloadVideoViewController.swift in Sources */,
 				3031F432219A37F30057C4CC /* CameraViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

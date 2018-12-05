@@ -20,6 +20,7 @@ class ProjectViewController: UIViewController, UINavigationControllerDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         is_admin = CheckAdmin(project_id: project_id, user_id: user_id)
         if !is_admin{
             AddParticipant.isHidden = true
@@ -38,7 +39,6 @@ class ProjectViewController: UIViewController, UINavigationControllerDelegate{
         if (response["empty"] as! Bool) == false{
             project_path = response["path"] as! String
         }
-        print(project_path)
         // Do any additional setup after loading the view.
     }
 
@@ -59,19 +59,48 @@ class ProjectViewController: UIViewController, UINavigationControllerDelegate{
             let vc = segue.destination as! AudioViewController
             vc.user_id = user_id
             vc.project_id = project_id
+            vc.projectPath = project_path
         } else if (segue.identifier == "CameraSegue"){
             let vc = segue.destination as! CameraViewController
             vc.user_id = user_id
             vc.project_id = project_id
+            vc.projectPath = project_path
+
         } else if (segue.identifier == "NotesSegue"){
             let vc = segue.destination as! NotesViewController
             vc.user_id = user_id
             vc.project_id = project_id
+            vc.projectPath = project_path
+
         } else if (segue.identifier == "VideoSegue"){
             let vc = segue.destination as! VideoViewController
             vc.user_id = user_id
             vc.project_id = project_id
+            vc.projectPath = project_path
+
+        } else if (segue.identifier == "DownloadNotes"){
+            let vc = segue.destination as! DownloadNotesViewController
+            vc.user_id = user_id
+            vc.project_id = project_id
+//            vc.location = project_path + selected
+
+        } else if (segue.identifier == "DownloadImage"){
+            let vc = segue.destination as! DownloadImageViewController
+            vc.user_id = user_id
+            vc.project_id = project_id
+//            vc.location = project_path + selected
+
+        } else if (segue.identifier == "DownloadVideo"){
+            let vc = segue.destination as! DownloadVideoViewController
+            vc.user_id = user_id
+            vc.project_id = project_id
+//            vc.location = project_path + selected
+
+        } else if (segue.identifier == "DownloadAudio"){
+            let vc = segue.destination as! DownloadAudioViewController
+            vc.user_id = user_id
+            vc.project_id = project_id
+//            vc.location = project_path + selected
         }
-        
     }
 }

@@ -33,7 +33,7 @@ class AudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudioRecor
     // Identify user and project
     var user_id = Int()
     var project_id = Int()
-    
+    var projectPath = String()
     
     // When view loads
     override func viewDidLoad() {
@@ -171,7 +171,7 @@ class AudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudioRecor
             // Does file exist?
             if FileManager.default.fileExists(atPath: getFileUrl().path){
                 RecordRef.isEnabled = false
-                PlayRef.setTitle("Pause", for: .normal)
+                PlayRef.setTitle("Stop", for: .normal)
                 preparePlay()
                 Player.play()
                 IsPlaying = true
@@ -255,7 +255,7 @@ class AudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudioRecor
         
         // POST parameters for API
         // fileType is given, and path to save file depends on user and project
-        let param = ["fileType":"1","path":("/var/www/projects/1/fb633b48-9850-40ca-ba37-26beb9558892" + "/voice/")]
+        let param = ["fileType":"1","path":(projectPath + "/voice/")]
         
         // Hash to identify request
         let boundary = generateBoundaryString()

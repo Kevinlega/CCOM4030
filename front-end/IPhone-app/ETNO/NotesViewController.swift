@@ -13,7 +13,7 @@ class NotesViewController: UIViewController, UITextViewDelegate {
     
     var user_id = Int()
     var project_id = Int()
-    
+    var projectPath = String()
     
     @IBOutlet weak var Note: UITextView!
     @IBOutlet weak var CharacterCount: UILabel!
@@ -58,7 +58,7 @@ class NotesViewController: UIViewController, UITextViewDelegate {
             // input al textfield para que nombres el file como quieras.
             // Cuando hagas esas dos cosas, borras esto:
 
-            let project_path = "/var/www/projects/1/fb633b48-9850-40ca-ba37-26beb9558892" + "/docs/"
+            let project_path = projectPath + "/docs/"
             //file name received from text field
             // Cuan dificil es conseguir un timestamp? AH APPLE?
             let dateFormatter : DateFormatter = DateFormatter()
@@ -92,7 +92,6 @@ class NotesViewController: UIViewController, UITextViewDelegate {
                 // Devolver al user a el folder de proyecto o desplegar mensaje
             }
             else{
-                print("Claseeee mierda cabron")
                 self.present(Alert(title: "Could not save note.", message: "Please, try again", Dismiss: "Dismiss"),animated: true, completion: nil)
             }
             
@@ -118,6 +117,8 @@ class NotesViewController: UIViewController, UITextViewDelegate {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "BackToProject"){
             let vc = segue.destination as! ProjectViewController
+            print(user_id)
+            print(project_id)
             vc.user_id = user_id
             vc.project_id = project_id
         }

@@ -14,6 +14,8 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
     // MARK: - Variables
     var user_id = Int()
     var project_id = Int()
+    var projectPath = String()
+
     @IBOutlet weak var imageView: UIImageView!
     
     @IBAction func importGallery(_ sender: Any) {
@@ -107,7 +109,7 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
         
         let param = [
             "fileType":"1",
-            "path":("/var/www/projects/1/fb633b48-9850-40ca-ba37-26beb9558892" + "/images/")
+            "path":(projectPath + "/images/")
         ]
         
         let boundary = generateBoundaryString()

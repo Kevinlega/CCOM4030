@@ -154,6 +154,7 @@ public func CheckAdmin(project_id: Int, user_id: Int) -> Bool{
     request.httpBody = post.data(using: String.Encoding.utf8)
     
     let response = ConnectToAPI(request: request)
+    
     if (response["admin"] as! Int) == user_id{
         return true
     }

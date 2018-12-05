@@ -26,6 +26,7 @@ class VideoViewController: UIViewController, UINavigationControllerDelegate, UII
     
     var user_id = Int()
     var project_id = Int()
+    var projectPath = String()
     
     @IBAction func importGallery(_ sender: Any) {
         controller.sourceType = UIImagePickerController.SourceType.photoLibrary
@@ -146,7 +147,7 @@ class VideoViewController: UIViewController, UINavigationControllerDelegate, UII
         
         let param = [
             "fileType":"1",
-            "path":("/var/www/projects/1/fb633b48-9850-40ca-ba37-26beb9558892" + "/videos/")
+            "path":(projectPath + "/videos/")
         ]
         
         let boundary = generateBoundaryString()
