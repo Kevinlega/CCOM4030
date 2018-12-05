@@ -1709,7 +1709,6 @@
         <image name="Image-8" width="128" height="128"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="5qV-Xp-Sn9"/>
         <segue reference="chT-jX-6aO"/>
         <segue reference="YSk-mB-5ei"/>
         <segue reference="YDh-3o-jHY"/>
