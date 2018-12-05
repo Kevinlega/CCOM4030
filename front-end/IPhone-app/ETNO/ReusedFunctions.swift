@@ -162,7 +162,6 @@ public func CheckAdmin(project_id: Int, user_id: Int) -> Bool{
     }
 }
 
-
 // MARK: - Login Handler
 public func CheckLogin(email: String, psw: String, Biometric: Bool) -> NSDictionary {
     var password = psw

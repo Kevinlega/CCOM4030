@@ -153,9 +153,10 @@ class LoginActivity : AppCompatActivity() {
                             val dbSalt = jSONObject.getString("salt")
 
                             val tryPassword = saltAndHash(password,dbSalt)
-                            println(tryPassword)
                             if (tryPassword == dbPassword) {
                                 getUID(email)
+                            } else{
+                                Toast.makeText(mContext, "Incorrect login info, try again.", Toast.LENGTH_SHORT).show()
                             }
                         } else {
                             Toast.makeText(mContext, "Incorrect login info, try again.", Toast.LENGTH_SHORT).show()
@@ -184,7 +185,6 @@ class LoginActivity : AppCompatActivity() {
                 val salted = password + salt
                 return md5(salted).toLowerCase()
             }
-
         }
     }
 }

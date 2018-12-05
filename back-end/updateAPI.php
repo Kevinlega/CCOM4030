@@ -36,7 +36,7 @@ if($queryType == UPDATE_PASSWORD) {
 	}
 
 } else if($queryType == VERIFY_USER) {
-	if(!isset($_REQUEST['uid']))	exit();
+	if(!isset($_REQUEST['email']))	exit();
 
 	$query = "UPDATE users 
 		  SET verified=1 
