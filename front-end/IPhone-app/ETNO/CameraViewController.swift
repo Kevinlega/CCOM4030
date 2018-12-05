@@ -15,6 +15,7 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
     var user_id = Int()
     var project_id = Int()
     var projectPath = String()
+    var saved = false
 
     @IBOutlet weak var imageView: UIImageView!
     
@@ -29,6 +30,7 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
         else{
             print("photo library not available")
         }
+        saved = true
         
     }
     
@@ -40,6 +42,7 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
             cameraController.sourceType = .camera;
             cameraController.allowsEditing = false
             self.present(cameraController, animated: true, completion: nil )
+            saved = false
         }
         else {
             print("Camera not available")
@@ -48,11 +51,18 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
     
     
     @IBAction func savePhoto(_ sender: Any) {
-        guard let selectedImage = imageView.image else {
-            print("Image not found!")
-            return
+        
+        if (!saved){
+            guard let selectedImage = imageView.image else {
+                print("Image not found!")
+                return
+            }
+            UIImageWriteToSavedPhotosAlbum(selectedImage, self, nil, nil)
+            saved = true
+            self.present(Alert(title: "Saved", message: "You may see the image in gallery.", Dismiss: "Dismiss"),animated: true, completion: nil)
+        } else{
+            self.present(Alert(title: "Nothing to Save", message: "Image already in gallery.", Dismiss: "Dismiss"),animated: true, completion: nil)
         }
-        UIImageWriteToSavedPhotosAlbum(selectedImage, self, nil, nil)
     }
     
     
@@ -90,14 +100,7 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
 
     // Le dimos al boton de upload o save
     @IBAction func Upload(_ sender: Any){
-        // Aqui esta el thread cualquier cosa: https://stackoverflow.com/questions/26335656/how-to-upload-images-to-a-server-in-ios-with-swift
-        
-//        imageUploadRequest(imageView: imageView)
-//        UploadRequest()
-        
         myImageUploadRequest()
-        
-        
     }
     
     func myImageUploadRequest(){

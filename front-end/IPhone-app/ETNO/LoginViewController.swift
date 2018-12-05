@@ -74,14 +74,18 @@ class LoginViewController: UIViewController {
                     if response["verified"] as! Bool == true{
                         let vc = segue.destination as! DashboardViewController
                         vc.user_id = response["uid"] as! Int
+                        if !BiometricAuthentication{
+                            SaveToKeychain(email: emailField.text!, password: passwordField.text!)
+                        }
+                        
+                        
                     }
                     else{
                         performSegue(withIdentifier: "NotVerified", sender: nil)
                     }
-                    
-                    
                 }
                 else{
+                    BiometricAuthentication = false
                     self.present(Alert(title: "Error", message: "Credentials are incorrect.", Dismiss: "Dismiss"),animated: true, completion: nil)
                 }
                 

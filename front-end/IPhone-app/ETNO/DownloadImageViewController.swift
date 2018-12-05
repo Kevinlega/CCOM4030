@@ -14,12 +14,15 @@ class DownloadImageViewController: UIViewController {
     var user_id = Int()
     var project_id = Int()
     var location = String()
+    var saved = false
     
+    @IBOutlet weak var Save: UIButton!
     @IBOutlet weak var imageView: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        Save.isHidden = true
 //        let url = URL(string: location)!
 
         let url = URL(string: "http://54.81.239.120/projects/1/fb633b48-9850-40ca-ba37-26beb9558892/images/IMAGE_1_20181204_160818_.jpg")!
@@ -38,15 +41,12 @@ class DownloadImageViewController: UIViewController {
                     // Note: for some reason this has to be done in the main thread
                     DispatchQueue.main.async{
                         self.imageView.image = viewIMG
+                        self.Save.isHidden = false
                     }
-              
                 }
             }
         }
         task.resume()
-        
-        
-        
         // Do any additional setup after loading the view.
     }
     
@@ -54,11 +54,16 @@ class DownloadImageViewController: UIViewController {
     
     
     @IBAction func savePhoto(_ sender: Any) {
-        guard let selectedImage = imageView.image else {
-            print("Image not found!")
-            return
+        if !saved{
+            guard let selectedImage = imageView.image else {
+                print("Image not found!")
+                return
+            }
+            UIImageWriteToSavedPhotosAlbum(selectedImage, self, nil, nil)
+            self.present(Alert(title: "Saved", message: "Image saved in gallery.", Dismiss: "Dismiss"),animated: true, completion: nil)
+        } else {
+            self.present(Alert(title: "Nothing to Save", message: "Already saved the image.", Dismiss: "Dismiss"),animated: true, completion: nil)
         }
-        UIImageWriteToSavedPhotosAlbum(selectedImage, self, nil, nil)
     }
     
     

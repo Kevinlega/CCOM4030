@@ -72,6 +72,7 @@ class ChangePasswordViewController: UIViewController {
                 let salt = saltGenerator(length: 5)
                 UserPassword = saltAndHash(password: UserPassword!, salt: salt)
                 ChangePassword(email: UserEmail!, password: UserPassword!,salt: salt)
+                SaveToKeychain(email: UserEmail!, password: UserPassword!)
                 let _ = segue.destination as! LoginViewController
             }
         }

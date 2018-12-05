@@ -886,6 +886,7 @@
                         <viewLayoutGuide key="safeArea" id="OEN-lB-Bmi"/>
                     </view>
                     <connections>
+                        <outlet property="Save" destination="DSp-zT-LT1" id="vVa-N4-F23"/>
                         <outlet property="imageView" destination="lIl-sI-T0x" id="gQ3-tc-d7g"/>
                     </connections>
                 </viewController>
@@ -918,7 +919,7 @@
                                     <action selector="playVideo:" destination="dlW-gu-REK" eventType="touchUpInside" id="NXL-DB-Le0"/>
                                 </connections>
                             </button>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" misplaced="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Szd-o0-IAk">
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Szd-o0-IAk">
                                 <rect key="frame" x="80" y="234" width="215" height="81"/>
                                 <color key="backgroundColor" red="0.75406885150000003" green="0.75408679249999999" blue="0.75407713649999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -1701,7 +1702,7 @@
         <image name="Image-8" width="128" height="128"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="8Qf-PI-h2I"/>
+        <segue reference="Zwe-aa-zfZ"/>
         <segue reference="YSk-mB-5ei"/>
         <segue reference="YDh-3o-jHY"/>
     </inferredMetricsTieBreakers>
