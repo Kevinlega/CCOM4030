@@ -613,36 +613,70 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Account not verified" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ddJ-kB-K7c">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Account not verified" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ddJ-kB-K7c">
                                 <rect key="frame" x="20" y="101" width="334" height="47"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="39"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4d7-pR-wuz">
-                                <rect key="frame" x="16" y="301" width="343" height="46"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4d7-pR-wuz">
+                                <rect key="frame" x="153" y="301" width="69" height="46"/>
+                                <color key="backgroundColor" red="0.75406885150000003" green="0.75408679249999999" blue="0.75407713649999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="28"/>
-                                <state key="normal" title="Send verification email again"/>
+                                <state key="normal" title="Verify"/>
+                                <connections>
+                                    <segue destination="BYZ-38-t0r" kind="show" identifier="Verify" id="cw9-yA-rVT"/>
+                                </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5zg-4A-0kA">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5zg-4A-0kA">
                                 <rect key="frame" x="35" y="44" width="42" height="35"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                 <state key="normal" title="Back"/>
                                 <connections>
                                     <segue destination="BYZ-38-t0r" kind="show" identifier="BackToLogin" id="wOM-C1-r7n"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email Address:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iUt-kf-BDn">
+                                <rect key="frame" x="20" y="182" width="158" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="8li-5d-COm"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email Address" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5sR-0b-UiO">
+                                <rect key="frame" x="16" y="219" width="343" height="30"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="ddJ-kB-K7c" firstAttribute="centerX" secondItem="5sR-0b-UiO" secondAttribute="centerX" id="E6t-tA-FG6"/>
+                            <constraint firstItem="5zg-4A-0kA" firstAttribute="top" secondItem="W7o-Ct-xO5" secondAttribute="top" id="ERU-v2-rFR"/>
+                            <constraint firstItem="ddJ-kB-K7c" firstAttribute="leading" secondItem="W7o-Ct-xO5" secondAttribute="leading" constant="20" id="FtX-rn-fUT"/>
+                            <constraint firstItem="5sR-0b-UiO" firstAttribute="centerX" secondItem="4d7-pR-wuz" secondAttribute="centerX" id="IGd-lm-oPu"/>
+                            <constraint firstItem="5zg-4A-0kA" firstAttribute="leading" secondItem="W7o-Ct-xO5" secondAttribute="leading" constant="35" id="KDi-Uc-mk9"/>
+                            <constraint firstItem="5sR-0b-UiO" firstAttribute="leading" secondItem="6BS-c7-rbW" secondAttribute="leadingMargin" id="dqn-yR-mkP"/>
+                            <constraint firstItem="ddJ-kB-K7c" firstAttribute="top" secondItem="5zg-4A-0kA" secondAttribute="bottom" constant="22" id="dwC-ok-oll"/>
+                            <constraint firstItem="iUt-kf-BDn" firstAttribute="top" secondItem="ddJ-kB-K7c" secondAttribute="bottom" constant="34" id="e96-EW-CI5"/>
+                            <constraint firstItem="5sR-0b-UiO" firstAttribute="trailing" secondItem="6BS-c7-rbW" secondAttribute="trailingMargin" id="gFs-1Y-spq"/>
+                            <constraint firstItem="5sR-0b-UiO" firstAttribute="top" secondItem="iUt-kf-BDn" secondAttribute="bottom" constant="16" id="lm5-BT-aWk"/>
+                            <constraint firstItem="4d7-pR-wuz" firstAttribute="top" secondItem="5sR-0b-UiO" secondAttribute="bottom" constant="52" id="pZ9-SR-MSu"/>
+                            <constraint firstItem="ddJ-kB-K7c" firstAttribute="leading" secondItem="iUt-kf-BDn" secondAttribute="leading" id="u8h-me-KZH"/>
+                            <constraint firstItem="W7o-Ct-xO5" firstAttribute="trailing" secondItem="iUt-kf-BDn" secondAttribute="trailing" constant="197" id="vRN-lP-IP1"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="W7o-Ct-xO5"/>
                     </view>
+                    <connections>
+                        <outlet property="email" destination="5sR-0b-UiO" id="GYX-0x-p65"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="E4v-LO-j0b" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="214" y="800"/>
+            <point key="canvasLocation" x="213.59999999999999" y="799.50738916256159"/>
         </scene>
         <!--CreateA Project View Controller-->
         <scene sceneID="IBT-aq-LRW">
@@ -1363,7 +1397,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="JPq-AB-AU8"/>
-        <segue reference="YSk-mB-5ei"/>
-        <segue reference="wOM-C1-r7n"/>
+        <segue reference="UWL-vV-kQq"/>
+        <segue reference="cw9-yA-rVT"/>
     </inferredMetricsTieBreakers>
 </document>
