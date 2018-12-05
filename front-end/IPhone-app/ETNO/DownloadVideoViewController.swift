@@ -24,7 +24,7 @@ class DownloadVideoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        location = "http://54.81.239.120/projects/1/fb633b48-9850-40ca-ba37-26beb9558892/videos/VIDEO_1_20181204_161530_.mp4"
+//        location = "http://54.81.239.120/projects/1/fb633b48-9850-40ca-ba37-26beb9558892/videos/VIDEO_1_20181204_161530_.mp4"
  
     }
     

@@ -22,10 +22,10 @@ foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path)) as
 }
 
 if(empty($files)) {
-	echo json_encode(["files" => "empty"]);
+	echo json_encode(["empty" => true]);
 }
 else {
-	echo json_encode(["files" => $files]);
+	echo json_encode(["empty"=> false,"files" => $files]);
 }
 
 

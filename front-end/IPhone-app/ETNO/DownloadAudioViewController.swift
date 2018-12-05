@@ -26,12 +26,12 @@ class DownloadAudioViewController: UIViewController,AVAudioPlayerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         PlayRef.isEnabled = false
-        location = "http://54.81.239.120/projects/1/5190075e-a8ec-4a3d-9a29-7940e5bc5f4d/voice/VOICE_1_20181204_223102_.3gp"
         self.Label.text = "Recording: " +  location.components(separatedBy: "/").last!
         
-        //        let url = URL(string: location)!
         
-        let url = URL(string: "http://54.81.239.120/projects/1/5190075e-a8ec-4a3d-9a29-7940e5bc5f4d/voice/VOICE_1_20181204_223102_.3gp")!
+        let url = URL(string: location)!
+        
+//        let url = URL(string: "http://54.81.239.120/projects/1/5190075e-a8ec-4a3d-9a29-7940e5bc5f4d/voice/VOICE_1_20181204_223102_.3gp")!
         // Start transfer
         let task = URLSession.shared.downloadTask(with: url){ localURL, urlResponse, error in
             // Save file from server to tmp file.

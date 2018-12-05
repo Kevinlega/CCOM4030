@@ -23,9 +23,9 @@ class DownloadImageViewController: UIViewController {
         super.viewDidLoad()
         
         Save.isHidden = true
-//        let url = URL(string: location)!
+        let url = URL(string: location)!
 
-        let url = URL(string: "http://54.81.239.120/projects/1/fb633b48-9850-40ca-ba37-26beb9558892/images/IMAGE_1_20181204_160818_.jpg")!
+//        let url = URL(string: "http://54.81.239.120/projects/1/fb633b48-9850-40ca-ba37-26beb9558892/images/IMAGE_1_20181204_160818_.jpg")!
         // Start transfer
         let task = URLSession.shared.downloadTask(with: url){ localURL, urlResponse, error in
             // Save file from server to tmp file.

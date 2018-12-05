@@ -8,15 +8,76 @@
 
 import UIKit
 
-class ProjectViewController: UIViewController, UINavigationControllerDelegate{
+class ProjectViewController: UIViewController, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource{
+  
+    
+  
+    
     
     // MARK: - Variables
     var user_id = Int()
     var project_id = Int()
     var is_admin = Bool()
     var project_path = String()
+    var noPhotos = false
+    var FileName : NSArray = []
+    var location = String()
     
     @IBOutlet weak var AddParticipant: UIButton!
+    @IBOutlet weak var table: UITableView!
+    
+
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if noPhotos{
+            return 0
+        }
+        return FileName.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = UITableViewCell(style: UITableViewCell.CellStyle.default, reuseIdentifier: "cell") as UITableViewCell
+        
+        let item = FileName[indexPath.row] as! [String:Any]
+        cell.textLabel?.text = (item["filename"] as! String)
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //Access the array that you have used to fill the tableViewCell
+        let item = FileName[indexPath.row] as! [String:Any]
+        
+        let name = item["filename"] as! String
+        let type = item["type"] as! String
+ 
+        var path = ""
+        if let range = project_path.range(of: "p") {
+            path = String(project_path[range.lowerBound...])
+        }
+        
+        
+        location = "http://54.81.239.120/" + path + "/" + type + "/" + name
+        
+        switch type {
+        case "images":
+            performSegue(withIdentifier: "DownloadImage", sender: nil)
+            break
+        
+        case "docs":
+            performSegue(withIdentifier: "DownloadNotes", sender: nil)
+            break
+        case "voice":
+            performSegue(withIdentifier: "DownloadAudio", sender: nil)
+            break
+        case "videos":
+            performSegue(withIdentifier: "DownloadVideo", sender: nil)
+            break
+        default:
+            break
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,9 +100,36 @@ class ProjectViewController: UIViewController, UINavigationControllerDelegate{
         if (response["empty"] as! Bool) == false{
             project_path = response["path"] as! String
         }
+        
+        fetchPhotos()
+        
         // Do any additional setup after loading the view.
     }
 
+    func fetchPhotos()
+    {
+        let url_parse = URL(string: "http://54.81.239.120/listdir.php?path=\(project_path)")
+        if url_parse != nil {
+            let task = URLSession.shared.dataTask(with: url_parse! as URL, completionHandler: {(data, response, error) -> Void in
+                do
+                {
+                    let jsonRes = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String: AnyObject]
+                    
+                    if jsonRes["empty"] as! Bool == false{
+                        self.FileName = jsonRes["files"] as! NSArray
+                    }
+                    
+                    DispatchQueue.main.async {
+                        self.table.reloadData()
+                    }
+                }catch{}
+                
+            })
+            task.resume()
+        }
+    }
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -82,25 +170,25 @@ class ProjectViewController: UIViewController, UINavigationControllerDelegate{
             let vc = segue.destination as! DownloadNotesViewController
             vc.user_id = user_id
             vc.project_id = project_id
-//            vc.location = project_path + selected
+            vc.location = location
 
         } else if (segue.identifier == "DownloadImage"){
             let vc = segue.destination as! DownloadImageViewController
             vc.user_id = user_id
             vc.project_id = project_id
-//            vc.location = project_path + selected
+            vc.location = location
 
         } else if (segue.identifier == "DownloadVideo"){
             let vc = segue.destination as! DownloadVideoViewController
             vc.user_id = user_id
             vc.project_id = project_id
-//            vc.location = project_path + selected
+            vc.location = location
 
         } else if (segue.identifier == "DownloadAudio"){
             let vc = segue.destination as! DownloadAudioViewController
             vc.user_id = user_id
             vc.project_id = project_id
-//            vc.location = project_path + selected
+            vc.location = location
         }
     }
 }

@@ -88,7 +88,8 @@ class NotesViewController: UIViewController, UITextViewDelegate {
             let success = response["file_created"] as! Bool
             
             if success{
-                print("Success")
+                self.present(Alert(title: "Uploaded", message: "You may see it from project view.", Dismiss: "Dismiss"),animated: true, completion: nil)
+                
                 // Devolver al user a el folder de proyecto o desplegar mensaje
             }
             else{

@@ -1086,7 +1086,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OmP-i8-EBW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7796" y="-1689"/>
+            <point key="canvasLocation" x="5281" y="-939"/>
         </scene>
         <!--Project View Controller-->
         <scene sceneID="Oi4-5m-nIf">
@@ -1098,6 +1098,9 @@
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CQf-1V-mSv">
                                 <rect key="frame" x="16" y="44" width="48" height="39"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="39" id="FvM-eT-rg6"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                 <state key="normal" title="Back"/>
                                 <connections>
@@ -1105,103 +1108,107 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="asg-2v-3RZ">
-                                <rect key="frame" x="189" y="44" width="170" height="41"/>
+                                <rect key="frame" x="189" y="44" width="170" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <state key="normal" title="Add Participants"/>
                                 <connections>
                                     <segue destination="7UN-HE-faA" kind="show" identifier="AddParticipants" id="5qV-Xp-Sn9"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CPf-7Z-Cqr">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CPf-7Z-Cqr">
                                 <rect key="frame" x="28" y="82" width="49" height="53"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="49" id="sSF-JB-hFM"/>
+                                </constraints>
                                 <state key="normal" image="Image-1"/>
                                 <connections>
                                     <segue destination="jHp-Id-dk0" kind="show" identifier="CameraSegue" id="h6A-XE-KyP"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ndn-c4-oZ2">
-                                <rect key="frame" x="118" y="264" width="125" height="30"/>
-                                <state key="normal" title="Download Notes"/>
-                                <connections>
-                                    <segue destination="DXX-vh-Lmw" kind="show" identifier="DownloadNotes" id="FeA-F8-u7c"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r8h-JN-WiG">
-                                <rect key="frame" x="130" y="302" width="114" height="30"/>
-                                <state key="normal" title="Download Image"/>
-                                <connections>
-                                    <segue destination="Pd8-I3-HDV" kind="show" identifier="DownloadImage" id="yrg-c9-8yD"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ah7-pD-HmB">
-                                <rect key="frame" x="131" y="340" width="112" height="30"/>
-                                <state key="normal" title="Download Video"/>
-                                <connections>
-                                    <segue destination="dlW-gu-REK" kind="show" identifier="DownloadVideo" id="5gD-be-8wm"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x9G-I4-79S">
-                                <rect key="frame" x="131" y="391" width="112" height="30"/>
-                                <state key="normal" title="Download Audio"/>
-                                <connections>
-                                    <segue destination="iEU-cP-CjA" kind="show" identifier="DownloadAudio" id="Rkc-tE-eEh"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LxW-81-hdZ">
-                                <rect key="frame" x="103" y="82" width="49" height="53"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LxW-81-hdZ">
+                                <rect key="frame" x="85" y="82" width="49" height="53"/>
                                 <state key="normal" image="Image-6"/>
                                 <connections>
                                     <segue destination="IoW-dB-d6j" kind="show" identifier="AudioSegue" id="Xsp-wK-Paw"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3KJ-Av-yic">
-                                <rect key="frame" x="163" y="82" width="49" height="53"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="Image-7"/>
-                                <connections>
-                                    <segue destination="0qJ-MA-mng" kind="show" identifier="NotesSegue" id="zyM-rt-zgH"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HK2-5Z-Ube">
-                                <rect key="frame" x="237" y="82" width="49" height="53"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HK2-5Z-Ube">
+                                <rect key="frame" x="142" y="79" width="53" height="58"/>
                                 <state key="normal" image="Image-8"/>
                                 <connections>
                                     <segue destination="ic3-ev-qO4" kind="show" identifier="VideoSegue" id="nhP-65-5wN"/>
                                 </connections>
                             </button>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="rZk-th-9RN">
+                                <rect key="frame" x="0.0" y="166" width="375" height="612"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Row" id="7bJ-2X-4qJ">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="7bJ-2X-4qJ" id="Yla-nY-MPF">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.666666666666664"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="Ukw-4a-vco" id="ze8-fK-GgP"/>
+                                    <outlet property="delegate" destination="Ukw-4a-vco" id="IuW-g1-BxH"/>
+                                </connections>
+                            </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3KJ-Av-yic">
+                                <rect key="frame" x="234" y="82" width="49" height="53"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="49" id="dEe-OU-sqk"/>
+                                </constraints>
+                                <state key="normal" image="Image-7"/>
+                                <connections>
+                                    <segue destination="0qJ-MA-mng" kind="show" identifier="NotesSegue" id="zyM-rt-zgH"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="CQf-1V-mSv" firstAttribute="leading" secondItem="rB0-Bo-k0P" secondAttribute="leadingMargin" id="0iP-jf-uSb"/>
-                            <constraint firstItem="CQf-1V-mSv" firstAttribute="top" secondItem="MEN-g5-Yib" secondAttribute="top" id="3ZD-Na-Kgn"/>
-                            <constraint firstItem="ndn-c4-oZ2" firstAttribute="trailing" secondItem="Ah7-pD-HmB" secondAttribute="trailing" id="44R-Fe-b4C"/>
-                            <constraint firstItem="asg-2v-3RZ" firstAttribute="trailing" secondItem="rB0-Bo-k0P" secondAttribute="trailingMargin" id="Pka-WI-Ejy"/>
-                            <constraint firstItem="Ah7-pD-HmB" firstAttribute="leading" secondItem="x9G-I4-79S" secondAttribute="leading" id="Tf6-GQ-OkQ"/>
-                            <constraint firstItem="Ah7-pD-HmB" firstAttribute="top" secondItem="r8h-JN-WiG" secondAttribute="bottom" constant="8" symbolic="YES" id="VZG-XW-49i"/>
-                            <constraint firstItem="x9G-I4-79S" firstAttribute="top" secondItem="Ah7-pD-HmB" secondAttribute="bottom" constant="21" id="WKG-M2-Z8h"/>
-                            <constraint firstItem="MEN-g5-Yib" firstAttribute="trailing" secondItem="ndn-c4-oZ2" secondAttribute="trailing" constant="132" id="aqv-VF-L98"/>
-                            <constraint firstItem="x9G-I4-79S" firstAttribute="centerY" secondItem="rB0-Bo-k0P" secondAttribute="centerY" id="eno-V2-o2h"/>
-                            <constraint firstItem="r8h-JN-WiG" firstAttribute="centerX" secondItem="rB0-Bo-k0P" secondAttribute="centerX" id="gCI-C1-zeN"/>
-                            <constraint firstItem="ndn-c4-oZ2" firstAttribute="leading" secondItem="MEN-g5-Yib" secondAttribute="leading" constant="118" id="ggW-gq-bep"/>
-                            <constraint firstItem="CQf-1V-mSv" firstAttribute="top" secondItem="asg-2v-3RZ" secondAttribute="top" id="hez-8h-dFL"/>
-                            <constraint firstItem="r8h-JN-WiG" firstAttribute="leading" secondItem="MEN-g5-Yib" secondAttribute="leading" constant="130" id="jyD-Tc-37n"/>
-                            <constraint firstItem="r8h-JN-WiG" firstAttribute="centerX" secondItem="Ah7-pD-HmB" secondAttribute="centerX" id="o5d-Jk-oFF"/>
-                            <constraint firstItem="r8h-JN-WiG" firstAttribute="top" secondItem="ndn-c4-oZ2" secondAttribute="bottom" constant="8" symbolic="YES" id="sd4-TP-XrS"/>
-                            <constraint firstItem="Ah7-pD-HmB" firstAttribute="trailing" secondItem="x9G-I4-79S" secondAttribute="trailing" id="teQ-HF-wOa"/>
+                            <constraint firstItem="CQf-1V-mSv" firstAttribute="top" secondItem="asg-2v-3RZ" secondAttribute="top" id="3sp-fF-mY7"/>
+                            <constraint firstItem="rZk-th-9RN" firstAttribute="top" secondItem="CPf-7Z-Cqr" secondAttribute="bottom" constant="31" id="4wq-xN-OUn"/>
+                            <constraint firstItem="CQf-1V-mSv" firstAttribute="top" secondItem="MEN-g5-Yib" secondAttribute="top" id="6Hk-PV-NG0"/>
+                            <constraint firstItem="rZk-th-9RN" firstAttribute="leading" secondItem="rB0-Bo-k0P" secondAttribute="leading" id="74a-DE-scQ"/>
+                            <constraint firstItem="LxW-81-hdZ" firstAttribute="top" secondItem="3KJ-Av-yic" secondAttribute="top" id="8iO-uI-Pew"/>
+                            <constraint firstItem="rZk-th-9RN" firstAttribute="bottom" secondItem="MEN-g5-Yib" secondAttribute="bottom" id="8wz-F7-Uh5"/>
+                            <constraint firstItem="asg-2v-3RZ" firstAttribute="trailing" secondItem="rB0-Bo-k0P" secondAttribute="trailingMargin" id="B6x-Gc-uIR"/>
+                            <constraint firstItem="LxW-81-hdZ" firstAttribute="leading" secondItem="CPf-7Z-Cqr" secondAttribute="trailing" constant="8" symbolic="YES" id="Cq7-Jj-PZ9"/>
+                            <constraint firstItem="MEN-g5-Yib" firstAttribute="trailing" secondItem="3KJ-Av-yic" secondAttribute="trailing" constant="92" id="HCG-k3-pCG"/>
+                            <constraint firstItem="LxW-81-hdZ" firstAttribute="bottom" secondItem="3KJ-Av-yic" secondAttribute="bottom" id="Oh9-qu-34Z"/>
+                            <constraint firstItem="CPf-7Z-Cqr" firstAttribute="bottom" secondItem="LxW-81-hdZ" secondAttribute="bottom" id="UA0-pg-mZg"/>
+                            <constraint firstItem="CPf-7Z-Cqr" firstAttribute="leading" secondItem="MEN-g5-Yib" secondAttribute="leading" constant="28" id="W4C-lg-aVg"/>
+                            <constraint firstItem="CQf-1V-mSv" firstAttribute="leading" secondItem="rB0-Bo-k0P" secondAttribute="leadingMargin" id="ZVp-0O-A8j"/>
+                            <constraint firstItem="HK2-5Z-Ube" firstAttribute="leading" secondItem="CQf-1V-mSv" secondAttribute="trailing" constant="78" id="bGy-nh-0PG"/>
+                            <constraint firstAttribute="trailing" secondItem="rZk-th-9RN" secondAttribute="trailing" id="bbh-LN-cQb"/>
+                            <constraint firstItem="HK2-5Z-Ube" firstAttribute="leading" secondItem="LxW-81-hdZ" secondAttribute="trailing" constant="8" symbolic="YES" id="byw-Uu-dNQ"/>
+                            <constraint firstItem="LxW-81-hdZ" firstAttribute="centerY" secondItem="HK2-5Z-Ube" secondAttribute="centerY" id="fHR-Vi-cs0"/>
+                            <constraint firstItem="HK2-5Z-Ube" firstAttribute="top" secondItem="asg-2v-3RZ" secondAttribute="bottom" constant="5" id="iWd-Qg-Wpg"/>
+                            <constraint firstItem="CPf-7Z-Cqr" firstAttribute="top" secondItem="MEN-g5-Yib" secondAttribute="top" constant="38" id="jLb-YA-eYC"/>
+                            <constraint firstItem="CPf-7Z-Cqr" firstAttribute="top" secondItem="LxW-81-hdZ" secondAttribute="top" id="qsH-op-XKt"/>
+                            <constraint firstItem="3KJ-Av-yic" firstAttribute="top" secondItem="asg-2v-3RZ" secondAttribute="bottom" constant="8" symbolic="YES" id="sp5-HP-xrD"/>
+                            <constraint firstItem="rZk-th-9RN" firstAttribute="top" secondItem="CQf-1V-mSv" secondAttribute="bottom" constant="83" id="uRH-2f-Dsh"/>
+                            <constraint firstItem="3KJ-Av-yic" firstAttribute="leading" secondItem="HK2-5Z-Ube" secondAttribute="trailing" constant="39" id="xt8-2D-tou"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="MEN-g5-Yib"/>
                     </view>
                     <navigationItem key="navigationItem" id="kBW-Y5-RmF"/>
                     <connections>
                         <outlet property="AddParticipant" destination="asg-2v-3RZ" id="nc6-g9-OxH"/>
+                        <outlet property="table" destination="rZk-th-9RN" id="aUJ-px-y7e"/>
+                        <segue destination="DXX-vh-Lmw" kind="show" identifier="DownloadNotes" id="Gd6-zv-mHA"/>
+                        <segue destination="Pd8-I3-HDV" kind="show" identifier="DownloadImage" id="JiI-v6-3dq"/>
+                        <segue destination="dlW-gu-REK" kind="show" identifier="DownloadVideo" id="Nbq-Bx-YUQ"/>
+                        <segue destination="iEU-cP-CjA" kind="show" identifier="DownloadAudio" id="knS-0f-mSH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jMa-eg-uar" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3093.5999999999999" y="35.467980295566505"/>
+            <point key="canvasLocation" x="4792.8000000000002" y="34.729064039408868"/>
         </scene>
         <!--Audio View Controller-->
         <scene sceneID="LxZ-Ga-6o0">
@@ -1287,7 +1294,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="r9N-nn-9de" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7796" y="-803"/>
+            <point key="canvasLocation" x="6769" y="-692"/>
         </scene>
         <!--Change Password View Controller-->
         <scene sceneID="0FX-1g-jFI">
@@ -1491,7 +1498,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kZI-GU-WN0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7796" y="61.330049261083744"/>
+            <point key="canvasLocation" x="7526" y="35"/>
         </scene>
         <!--Notes View Controller-->
         <scene sceneID="hBi-sc-tDJ">
@@ -1587,7 +1594,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VSf-Hn-mrl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7796" y="858"/>
+            <point key="canvasLocation" x="7689" y="800"/>
         </scene>
         <!--Video View Controller-->
         <scene sceneID="qGo-6x-ceo">
@@ -1702,7 +1709,8 @@
         <image name="Image-8" width="128" height="128"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Zwe-aa-zfZ"/>
+        <segue reference="5qV-Xp-Sn9"/>
+        <segue reference="chT-jX-6aO"/>
         <segue reference="YSk-mB-5ei"/>
         <segue reference="YDh-3o-jHY"/>
     </inferredMetricsTieBreakers>

@@ -146,7 +146,12 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
             do {
                 let json = try JSONSerialization.jsonObject(with: data!, options: []) as? NSDictionary
                 
-                print(json ?? "bad")
+                if json!["file_created"] as! Bool == true{
+                    self.present(Alert(title: "Uploaded", message: "You may see it from project view.", Dismiss: "Dismiss"),animated: true, completion: nil)
+                } else{
+                    self.present(Alert(title: "Try Again", message: "Error uploading.", Dismiss: "Dismiss"),animated: true, completion: nil)
+                }
+                
                 
             }catch
             {

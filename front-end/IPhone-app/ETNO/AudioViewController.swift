@@ -288,7 +288,13 @@ class AudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudioRecor
             
             do {
                 // Handle response from server
-                let _ = try JSONSerialization.jsonObject(with: data!, options: []) as? NSDictionary
+                let json = try JSONSerialization.jsonObject(with: data!, options: []) as? NSDictionary
+                if json!["file_created"] as! Bool == true{
+                    self.present(Alert(title: "Uploaded", message: "You may see it from project view.", Dismiss: "Dismiss"),animated: true, completion: nil)
+                } else{
+                    self.present(Alert(title: "Try Again", message: "Error uploading.", Dismiss: "Dismiss"),animated: true, completion: nil)
+                }
+                
             }
             // Error handling
             catch {

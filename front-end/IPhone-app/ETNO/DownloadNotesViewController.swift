@@ -18,9 +18,9 @@ class DownloadNotesViewController: UIViewController {
     override func viewDidLoad() {
     
         // Contructed path to file
-//        let url = URL(string: location)!
+        let url = URL(string: location)!
 
-        let url = URL(string: "http://54.81.239.120/projects/1/fb633b48-9850-40ca-ba37-26beb9558892/docs/test.txt")!
+//        let url = URL(string: "http://54.81.239.120/projects/1/fb633b48-9850-40ca-ba37-26beb9558892/docs/test.txt")!
         // Start transfer
         let task = URLSession.shared.downloadTask(with: url){ localURL, urlResponse, error in
             // Save file from server to tmp file.
