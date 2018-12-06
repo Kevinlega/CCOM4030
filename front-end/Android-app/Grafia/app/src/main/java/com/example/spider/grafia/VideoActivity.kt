@@ -1,3 +1,13 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
+//
+// File        : VideoActivity.kt
+// Description : Takes video or grabs from gallery
+//               and uploads it to server
+
 package com.example.spider.grafia
 
 import android.Manifest
@@ -25,6 +35,7 @@ import java.net.URL
 
 class VideoActivity : AppCompatActivity() {
 
+    // Global variables
     private var mCurrentVideoPath = ""
     private var mCurrentVideoUri : Uri = Uri.EMPTY
     private var mCurrentPickedVideo = ""
@@ -42,11 +53,14 @@ class VideoActivity : AppCompatActivity() {
 
         videoView.visibility = View.INVISIBLE
 
+        // get user data
         userId = intent.getIntExtra("userId", -1)
         projectId = intent.getIntExtra("pId",-1)
         projectPath = intent.getStringExtra("projectPath")
         val name = intent.getStringExtra("projectName")
 
+
+        // Segue
         backToProject2.setOnClickListener {
             finish()
             if ((mCurrentVideoPath != "") and !saved) {
@@ -64,6 +78,7 @@ class VideoActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // open video with intent
         openVideo.setOnClickListener {
 
             if ((mCurrentVideoPath != "") and !saved) {
@@ -79,11 +94,13 @@ class VideoActivity : AppCompatActivity() {
             dispatchTakeVideoIntent()
         }
 
+        // open video gallery
         openVideoGallery.setOnClickListener {
 
             dispatchPicVideoIntent()
         }
 
+        // save video to gallery
         saveVideo.setOnClickListener {
             if (mCurrentVideoPath != "" && !saved) {
                 galleryAddVideo()
@@ -93,6 +110,7 @@ class VideoActivity : AppCompatActivity() {
             }
         }
 
+        // play video
         play.setOnClickListener {
             if ((mCurrentVideoUri != Uri.EMPTY) and restart) {
                 videoView.setVideoURI((mCurrentVideoUri) as Uri)
@@ -101,20 +119,24 @@ class VideoActivity : AppCompatActivity() {
             videoView.requestFocus()
             videoView.start()
         }
+        // pause video
         pause.setOnClickListener {
             videoView.pause()
         }
 
+        // stop video
         stop.setOnClickListener {
             videoView.stopPlayback()
             restart = true
         }
 
+        // upload video
         uploadVideo.setOnClickListener {
             UploadFileAsync(projectPath).execute("")
         }
     }
 
+    // takes intent to open camera to record
     private fun dispatchTakeVideoIntent() {
         Intent(MediaStore.ACTION_VIDEO_CAPTURE).also { takePictureIntent ->
             // Ensure that there's a camera activity to handle the intent
@@ -135,6 +157,7 @@ class VideoActivity : AppCompatActivity() {
             }
         }
     }
+    // takes intent to open gallery
     private fun dispatchPicVideoIntent(){
         val intent = Intent()
         intent.type = "video/*"
@@ -142,7 +165,9 @@ class VideoActivity : AppCompatActivity() {
         startActivityForResult(Intent.createChooser(intent, "Select Video"), 2)
     }
 
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        // take video
         if (requestCode == 1 && resultCode == RESULT_OK) {
             videoView.visibility = View.VISIBLE
 
@@ -152,7 +177,9 @@ class VideoActivity : AppCompatActivity() {
                 videoView.setVideoURI(videoURI)
             }
 
-        } else if (requestCode == 2 && resultCode == RESULT_OK){
+        }
+        // takes video from gallery
+        else if (requestCode == 2 && resultCode == RESULT_OK){
             videoView.visibility = View.VISIBLE
             if(mCurrentVideoPath != ""){
                 val myFile = File(mCurrentVideoPath)
@@ -195,8 +222,9 @@ class VideoActivity : AppCompatActivity() {
         }
     }
 
+
     private fun createTempVideoFile(): File {
-        // Create an image file name
+        // Create a temporary video file
         val timeStamp: String = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
         val storageDir: File = getExternalFilesDir(Environment.DIRECTORY_MOVIES)
         return File.createTempFile(
@@ -209,6 +237,7 @@ class VideoActivity : AppCompatActivity() {
         }
     }
 
+    // save video to gallery
     private fun galleryAddVideo() = if (ContextCompat.checkSelfPermission(
             this,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -261,6 +290,7 @@ class VideoActivity : AppCompatActivity() {
         saved = true
     }
 
+    // Delete Temps
     override fun onDestroy() {
         super.onDestroy()
         if (!isChangingConfigurations) {
@@ -283,6 +313,8 @@ class VideoActivity : AppCompatActivity() {
         }
         return file.delete()
     }
+
+    // Upload Video to server
     private inner class UploadFileAsync(val projectPath: String) : AsyncTask<String, Void, String>() {
 
         override fun doInBackground(vararg params: String): String {
@@ -326,7 +358,5 @@ class VideoActivity : AppCompatActivity() {
         override fun onPreExecute() {}
 
         override fun onProgressUpdate(vararg values: Void) {}
-
-
     }
 }

@@ -1,3 +1,12 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
+//
+// File        : LoginActivity.kt
+// Description : Login with email and password
+
 package com.example.spider.grafia
 
 import android.content.Context
@@ -22,8 +31,8 @@ class LoginActivity : AppCompatActivity() {
 
         supportActionBar!!.setTitle("Grafía Login")
 
+        // Trigger login
         loginButton.setOnClickListener {
-
 
             val Email = findViewById<EditText>(R.id.loginEmail)
             val Password = findViewById<EditText>(R.id.loginPassword)
@@ -34,6 +43,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
+        // Segues
         createAccount.setOnClickListener {
             val intent = Intent(this@LoginActivity, CreateAccountActivity::class.java)
 
@@ -46,37 +56,6 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-//        fingerprint.setOnClickListener {
-//
-//            val sharedPreferences = getSharedPreferences("Grafia_Login", Context.MODE_PRIVATE)
-//
-//            val email = sharedPreferences.getString("Email", "")
-//            val password = sharedPreferences.getString("Password", "")
-//
-//            if (email.isNullOrBlank() || password.isNullOrBlank()){
-//                Toast.makeText(this@LoginActivity,"No Credentials Saved", Toast.LENGTH_SHORT).show()
-//            } else {
-//
-//
-////                    fingerprintLogin(email, password)
-//
-//
-//            }
-//        }
-//    }
-
-    // Checks if an email is already registered.
-//    private fun fingerprintLogin(email:String,password:String){
-//        val query = 4
-//        val connectToAPI = Connect(this, 2,email,password)
-//        try{
-//            val url = "http://54.81.239.120/selectAPI.php?queryType=$query&email=$email"
-//            println(url)
-//            connectToAPI.execute(url)
-//        }
-//        catch (error: Exception){}
-//    }
-
     // Checks if an email is already registered.
     private fun isRegistered(email:String,password:String){
         val query = 4
@@ -88,6 +67,8 @@ class LoginActivity : AppCompatActivity() {
         }
         catch (error: Exception){}
     }
+
+    // Check if can Login
     private fun checkLogin(password:String, email:String): Boolean{
         var canLogin = true
         if(password.isNullOrBlank() || email.isNullOrBlank()){
@@ -98,11 +79,12 @@ class LoginActivity : AppCompatActivity() {
         return canLogin
     }
 
+    // Verifies Login data
     companion object {
         class Connect(private val mContext: Context,private val flag: Int, private val email: String, private val password: String) :
             AsyncTask<String, Void, String>() {
 
-
+            // Send uid retrieve request
             private fun getUID(email:String){
                 val query = 2
                 val connectToAPI = LoginActivity.Companion.Connect(mContext, 1,email,"")
@@ -113,7 +95,7 @@ class LoginActivity : AppCompatActivity() {
                 }
                 catch (error: Exception){}
             }
-
+            // Byte Array To String
             private fun byteArrayToHexString(array: Array<Byte>): String {
 
                 var result = StringBuilder(array.size * 2)
@@ -127,6 +109,7 @@ class LoginActivity : AppCompatActivity() {
                 return result.toString()
             }
 
+            // gets md5 of String
             private fun md5(data: String): String {
 
                 var result = ""
@@ -152,6 +135,7 @@ class LoginActivity : AppCompatActivity() {
                 return URL(url).readText()
             }
 
+            // Gets data and if its correct, retrieves the user id
             override fun onPostExecute(result: String) {
                 try {
                     val jSONObject = JSONObject(result)

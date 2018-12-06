@@ -1,3 +1,14 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
+//
+// File        : ProjectActivity.kt
+// Description : Shows all the files on the server
+//               and segue to download and take data
+
+
 package com.example.spider.grafia
 
 import android.content.Context
@@ -24,7 +35,7 @@ import java.net.URL
 
 
 class ProjectActivity : AppCompatActivity() {
-
+    // Global variables
     private var projectPath = ""
     private var userId = -1
     private var projectId = -1
@@ -36,10 +47,12 @@ class ProjectActivity : AppCompatActivity() {
         title = intent.getStringExtra("projectName")
         supportActionBar!!.title = title
 
+        // Get user data
         userId = intent.getIntExtra("userId",-1)
         projectId = intent.getIntExtra("pId",-1)
 
 
+        // Check if admin
         var connectToAPI = Connect(this,1)
         try{
             val url = "http://54.81.239.120/selectAPI.php?queryType=8&pid=$projectId"
@@ -47,6 +60,7 @@ class ProjectActivity : AppCompatActivity() {
         }
         catch (error: Exception){}
 
+        // Get project path
         connectToAPI = Connect(this,0)
         try{
             val url = "http://54.81.239.120/selectAPI.php?queryType=10&pid=$projectId"
@@ -54,6 +68,7 @@ class ProjectActivity : AppCompatActivity() {
         }
         catch (error: Exception){}
 
+        // Segues
         BackToDashboard.setOnClickListener {
             val intent = Intent(this@ProjectActivity, DashboardActivity::class.java)
             // To pass any data to next activity
@@ -68,7 +83,7 @@ class ProjectActivity : AppCompatActivity() {
             intent.putExtra("userId", userId)
             intent.putExtra("pId", projectId)
             intent.putExtra("projectName",title)
-//             start your next activity
+            // start your next activity
             startActivity(intent)
         }
 
@@ -79,7 +94,7 @@ class ProjectActivity : AppCompatActivity() {
             intent.putExtra("pId", projectId)
             intent.putExtra("projectPath",projectPath)
             intent.putExtra("projectName",title)
-//             start your next activity
+            // start your next activity
             startActivity(intent)
         }
 
@@ -90,7 +105,7 @@ class ProjectActivity : AppCompatActivity() {
             intent.putExtra("pId", projectId)
             intent.putExtra("projectPath",projectPath)
             intent.putExtra("projectName",title)
-//             start your next activity
+            // start your next activity
             startActivity(intent)
         }
 
@@ -101,7 +116,7 @@ class ProjectActivity : AppCompatActivity() {
             intent.putExtra("pId", projectId)
             intent.putExtra("projectPath",projectPath)
             intent.putExtra("projectName",title)
-//             start your next activity
+            // start your next activity
             startActivity(intent)
         }
 
@@ -112,17 +127,15 @@ class ProjectActivity : AppCompatActivity() {
             intent.putExtra("pId", projectId)
             intent.putExtra("projectPath",projectPath)
             intent.putExtra("projectName",title)
-//             start your next activity
+            // start your next activity
             startActivity(intent)
         }
     }
 
-
+    // fetch files
     private fun fetchJson(mContext: Context) {
         println("Fetching Json.")
         val url = "http://54.81.239.120/listdir.php?path=$projectPath"
-
-        println(url)
 
         var request = Request.Builder().url(url).build()
         val client = OkHttpClient()
@@ -134,14 +147,13 @@ class ProjectActivity : AppCompatActivity() {
                 myfiles = gson.fromJson(body, myFiles::class.java)
                 val listview = findViewById<ListView>(R.id.project_list_files)
 
+                // list adapter
                 runOnUiThread {
                     listview.adapter = MyCustomAdapter(this@ProjectActivity, myfiles)
 
                     listview.setOnItemClickListener { parent, view, position, id ->
 
                         val file = listview.getItemAtPosition(position) as Array<String>
-
-
 
                         var intent = Intent(this@ProjectActivity, ProjectActivity::class.java)
 
@@ -152,7 +164,6 @@ class ProjectActivity : AppCompatActivity() {
                             "docs" ->  intent = Intent(this@ProjectActivity, DownloadNotesActivity::class.java)
                         }
 
-
                         var path = projectPath.substringAfter("/var/www/html/")
 
                         val location = "http://54.81.239.120/" + path + "/" + file[1] + "/" + file[0]
@@ -162,7 +173,7 @@ class ProjectActivity : AppCompatActivity() {
                         intent.putExtra("pId", projectId)
                         intent.putExtra("projectPath",location)
                         intent.putExtra("projectName",title)
-            //             start your next activity
+                        // start your next activity
                         startActivity(intent)
 
 
@@ -171,12 +182,12 @@ class ProjectActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call, e: IOException) {
-                println("NOPE")
+                println("Error")
             }
         })
-
-
     }
+
+    // List Adapter
     private inner class MyCustomAdapter(context: Context, myfiles : myFiles) : BaseAdapter() {
         private val mContext: Context
         private val myfiles : myFiles
@@ -214,6 +225,7 @@ class ProjectActivity : AppCompatActivity() {
         }
     }
 
+    // Connect to API
     private inner class Connect(val mContext: Context,val flag:Int) : AsyncTask<String, Void, String>() {
 
         override fun doInBackground(vararg p0: String?): String {
@@ -247,8 +259,6 @@ class ProjectActivity : AppCompatActivity() {
         }
     }
 }
-
-
     class myFiles(val files : List<mFile>) {
 
     }

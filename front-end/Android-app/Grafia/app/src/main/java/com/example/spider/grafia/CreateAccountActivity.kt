@@ -109,14 +109,6 @@ open class CreateAccountActivity : AppCompatActivity(){
                     if(type == 1) {
 
                         if(registered) {
-
-//                            val sharedPreferences = mContext.getSharedPreferences("Grafia_Login", Context.MODE_PRIVATE)
-//                            val editor = sharedPreferences.edit()
-//                            editor.putString("Email", email)
-//                            editor.putString("Password", password)
-//                            editor.apply()
-
-
                             val intent = Intent(mContext, LoginActivity::class.java)
                             Toast.makeText(mContext, "Account Created.", Toast.LENGTH_SHORT).show()
                             mContext.startActivity(intent)

@@ -1,3 +1,12 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
+//
+// File        : NotesActivity.kt
+// Description : Creates a note and saves it to server
+
 package com.example.spider.grafia
 
 import android.content.Context
@@ -17,6 +26,7 @@ import java.net.URL
 
 class NotesActivity : AppCompatActivity() {
 
+    // global varibales
     var projectPath = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,13 +34,13 @@ class NotesActivity : AppCompatActivity() {
         setContentView(R.layout.activity_notes)
 
         supportActionBar!!.title = "Notes"
-
+        // get users data
         val userId = intent.getIntExtra("userId",-1)
         val projectId = intent.getIntExtra("pId",-1)
         projectPath = intent.getStringExtra("projectPath")
         val name = intent.getStringExtra("projectName")
 
-
+        // Segue
         backToProject4.setOnClickListener {
             val intent = Intent(this@NotesActivity, ProjectActivity::class.java)
             // To pass any data to next activity
@@ -41,9 +51,11 @@ class NotesActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // Text written
         var Note = findViewById(R.id.Note) as EditText
         Note.afterTextChanged{}
 
+        // save to server
         save_button.setOnClickListener{
             val Note = findViewById<EditText>(R.id.Note)
             val Name = findViewById<EditText>(R.id.Name)
@@ -58,16 +70,15 @@ class NotesActivity : AppCompatActivity() {
                 val timeStamp: String = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
 
                 if(name.isNullOrBlank()){
-
                     name = "NOTES_$userId" + "_$timeStamp" + "_.txt"
                 } else{
                     name += "_NOTES_$userId" + "_$timeStamp" + "_.txt"
                 }
-
                 save(note,name)
             }
         }
 
+        // clear Note
         clear_button.setOnClickListener {
             var Note = findViewById<EditText>(R.id.Note)
             Note.setText("")
@@ -78,7 +89,7 @@ class NotesActivity : AppCompatActivity() {
 
     }
 
-    // Post al API para subir el archivo
+    // Post to API to upload file
     private fun save(text:String,name:String){
         val fileType = 0
         val path = projectPath + "/docs/" + name
@@ -90,7 +101,7 @@ class NotesActivity : AppCompatActivity() {
         catch (error: Exception){}
     }
 
-    // Listener si cambio el textview
+    // Listener for text change
     private fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
         this.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(s: Editable?) {

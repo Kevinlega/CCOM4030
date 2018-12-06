@@ -1,3 +1,14 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
+//
+// File        : FriendsActivity.kt
+// Description : Send Friend Request, Accept or Reject Request and
+//               view all friends
+
+
 package com.example.spider.grafia
 
 import android.content.Context
@@ -19,6 +30,7 @@ import java.net.URL
 
 class FriendsActivity : AppCompatActivity() {
 
+    // Global variables
     var selectedEmails: MutableList<String> = ArrayList()
     var selectedNames: MutableList<String> = ArrayList()
 
@@ -30,13 +42,15 @@ class FriendsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_friends)
 
+        // get user id from previous
         setuid(intent.getIntExtra("userId",-1))
 
+        // Set view to Pending Request
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         navigation.selectedItemId = R.id.navigation_pending
 
+        // list view clear
         val listView = findViewById<ListView>(R.id.listaFriends)
-
         listView.adapter = ListFriendAdapter(this@FriendsActivity, JSONArray(), JSONArray(),  ArrayList(), ArrayList())
 
         Return.setOnClickListener {
@@ -47,15 +61,17 @@ class FriendsActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-
+    // sets userId to uid
     private fun setuid(uid : Int){
         userId = uid
     }
 
+    // Return uid
     private fun getuid(): Int{
         return userId
     }
 
+    // Tab changer
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_search -> {
@@ -95,19 +111,21 @@ class FriendsActivity : AppCompatActivity() {
         false
     }
 
+    // Send Friend Request View
     private fun sendRequest() {
         val listView = findViewById<ListView>(R.id.listaFriends)
         // empty list view
         listView.adapter = ListFriendAdapter(this@FriendsActivity, JSONArray(), JSONArray(), selectedEmails, selectedNames)
         val user = getuid()
 
+        // Searches for Friends
         val search = findViewById<SearchView>(R.id.searchBarFriends)
-
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return true
             }
 
+            // Filter data
             override fun onQueryTextChange(newText: String?): Boolean {
 
                 if (newText!!.isNotEmpty() and newText!!.contains(".com") and newText!!.contains("@") and (newText!!.length > 13) and (!selectedEmails.contains(newText!!))) {
@@ -128,6 +146,7 @@ class FriendsActivity : AppCompatActivity() {
             }
         })
 
+        // Sends request
         ButtonAction2.setOnClickListener {
             if (selectedEmails.size > 0) {
 
@@ -157,6 +176,7 @@ class FriendsActivity : AppCompatActivity() {
         }
     }
 
+    // Makes pending Request View
     private fun pendingRequest(){
         val listView = findViewById<ListView>(R.id.listaFriends)
         // empty list view
@@ -174,13 +194,14 @@ class FriendsActivity : AppCompatActivity() {
             println(e.message)
         }
 
+        // Searches pending Requests
         val search = findViewById<SearchView>(R.id.searchBarFriends)
-
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return true
             }
 
+            // Filter data
             override fun onQueryTextChange(newText: String?): Boolean {
                 var empty: Boolean
                 if (downloadData.names.length() > 0) {
@@ -219,6 +240,7 @@ class FriendsActivity : AppCompatActivity() {
             }
         })
 
+        // Accept Friend Request selected
         ButtonAction.setOnClickListener {
             if(selectedEmails.size > 0){
 
@@ -261,6 +283,8 @@ class FriendsActivity : AppCompatActivity() {
             }
 
         }
+
+        // Reject Friend Request selected
         ButtonAction2.setOnClickListener {
             if(selectedEmails.size > 0){
 
@@ -305,6 +329,7 @@ class FriendsActivity : AppCompatActivity() {
         }
     }
 
+    // View All friends
     private fun allFriends(){
         val listView = findViewById<ListView>(R.id.listaFriends)
         // empty list view
@@ -322,13 +347,13 @@ class FriendsActivity : AppCompatActivity() {
             println(e.message)
         }
 
+        // Search Bar handler
         val search = findViewById<SearchView>(R.id.searchBarFriends)
-
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return true
             }
-
+            // Filter data
             override fun onQueryTextChange(newText: String?): Boolean {
                 var empty: Boolean
                 if (downloadData.names.length() > 0) {
@@ -368,6 +393,8 @@ class FriendsActivity : AppCompatActivity() {
         })
     }
 
+
+    // Handles the list display
     private class ListFriendAdapter(context: Context, names: JSONArray, emails: JSONArray, selectedEmail: MutableList<String>,selectedName: MutableList<String>) : BaseAdapter() {
 
         private val mContext: Context
@@ -395,6 +422,7 @@ class FriendsActivity : AppCompatActivity() {
             return emailsArray.get(position)
         }
 
+        // Sets the view
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
 
             val layoutInflater = LayoutInflater.from(mContext)
@@ -404,7 +432,6 @@ class FriendsActivity : AppCompatActivity() {
 
                 override fun onClick(v: View?) {
                     //use getItem(position) to get the item
-
                     if (selected.contains(position)){
                         val index = selected.indexOf(position)
                         selectedNames.removeAt(index)
@@ -437,6 +464,7 @@ class FriendsActivity : AppCompatActivity() {
         }
     }
 
+    // Connects to the API and gets the data
     companion object {
         class ConnectFriends(context: Context, queryType: Int, listView: ListView, selectedEmail: MutableList<String>, selectedName: MutableList<String> ) :
             AsyncTask<String, Void, String>() {

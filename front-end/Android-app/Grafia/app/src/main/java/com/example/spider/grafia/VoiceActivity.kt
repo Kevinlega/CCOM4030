@@ -1,3 +1,13 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
+//
+// File        : VoiceActivity.kt
+// Description : Takes audio and uploads it to server
+
+
 package com.example.spider.grafia
 
 import android.Manifest
@@ -19,6 +29,7 @@ import java.net.URL
 
 class VoiceActivity : AppCompatActivity(){
 
+    // Global varibales
     private var mCurrentVoicePath = String()
     private var userId = -1
     private var projectId = -1
@@ -29,9 +40,8 @@ class VoiceActivity : AppCompatActivity(){
     private var myAudioRecorder = MediaRecorder()
     private var projectPath = ""
 
-
+    // Creates temporary audio file
     private fun createTempVoiceFile(): File {
-        // Create an voice file name
         val timeStamp: String = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
         val storageDir: File = getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
         return File.createTempFile(
@@ -48,6 +58,7 @@ class VoiceActivity : AppCompatActivity(){
         super.onCreate (savedInstanceState)
         setContentView (R.layout.activity_voice)
 
+        // record listener
         recordVoice.setOnClickListener {
 
             recording = true
@@ -57,7 +68,7 @@ class VoiceActivity : AppCompatActivity(){
                 myFile.delete()
                 mCurrentVoicePath = ""
             }
-
+            // checks permissions
             if (ContextCompat.checkSelfPermission(
                     this,
                     Manifest.permission.RECORD_AUDIO
@@ -69,7 +80,7 @@ class VoiceActivity : AppCompatActivity(){
                     arrayOf(Manifest.permission.RECORD_AUDIO), 1
                 )
             } else {
-
+                // records
                 val NotUsed = createTempVoiceFile()
                 myAudioRecorder = MediaRecorder()
                 myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)
@@ -88,6 +99,8 @@ class VoiceActivity : AppCompatActivity(){
             }
         }
 
+
+        // stops recording or play
         stopVoice.setOnClickListener {
 
             if (recording) {
@@ -109,6 +122,7 @@ class VoiceActivity : AppCompatActivity(){
             }
         }
 
+        //plays recorded audio
         playVoice.setOnClickListener {
 
             if (mCurrentVoicePath != "" && !playing) {
@@ -133,6 +147,7 @@ class VoiceActivity : AppCompatActivity(){
             }
         }
 
+        // pause audio file
         pauseVoice.setOnClickListener {
             if (playing){
                 playing = false
@@ -144,17 +159,18 @@ class VoiceActivity : AppCompatActivity(){
             }
         }
 
+        // get user data
         userId = intent.getIntExtra("userId",-1)
         projectId = intent.getIntExtra("pId",-1)
         projectPath = intent.getStringExtra("projectPath")
         val name = intent.getStringExtra("projectName")
 
-
+        // upload to server
         uploadVoice.setOnClickListener {
             UploadFileAsync(projectPath).execute("")
         }
 
-
+        // back to project view
         backToProject3.setOnClickListener {
             val intent = Intent(this@VoiceActivity, ProjectActivity::class.java)
             // To pass any data to next activity
@@ -173,6 +189,7 @@ class VoiceActivity : AppCompatActivity(){
         }
     }
 
+    // trigger delete files
     override fun onDestroy() {
         super.onDestroy()
         if (!isChangingConfigurations) {
@@ -180,6 +197,7 @@ class VoiceActivity : AppCompatActivity(){
         }
     }
 
+    // Deletes files
     private fun deleteTempFiles(file: File): Boolean {
         if (file.isDirectory) {
             val files = file.listFiles()
@@ -196,6 +214,7 @@ class VoiceActivity : AppCompatActivity(){
         return file.delete()
     }
 
+    // Upload files to server
     private inner class UploadFileAsync(val projectPath: String) : AsyncTask<String, Void, String>() {
 
         override fun doInBackground(vararg params: String): String {

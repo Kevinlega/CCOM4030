@@ -1,3 +1,12 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
+//
+// File        : NotVerifiedActivity.kt
+// Description : Verifies user account
+
 package com.example.spider.grafia
 
 import android.content.Context
@@ -14,6 +23,7 @@ import java.net.URL
 
 class NotVerifiedActivity : AppCompatActivity() {
 
+    // verifies email request to API
     fun verify(email: String){
         val query = 1
         val connectToAPI = Connect(this@NotVerifiedActivity)
@@ -32,17 +42,22 @@ class NotVerifiedActivity : AppCompatActivity() {
         supportActionBar!!.setTitle("Account Verification")
 
         val Email = findViewById<EditText>(R.id.emailVerify)
-
-
+        // triggers verify
         Verify.setOnClickListener {
 
             val email = Email.text.toString()
             if(!email.isNullOrBlank()){
                 verify(email)
             }
+
+        backToLogin.setOnClickListener {
+            val intent = Intent(this@NotVerifiedActivity, LoginActivity::class.java)
+            startActivity(intent)
+            }
         }
     }
 
+    // verifies account
     companion object {
         class Connect(private val mContext: Context) :
             AsyncTask<String, Void, String>() {
