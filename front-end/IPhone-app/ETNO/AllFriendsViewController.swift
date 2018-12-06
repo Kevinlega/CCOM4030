@@ -1,10 +1,12 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
 //
-//  AllFriendsViewController.swift
-//  ETNO
-//
-//  Created by Kevin Legarreta on 10/24/18.
-//  Copyright © 2018 Los 5. All rights reserved.
-//
+// File        : AppDelegate.swift
+// Description : View controller that displays friendlist of a user
+//  Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 import UIKit
 
@@ -35,7 +37,6 @@ class AllFriendsViewController: UIViewController, UITableViewDelegate, UITableVi
     
     // MARK: - Modify the Tableview
     // Update the view of the table
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if Searching{
             return FilteredUsers.count
@@ -52,6 +53,7 @@ class AllFriendsViewController: UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
+    // Display users in table view
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Row", for: indexPath)
         if Searching{
@@ -65,7 +67,6 @@ class AllFriendsViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     // MARK: - Search Bar Actions
-    
     // Use the search bar to search users
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text == nil || searchBar.text == ""{
@@ -85,7 +86,7 @@ class AllFriendsViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     // MARK: - Default Functions
-    
+    // When view loads, receive user id, and display friends
     override func viewDidLoad() {
         super.viewDidLoad()
         user_id = TabBarViewController.User.uid
@@ -96,17 +97,17 @@ class AllFriendsViewController: UIViewController, UITableViewDelegate, UITableVi
             users = response["name"] as! [String]
             usersEmail = response["email"] as! [String]
         }
-        
         // Do any additional setup after loading the view.
     }
     
+    // Default
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
     // MARK: - Segue Function
-    
+    // Prepare segue for user validation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "BackToDashboard"){
             let vc = segue.destination as! DashboardViewController

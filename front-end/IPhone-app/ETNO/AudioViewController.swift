@@ -1,10 +1,13 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
 //
-//  AudioViewController.swift
-//  ETNO
-//
-//  Created by Kevin Legarreta on 11/12/18.
-//  Copyright © 2018 Los 5. All rights reserved.
-//
+// File        : AudioViewController.swift
+// Description : View controller that records audio using AVFoundation library
+//  Copyright © 2018 Los Duendes Malvados. All rights reserved.
+
 
 import UIKit
 import AVFoundation
@@ -39,7 +42,7 @@ class AudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudioRecor
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        // Es mejor pedir perdon que pedir permiso. Or is it?
+        // Ask user for access to microphone
         checkPermission()
         
     }
