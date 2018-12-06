@@ -6,8 +6,7 @@
 //
 // File        : AddParticipantViewController.swift
 // Description : View controller that allows user to add other users to project
-
-//  Copyright © 2018 Los Duendes Malvados. All rights reserved.
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 import UIKit
 

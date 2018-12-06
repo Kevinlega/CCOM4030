@@ -1,10 +1,11 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
 //
-//  AppDelegate.swift
-//  ETNO
-//
-//  Created by Kevin Legarreta on 9/27/18.
-//  Copyright © 2018 Los 5. All rights reserved.
-//
+// File        : AppDelegate.swift
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 import UIKit
 

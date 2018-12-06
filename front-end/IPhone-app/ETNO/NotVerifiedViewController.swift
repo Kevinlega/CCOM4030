@@ -1,10 +1,13 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
 //
-//  NotVerifiedViewController.swift
-//  ETNO
-//
-//  Created by Kevin Legarreta on 10/27/18.
-//  Copyright © 2018 Los 5. All rights reserved.
-//
+// File        :   NotVerifiedViewController.swift
+// Description : View controller that lets the user verify the account.
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
+
 
 import UIKit
 
@@ -31,7 +34,7 @@ class NotVerifiedViewController: UIViewController {
         }
     }
 
-    
+    // Default
     override func viewDidLoad() {
         super.viewDidLoad()
         hideKeyboardWhenTappedAround()
@@ -40,15 +43,14 @@ class NotVerifiedViewController: UIViewController {
     }
     
     // MARK: - Segue Function
-    // Makes sure that user is registered and changes user-password.
+    // Makes sure that user is registered and verifies account.
     // Performs segue for Login view.
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "BackToLogin"){
             let _ = segue.destination as! LoginViewController
         }
-            // If user is registered and gives valid input, hash and salt new password
-            // and insert it in database.
+        
+        // If user is registered and gives valid email it verifies the account
         else if (segue.identifier == "Verify"){
             let UserEmail = email.text!
             verify()
@@ -62,7 +64,7 @@ class NotVerifiedViewController: UIViewController {
                     
                     var response : NSDictionary = NSDictionary()
                 
-                    // Create the request to the API
+                    // Create the verify request to the API
                     let QueryType = "1"
                     let url = URL(string: "http://54.81.239.120/updateAPI.php")
                     var request = URLRequest(url:url!)

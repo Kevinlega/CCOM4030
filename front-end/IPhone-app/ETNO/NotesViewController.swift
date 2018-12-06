@@ -6,7 +6,7 @@
 //
 // File        : NotesViewController.swift
 // Description : Displays a textbox to user and receives his input to save as text file
-//  Copyright © 2018 Los Duendes Malvados. All rights reserved.
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 
 import UIKit

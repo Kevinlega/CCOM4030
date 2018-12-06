@@ -7,7 +7,7 @@
 // File        : ReusedFunctions.swift
 // Description : A plethora of functions that will be used multiple times
 //               accross the other views.
-//  Copyright © 2018 Los Duendes Malvados. All rights reserved.
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 
 import Foundation

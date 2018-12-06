@@ -1,10 +1,13 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
 //
-//  DownloadImageViewController.swift
-//  ETNO
-//
-//  Created by Kevin Legarreta on 12/5/18.
-//  Copyright © 2018 Los 5. All rights reserved.
-//
+// File        : DownloadImageViewController.swift
+// Description : View controller that lets the user download Image file
+//               and displays it.
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 import UIKit
 
@@ -19,20 +22,20 @@ class DownloadImageViewController: UIViewController {
     @IBOutlet weak var Save: UIButton!
     @IBOutlet weak var imageView: UIImageView!
     
+    
+    // Downloads file
     override func viewDidLoad() {
         super.viewDidLoad()
         
         Save.isHidden = true
         let url = URL(string: location)!
 
-//        let url = URL(string: "http://54.81.239.120/projects/1/fb633b48-9850-40ca-ba37-26beb9558892/images/IMAGE_1_20181204_160818_.jpg")!
-        // Start transfer
+        // Start download
         let task = URLSession.shared.downloadTask(with: url){ localURL, urlResponse, error in
             // Save file from server to tmp file.
             if let localURL = localURL{
-                // Switch case for each supported file type
                 
-                // Received a text file, just cast to string
+                // gets the data from download file
                 if let img =  try? Data(contentsOf: localURL){
                     
                     // Cast data to UIImage
@@ -52,7 +55,7 @@ class DownloadImageViewController: UIViewController {
     
     
     
-    
+    // Save image to gallery
     @IBAction func savePhoto(_ sender: Any) {
         if !saved{
             guard let selectedImage = imageView.image else {
@@ -66,8 +69,7 @@ class DownloadImageViewController: UIViewController {
         }
     }
     
-    
-
+    // Handles the data
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "BackToProject"){
             let vc = segue.destination as! ProjectViewController

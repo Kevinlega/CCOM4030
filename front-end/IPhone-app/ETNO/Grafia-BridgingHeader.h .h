@@ -1,10 +1,14 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
 //
-//  Grafia-BridgingHeader.h .h
-//  ETNO
-//
-//  Created by Kevin Legarreta on 11/6/18.
-//  Copyright © 2018 Los 5. All rights reserved.
-//
+// File        : Grafia-BridgingHeader.h .h
+
+// Description : File with a header class import for the app.
+//               Used for md5 hashing.
+//  Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 #ifndef Grafia_BridgingHeader_h__h
 #define Grafia_BridgingHeader_h__h

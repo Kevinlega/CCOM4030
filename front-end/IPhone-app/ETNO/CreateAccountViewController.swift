@@ -1,10 +1,13 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
 //
-//  CreateAccountViewController.swift
-//  ETNO
-//
-//  Created by Kevin Legarreta on 10/2/18.
-//  Copyright © 2018 Los Duendes Malvados. All rights reserved.
-//
+// File        : CreateAccountViewController.swift
+// Description : View controller that lets the user create an account with the server.
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
+
 import UIKit
 import Foundation
 
@@ -62,13 +65,14 @@ class CreateAccountViewController: UIViewController {
         hideKeyboardWhenTappedAround()
         // Do any additional setup after loading the view.
     }
-
+    // Default
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
     // MARK: - Segue Function
+    // Handles the data
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "BackToLogin"){
             let _ = segue.destination as! LoginViewController

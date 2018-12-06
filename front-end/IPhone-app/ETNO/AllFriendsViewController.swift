@@ -6,7 +6,7 @@
 //
 // File        : AppDelegate.swift
 // Description : View controller that displays friendlist of a user
-//  Copyright © 2018 Los Duendes Malvados. All rights reserved.
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 import UIKit
 

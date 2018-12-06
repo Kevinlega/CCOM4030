@@ -6,7 +6,7 @@
 //
 // File        : AudioViewController.swift
 // Description : View controller that records audio using AVFoundation library
-//  Copyright © 2018 Los Duendes Malvados. All rights reserved.
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 
 import UIKit

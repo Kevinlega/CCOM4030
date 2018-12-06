@@ -1,10 +1,13 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
 //
-//  DownloadNotesViewController.swift
-//  ETNO
-//
-//  Created by Kevin Legarreta on 12/5/18.
-//  Copyright © 2018 Los 5. All rights reserved.
-//
+// File        : DownloadNotesViewController.swift
+// Description : View controller that lets the user download text file
+//               and displays it.
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 import UIKit
 
@@ -17,18 +20,15 @@ class DownloadNotesViewController: UIViewController {
     
     override func viewDidLoad() {
     
-        // Contructed path to file
+        // Constructed path to file
         let url = URL(string: location)!
 
-//        let url = URL(string: "http://54.81.239.120/projects/1/fb633b48-9850-40ca-ba37-26beb9558892/docs/test.txt")!
-        // Start transfer
+        // Start download
         let task = URLSession.shared.downloadTask(with: url){ localURL, urlResponse, error in
             // Save file from server to tmp file.
             if let localURL = localURL{
-                // Switch case for each supported file type
         
                 // Received a text file, just cast to string
-           
                 if let string = try? String(contentsOf: localURL){
                     // Pass string to textView
                     DispatchQueue.main.async{
@@ -40,6 +40,7 @@ class DownloadNotesViewController: UIViewController {
         task.resume()
     }
     
+    // Handles the data
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "BackToProject"){
             let vc = segue.destination as! ProjectViewController

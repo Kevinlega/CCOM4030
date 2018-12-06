@@ -1,10 +1,13 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
 //
-//  DownloadAudioViewController.swift
-//  ETNO
-//
-//  Created by Kevin Legarreta on 12/5/18.
-//  Copyright © 2018 Los 5. All rights reserved.
-//
+// File        : DownloadAudioViewController.swift
+// Description : View controller that lets the user download audio file
+//               and play it.
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 import UIKit
 import AVFoundation
@@ -31,8 +34,7 @@ class DownloadAudioViewController: UIViewController,AVAudioPlayerDelegate {
         
         let url = URL(string: location)!
         
-//        let url = URL(string: "http://54.81.239.120/projects/1/5190075e-a8ec-4a3d-9a29-7940e5bc5f4d/voice/VOICE_1_20181204_223102_.3gp")!
-        // Start transfer
+        // Start download
         let task = URLSession.shared.downloadTask(with: url){ localURL, urlResponse, error in
             // Save file from server to tmp file.
             
@@ -68,7 +70,7 @@ class DownloadAudioViewController: UIViewController,AVAudioPlayerDelegate {
         }
     }
     
-    
+    // Set the Audio Player with the data
     func preparePlay(){
         do{
             Player = try AVAudioPlayer(data: Audio)
@@ -78,6 +80,7 @@ class DownloadAudioViewController: UIViewController,AVAudioPlayerDelegate {
         catch{}
     }
     
+    // Handles the data
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "BackToProject"){
             let vc = segue.destination as! ProjectViewController

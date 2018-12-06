@@ -7,7 +7,7 @@
 // File        : VideoViewController.swift
 // Description : View controller that allows users to upload and download videos
 //               to/from the image view
-//  Copyright © 2018 Los Duendes Malvados. All rights reserved.
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 import UIKit
 import MobileCoreServices

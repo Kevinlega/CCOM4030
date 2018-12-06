@@ -1,10 +1,15 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
 //
-//  LoginViewController.swift
-//  ETNO
-//
-//  Created by Kevin Legarreta on 10/10/18.
-//  Copyright © 2018 Los Duendes Malvados. All rights reserved.
-//
+// File        :  LoginViewController.swift
+// Description : View controller that lets the user authenticate with the server
+//              to pass to the dashboard and see all the projects
+//               the user owns and participates, gateway to change password
+//               and create account.
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 import UIKit
 import LocalAuthentication
@@ -52,8 +57,7 @@ class LoginViewController: UIViewController {
     
     
     // MARK: - Segue Function
-    // We think is only needed if we send information from view to view
-    
+    // Handles the data and if the login is successful passes data to next view
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "CreateAccount"){
             let _ = segue.destination as! CreateAccountViewController

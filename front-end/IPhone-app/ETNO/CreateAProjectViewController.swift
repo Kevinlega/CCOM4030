@@ -1,10 +1,14 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
 //
-//  CreateAProjectViewController.swift
-//  ETNO
-//
-//  Created by Kevin Legarreta on 10/2/18.
-//  Copyright © 2018 Los Duendes Malvados. All rights reserved.
-//
+// File        : CreateAProjectViewController.swift
+// Description : View controller that lets the user create projects
+//               and be the administrator.
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
+
 
 import UIKit
 
@@ -21,7 +25,6 @@ class CreateAProjectViewController: UIViewController {
     
     
     // MARK: - Verifies that Project Can be Created
-    
     @IBAction func CanProjectBeCreated(_ sender: Any) {
         let ProjectName = projectName.text
         let ProjectDescription = projectDescription.text
@@ -39,7 +42,6 @@ class CreateAProjectViewController: UIViewController {
 
     
     // MARK: - Default Functions
-
     override func viewDidLoad() {
         super.viewDidLoad()
         hideKeyboardWhenTappedAround()
@@ -53,7 +55,7 @@ class CreateAProjectViewController: UIViewController {
     
     
     // MARK: - Segue Function
-    
+    // Handles the data
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "BackToDashboard"){
             let vc = segue.destination as! DashboardViewController

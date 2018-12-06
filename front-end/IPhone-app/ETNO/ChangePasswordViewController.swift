@@ -6,7 +6,7 @@
 //
 // File        : ChangePasswordViewController.swift
 // Description : View controller that changes a user's password.
-//  Copyright © 2018 Los Duendes Malvados. All rights reserved.
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 import UIKit
 

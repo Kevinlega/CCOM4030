@@ -6,7 +6,7 @@
 //
 // File        : TabBarViewController.swift
 // Description : Store user id in tab bar
-//  Copyright © 2018 Los Duendes Malvados. All rights reserved.
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 
 import UIKit

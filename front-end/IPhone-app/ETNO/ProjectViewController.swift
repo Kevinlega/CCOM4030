@@ -6,8 +6,8 @@
 //
 // File        : ProjectViewController.swift
 // Description : View controller for project view that mostly prepares segues
-//               and checks if user is admin of said project.
-//  Copyright © 2018 Los Duendes Malvados. All rights reserved.
+//               and checks if user is admin of said project and displays files.
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 import UIKit
 
