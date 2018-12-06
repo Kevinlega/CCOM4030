@@ -130,15 +130,15 @@ public func GetProjects(user_id: Int) -> NSDictionary{
 // MARK: - Creates the project
 
 public func CreateProject(user_id: Int, name: String, description: String, location: String) -> NSDictionary{
-    let folder_link = "the_link"
     
     // Create the request to the API
     let QueryType = "2"
     let url = URL(string: "http://54.81.239.120/insertAPI.php")
     var request = URLRequest(url:url!)
     request.httpMethod = "POST"
-    let post = "queryType=\(QueryType)&name=\(name)&description=\(description)&location=\(location)&folder_link=\(folder_link)&user_id=\(user_id)"
+    let post = "queryType=\(QueryType)&name=\(name)&description=\(description)&location=\(location)&user_id=\(user_id)"
     request.httpBody = post.data(using: String.Encoding.utf8)
+    print(post)
     
    return ConnectToAPI(request: request)
 }

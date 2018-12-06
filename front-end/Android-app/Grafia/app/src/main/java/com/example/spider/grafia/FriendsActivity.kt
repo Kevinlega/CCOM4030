@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import kotlinx.android.synthetic.main.activity_add_participants.*
 import kotlinx.android.synthetic.main.activity_friends.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -33,12 +34,15 @@ class FriendsActivity : AppCompatActivity() {
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         navigation.selectedItemId = R.id.navigation_pending
-        navigation.selectedItemId = R.id.navigation_search
+
+        val listView = findViewById<ListView>(R.id.listaFriends)
+
+        listView.adapter = ListFriendAdapter(this@FriendsActivity, JSONArray(), JSONArray(),  ArrayList(), ArrayList())
 
         Return.setOnClickListener {
             val intent = Intent(this, DashboardActivity::class.java)
             // To pass any data to next activity
-//            intent.putExtra("userId", userId)
+            intent.putExtra("userId", userId)
             // start your next activity
             startActivity(intent)
         }
