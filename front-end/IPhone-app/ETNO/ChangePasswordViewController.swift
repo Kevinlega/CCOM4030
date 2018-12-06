@@ -1,10 +1,12 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
 //
-//  ChangePasswordViewController.swift
-//  ETNO
-//
-//  Created by Kevin Legarreta on 10/13/18.
+// File        : ChangePasswordViewController.swift
+// Description : View controller that changes a user's password.
 //  Copyright © 2018 Los Duendes Malvados. All rights reserved.
-//
 
 import UIKit
 
@@ -59,7 +61,6 @@ class ChangePasswordViewController: UIViewController {
     // MARK: - Segue Function
     // Makes sure that user is registered and changes user-password.
     // Performs segue for Login view.
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "BackToLogin"){
             let _ = segue.destination as! LoginViewController

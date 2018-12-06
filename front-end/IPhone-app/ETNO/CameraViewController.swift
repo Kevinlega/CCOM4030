@@ -1,10 +1,13 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
 //
-//  CameraViewController.swift
-//  ETNO
-//
-//  Created by Kevin Legarreta on 11/12/18.
-//  Copyright © 2018 Los 5. All rights reserved.
-//
+// File        : CameraViewController.swift
+// Description : View controller that allows upload of an image to an image view
+//               via camera or via gallery.
+//  Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 import UIKit
 
@@ -17,8 +20,10 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
     var projectPath = String()
     var saved = false
 
+    // Image portrait
     @IBOutlet weak var imageView: UIImageView!
     
+    // Import image from gallery
     @IBAction func importGallery(_ sender: Any) {
         let imagePickerController = UIImagePickerController()
         if UIImagePickerController.isSourceTypeAvailable(.photoLibrary){
@@ -34,6 +39,7 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
         
     }
     
+    // When pressed accesses users camera
     @IBAction func openCamera(_ sender: Any) {
         
         let cameraController = UIImagePickerController()
@@ -49,7 +55,7 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
         }
     }
     
-    
+    // Save image in view to device
     @IBAction func savePhoto(_ sender: Any) {
         
         if (!saved){
@@ -65,30 +71,31 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
         }
     }
     
-    
+    // Select image for import
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
         let image = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
-        
         imageView.image = image
-        
         picker.dismiss(animated: true, completion: nil)
         
     }
     
+    // Cancel image import
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }
     
+    // Default
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-    
+    // Default
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
+    // Pass values to segue for user validation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "BackToProject"){
             let vc = segue.destination as! ProjectViewController
@@ -98,36 +105,39 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
     }
     
 
-    // Le dimos al boton de upload o save
+    // When upload button is pressed, take image currently in the view
+    // and upload it to server.
     @IBAction func Upload(_ sender: Any){
         myImageUploadRequest()
     }
     
     func myImageUploadRequest(){
         
+        // API URL
         let myUrl = NSURL(string: "http://54.81.239.120/fUploadAPI.php");
-        
         let request = NSMutableURLRequest(url:myUrl! as URL);
+        
+        // Request method
         request.httpMethod = "POST";
         
-        let param = [
-            "fileType":"1",
-            "path":(projectPath + "/images/")
-        ]
+        // Dictionary containing parameters for server API
+        let param = ["fileType":"1", "path":(projectPath + "/images/")]
         
+        // Header for request
         let boundary = generateBoundaryString()
-        
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         
-        
+        // Receive image from view as a compressed jpeg,
+        // note that compression rate is 0.0 so no compression is ocurring.
         let imageData = imageView.image?.jpegData(compressionQuality: 0.0)
         
-        
+        // If image compression was successful continue
         if(imageData==nil)  { return; }
         
+        // Generates body for request using a dictionary as parameters for server post request
         request.httpBody = createBodyWithParameters(parameters: param, filePathKey: "file", imageDataKey: imageData! as NSData, boundary: boundary) as Data
         
-        
+        // Initiate request task, should receive a json response from server
         let task = URLSession.shared.dataTask(with: request as URLRequest) {
             data, response, error in
             
@@ -136,7 +146,7 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
                 return
             }
             
-            // You can print out response object
+            // Print out response object
             print("******* response = \(String(describing: response))")
             
             // Print out reponse body
@@ -164,6 +174,10 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
     }
     
     
+    // Receives an array of strings simulating a json to create the body for upload request.
+    // This body contains a series of hashes and the pertinent info for file upload.
+    // Note: \r\n refers to end of line
+
     func createBodyWithParameters(parameters: [String: String]?, filePathKey: String?, imageDataKey: NSData, boundary: String) -> NSData {
         let body = NSMutableData();
         
@@ -175,38 +189,36 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
             }
         }
         
+        // Creating a format for date to timestamp files
         let dateFormatter : DateFormatter = DateFormatter()
-        //        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         dateFormatter.dateFormat = "yyyyMMdd_HHmmss"
         let date = Date()
         let dateString = dateFormatter.string(from: date)
+       
+        // File Name
         let filename = "IMAGE_\(user_id)_" + dateString + "_.jpg"
-        
+        // File type
         let mimetype = "image/jpg"
         
+        // Some other info, here binary data from file is appended to request body
         body.appendString(string: "--\(boundary)\r\n")
         body.appendString(string: "Content-Disposition: form-data; name=\"\(filePathKey!)\"; filename=\"\(filename)\"\r\n")
         body.appendString(string: "Content-Type: \(mimetype)\r\n\r\n")
         body.append(imageDataKey as Data)
         body.appendString(string: "\r\n")
-        
-        
-        
         body.appendString(string: "--\(boundary)--\r\n")
         
         return body
     }
-    
-    
-    
+
+    // Generates a UUID for request boundary.
     func generateBoundaryString() -> String {
         return "Boundary-\(NSUUID().uuidString)"
     }
-    
-    
 }
+
+// Converts string to data
 extension NSMutableData {
-    
     func appendString(string: String) {
         let data = string.data(using: String.Encoding.utf8, allowLossyConversion: true)
         append(data!)

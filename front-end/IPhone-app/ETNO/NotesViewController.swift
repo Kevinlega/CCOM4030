@@ -1,22 +1,27 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
 //
-//  NotesViewController.swift
-//  ETNO
-//
-//  Created by Kevin Legarreta on 12/2/18.
-//  Copyright © 2018 Los 5. All rights reserved.
-//
+// File        : NotesViewController.swift
+// Description : Displays a textbox to user and receives his input to save as text file
+//  Copyright © 2018 Los Duendes Malvados. All rights reserved.
+
 
 import UIKit
 
 class NotesViewController: UIViewController, UITextViewDelegate {
     
-    
+    // MARK: - Variables
     var user_id = Int()
     var project_id = Int()
     var projectPath = String()
     
     @IBOutlet weak var Note: UITextView!
     @IBOutlet weak var CharacterCount: UILabel!
+    
+    // When view loads, character count will be 0
     override func viewDidLoad() {
         super.viewDidLoad()
         CharacterCount.text = "Characters: 0"
@@ -25,6 +30,7 @@ class NotesViewController: UIViewController, UITextViewDelegate {
     }
     
     // MARK: - Alert Function
+    // Displays alert box to user
     public func Alert(title: String, message: String, Dismiss: String) -> UIAlertController{
         let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
         alertController.addAction(UIAlertAction.init(title: Dismiss, style: UIAlertAction.Style.destructive, handler: {(alert: UIAlertAction!) in print("Bad")}))
@@ -33,6 +39,7 @@ class NotesViewController: UIViewController, UITextViewDelegate {
     }
     
     // MARK: - Connect to API
+    // Receives a request, connects to API and returns API response
     public func ConnectToAPI(request: URLRequest) -> NSDictionary{
         
         var json : NSDictionary = NSDictionary()
@@ -51,14 +58,10 @@ class NotesViewController: UIViewController, UITextViewDelegate {
     }
     
     @IBAction func SaveButton(_ sender: Any){
+        // Save note if character count is in boundary
         if Note.text.count > 0 && Note.text.count < 501 {
-            //Save
             
-            // 1)Tienes que pasarle a este view el project path,
-            // 2)No me deja conectar del storyboard a aqui asi que no puedo hacerle
-            // input al textfield para que nombres el file como quieras.
-            // Cuando hagas esas dos cosas, borras esto:
-
+            // Project path in server
             let project_path = projectPath + "/docs/"
             //file name received from text field
             // Cuan dificil es conseguir un timestamp? AH APPLE?
@@ -71,8 +74,6 @@ class NotesViewController: UIViewController, UITextViewDelegate {
             
             // text to save
             let text = String(Note.text)
-            // construct the path, path = project path + docs (because its a text file)
-            // + file Name, if file name is empty use timestamp.
             let path = project_path + fileName
             
             var response : NSDictionary = NSDictionary()
@@ -107,15 +108,18 @@ class NotesViewController: UIViewController, UITextViewDelegate {
         Note.text = ""
     }
     
+    //MARK: - Text Change
+    // Keep track of number of characters in text view
     func textViewDidChange(_ textView: UITextView) {
         let count = "Characters: " + String(textView.text.count)
         CharacterCount.text = count
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
-        print(2)
+        print("Done")
     }
     
+    // MARK: - Segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "BackToProject"){
             let vc = segue.destination as! ProjectViewController

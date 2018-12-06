@@ -1580,7 +1580,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="Save Video"/>
                                 <connections>
-                                    <action selector="savePhoto:" destination="ic3-ev-qO4" eventType="touchUpInside" id="KSL-HH-h4k"/>
+                                    <action selector="saveVideo:" destination="ic3-ev-qO4" eventType="touchUpInside" id="qVC-wb-66X"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bgt-iS-oNd">

@@ -1,24 +1,27 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
 //
-//  ProjectViewController.swift
-//  ETNO
-//
-//  Created by Kevin Legarreta on 10/4/18.
+// File        : ProjectViewController.swift
+// Description : View controller for project view that mostly prepares segues
+//               and checks if user is admin of said project.
 //  Copyright © 2018 Los Duendes Malvados. All rights reserved.
-//
 
 import UIKit
 
 class ProjectViewController: UIViewController, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource{
   
-    
-  
-    
-    
     // MARK: - Variables
+    // MARK: - Variables
+    // Will be received by previous view
     var user_id = Int()
     var project_id = Int()
-    var is_admin = Bool()
     var project_path = String()
+    
+    // Is current user admin?
+    var is_admin = Bool()
     var noPhotos = false
     var FileName : NSArray = []
     var location = String()
@@ -26,8 +29,7 @@ class ProjectViewController: UIViewController, UINavigationControllerDelegate, U
     @IBOutlet weak var AddParticipant: UIButton!
     @IBOutlet weak var table: UITableView!
     
-
-    
+    // Display the file names
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if noPhotos{
             return 0
@@ -45,6 +47,7 @@ class ProjectViewController: UIViewController, UINavigationControllerDelegate, U
         return cell
     }
     
+    // Select file and move to next view (for download)
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //Access the array that you have used to fill the tableViewCell
         let item = FileName[indexPath.row] as! [String:Any]
@@ -52,14 +55,15 @@ class ProjectViewController: UIViewController, UINavigationControllerDelegate, U
         let name = item["filename"] as! String
         let type = item["type"] as! String
  
+        // create url
         var path = ""
         if let range = project_path.range(of: "p") {
             path = String(project_path[range.lowerBound...])
         }
-        
-        
+
         location = "http://54.81.239.120/" + path + "/" + type + "/" + name
         
+        // Check type of download and move to the according view
         switch type {
         case "images":
             performSegue(withIdentifier: "DownloadImage", sender: nil)
@@ -79,6 +83,9 @@ class ProjectViewController: UIViewController, UINavigationControllerDelegate, U
         }
     }
     
+    
+    // If user is not admin of project, hide add participants button
+    // and download the filenames for the project
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -106,6 +113,7 @@ class ProjectViewController: UIViewController, UINavigationControllerDelegate, U
         // Do any additional setup after loading the view.
     }
 
+    // Download file names from server
     func fetchPhotos()
     {
         let url_parse = URL(string: "http://54.81.239.120/listdir.php?path=\(project_path)")
@@ -114,11 +122,9 @@ class ProjectViewController: UIViewController, UINavigationControllerDelegate, U
                 do
                 {
                     let jsonRes = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String: AnyObject]
-                    
                     if jsonRes["empty"] as! Bool == false{
                         self.FileName = jsonRes["files"] as! NSArray
                     }
-                    
                     DispatchQueue.main.async {
                         self.table.reloadData()
                     }
@@ -135,6 +141,7 @@ class ProjectViewController: UIViewController, UINavigationControllerDelegate, U
         // Dispose of any resources that can be recreated.
     }
     
+    // Handles the segue and moves the data around.
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "AddParticipants"){
             let vc = segue.destination as! AddParticipantViewController
