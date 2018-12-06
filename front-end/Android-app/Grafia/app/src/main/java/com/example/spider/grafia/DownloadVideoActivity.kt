@@ -21,15 +21,20 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.lang.Exception
 import java.net.URL
+import android.media.AudioManager
+import android.media.MediaPlayer
+import android.view.SurfaceView
+
 
 class DownloadVideoActivity : AppCompatActivity() {
 
-    private var projectPath = ""
     private var mCurrentPath = ""
     private var userId = -1
     private var restart = true
     private var saved = false
-    private var location = "http://54.81.239.120/projects/1/fb633b48-9850-40ca-ba37-26beb9558892/videos/VIDEO_1_20181204_161332_.mp4"
+    private var location = ""
+
+    private var mediaPlayer = MediaPlayer()
 
 
     private fun createTempFile(): File {
@@ -134,10 +139,10 @@ class DownloadVideoActivity : AppCompatActivity() {
 
         userId = intent.getIntExtra("userId",-1)
         val projectId = intent.getIntExtra("pId",-1)
-        projectPath = intent.getStringExtra("projectPath")
+        location = intent.getStringExtra("projectPath")
         val name = intent.getStringExtra("projectName")
 
-        DownloadFileAsync(projectPath).execute("")
+        DownloadFileAsync().execute("")
 
         BackToProject8.setOnClickListener {
             finish()
@@ -159,6 +164,7 @@ class DownloadVideoActivity : AppCompatActivity() {
             }
             videoView2.requestFocus()
             videoView2.start()
+
         }
         pauseVideo2.setOnClickListener {
             videoView2.pause()
@@ -195,7 +201,7 @@ class DownloadVideoActivity : AppCompatActivity() {
     }
 
 
-    private inner class DownloadFileAsync(val projectPath: String) : AsyncTask<String, Void, String>() {
+    private inner class DownloadFileAsync : AsyncTask<String, Void, String>() {
 
         override fun doInBackground(vararg params: String): String {
             createTempFile()

@@ -200,7 +200,7 @@ class VideoActivity : AppCompatActivity() {
         val timeStamp: String = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
         val storageDir: File = getExternalFilesDir(Environment.DIRECTORY_MOVIES)
         return File.createTempFile(
-            "Video_${userId}_${timeStamp}_", /* prefix */
+            "VIDEO_${userId}_${timeStamp}_", /* prefix */
             ".mp4", /* suffix */
             storageDir /* directory */
         ).apply {

@@ -16,13 +16,12 @@ import java.net.URL
 
 class DownloadAudioActivity : AppCompatActivity() {
 
-    var projectPath = ""
     var mCurrentPath = ""
     var userId = -1
     var playing = false
     var paused = false
     private var mPlayer: MediaPlayer? = null
-    private var location = "http://54.81.239.120/projects/1/5190075e-a8ec-4a3d-9a29-7940e5bc5f4d/voice/VOICE_1_20181204_223102_.3gp"
+    private var location = ""
 
 
     private fun createTempFile(): File {
@@ -72,10 +71,10 @@ class DownloadAudioActivity : AppCompatActivity() {
 
         userId = intent.getIntExtra("userId",-1)
         val projectId = intent.getIntExtra("pId",-1)
-        projectPath = intent.getStringExtra("projectPath")
+        location = intent.getStringExtra("projectPath")
         val name = intent.getStringExtra("projectName")
 
-        DownloadFileAsync(projectPath).execute("")
+        DownloadFileAsync().execute("")
 
         BackToProject7.setOnClickListener {
             finish()
@@ -150,7 +149,7 @@ class DownloadAudioActivity : AppCompatActivity() {
     }
 
 
-    private inner class DownloadFileAsync(val projectPath: String) : AsyncTask<String, Void, String>() {
+    private inner class DownloadFileAsync : AsyncTask<String, Void, String>() {
 
         override fun doInBackground(vararg params: String): String {
             createTempFile()

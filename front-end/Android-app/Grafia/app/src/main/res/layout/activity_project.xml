@@ -53,10 +53,17 @@
             android:id="@+id/Notes" android:scaleType="fitXY"
             android:layout_marginTop="5dp" app:layout_constraintTop_toBottomOf="@+id/AddUsers"
             app:layout_constraintStart_toEndOf="@+id/Video" android:layout_marginStart="10dp"/>
-    <Button
-            android:text="Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/Dummy" app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="148dp"
-            android:layout_marginTop="71dp" app:layout_constraintTop_toBottomOf="@+id/Voice"/>
+
+
+    <ListView
+            android:id="@+id/project_list_files"
+            android:layout_width="match_parent"
+            android:layout_height="377dp"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="14dp"
+            app:layout_constraintTop_toBottomOf="@+id/Camera" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+    </ListView>
+
+
 </android.support.constraint.ConstraintLayout>

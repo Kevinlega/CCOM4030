@@ -21,11 +21,10 @@ import java.net.URL
 
 class DownloadImageActivity : AppCompatActivity() {
 
-    var projectPath = ""
     var mCurrentPath = ""
     var userId = -1
     private var saved = false
-    private var location = "http://54.81.239.120/projects/1/fb633b48-9850-40ca-ba37-26beb9558892/images/IMAGE_1_20181204_160818_.jpg"
+    private var location = ""
 
     private fun createTempFile(): File {
         // Create an image file name
@@ -111,10 +110,10 @@ class DownloadImageActivity : AppCompatActivity() {
 
         userId = intent.getIntExtra("userId",-1)
         val projectId = intent.getIntExtra("pId",-1)
-        projectPath = intent.getStringExtra("projectPath")
+        location = intent.getStringExtra("projectPath")
         val name = intent.getStringExtra("projectName")
 
-        DownloadFileAsync(projectPath).execute("")
+        DownloadFileAsync().execute("")
 
         BackToProject6.setOnClickListener {
             finish()
@@ -153,7 +152,7 @@ class DownloadImageActivity : AppCompatActivity() {
     }
 
 
-    private inner class DownloadFileAsync(val projectPath: String) : AsyncTask<String, Void, String>() {
+    private inner class DownloadFileAsync : AsyncTask<String, Void, String>() {
 
         override fun doInBackground(vararg params: String): String {
             createTempFile()
