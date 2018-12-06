@@ -1,3 +1,12 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
+//
+// File        : CreateProjectActivity.kt
+// Description : Allows user to create a project
+
 package com.example.spider.grafia
 
 import android.content.Context
@@ -25,9 +34,7 @@ class CreateProjectActivity : AppCompatActivity() {
 
         DontCreateProject.setOnClickListener {
             val intent = Intent(this@CreateProjectActivity, DashboardActivity::class.java)
-            // To pass any data to next activity
-//            intent.putExtra("keyIdentifier", value)
-//             start your next activity
+
             startActivity(intent)
         }
 
@@ -37,12 +44,13 @@ class CreateProjectActivity : AppCompatActivity() {
             var name = Name.text.toString()
             var location = Location.text.toString()
             var description = Description.text.toString()
-
+            // Input validation
             if(name == "" || location == "" || description == "") {
                 Log.i("CreateProjectActivity", "Empty input")
                 Toast.makeText(this, "All fields are requiered.", Toast.LENGTH_SHORT).show()
             } else {
 
+                // Connect to API
                 val downloadData = Download(this,userId,name)
 
                 try
@@ -61,6 +69,9 @@ class CreateProjectActivity : AppCompatActivity() {
             }
         }
     }
+
+
+    // Download class that connects to API to insert project into database and retrieve project id and trigger activity segue
     companion object {
         class Download(private val mContext: Context, private val userId: Int, private val Name: String) : AsyncTask<String, Void, String>(){
             var projectId = -1
@@ -75,6 +86,7 @@ class CreateProjectActivity : AppCompatActivity() {
                 return URL(url).readText()
             }
 
+            // Retrieve JSON file
             override fun onPostExecute(result: String?) {
 
                 try
@@ -100,7 +112,6 @@ class CreateProjectActivity : AppCompatActivity() {
                 }catch (e: Exception){
                     println(e.message)
                 }
-
                 super.onPostExecute(result)
             }
         }

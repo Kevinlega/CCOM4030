@@ -1,3 +1,13 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
+//
+// File        : DashboardHolder.kt
+// Description : Displays a project at cell
+
+
 package com.example.spider.grafia
 
 import android.content.Context
@@ -13,7 +23,7 @@ class DashboardHolder(itemView : View, private val mContext: Context) : Recycler
     private val iview = itemView.findViewById<View>(R.id.iview) as ImageView
     private val tview = itemView.findViewById<View>(R.id.tview) as TextView
 
-
+    // displays
     fun index(item : Int, s: String) {
         Glide.with(mContext).load(item).into(iview)
 

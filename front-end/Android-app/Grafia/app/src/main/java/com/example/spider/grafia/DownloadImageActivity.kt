@@ -1,3 +1,12 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
+//
+// File        : DownloadImageActivity.kt
+// Description : Fetches image from server and places it in image view
+
 package com.example.spider.grafia
 
 import android.Manifest
@@ -21,13 +30,14 @@ import java.net.URL
 
 class DownloadImageActivity : AppCompatActivity() {
 
+    // Global variables
     var mCurrentPath = ""
     var userId = -1
     private var saved = false
     private var location = ""
 
     private fun createTempFile(): File {
-        // Create an image file name
+        // Create an image temporary file
         val timeStamp: String = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
         val storageDir: File = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
 
@@ -41,6 +51,8 @@ class DownloadImageActivity : AppCompatActivity() {
         }
     }
 
+
+    // Delete Trigger
     override fun onDestroy() {
         super.onDestroy()
 
@@ -48,6 +60,7 @@ class DownloadImageActivity : AppCompatActivity() {
 
     }
 
+    // Delete Temporary Files
     private fun deleteTempFiles(file: File): Boolean {
         if (file.isDirectory) {
             val files = file.listFiles()
@@ -64,7 +77,7 @@ class DownloadImageActivity : AppCompatActivity() {
         return file.delete()
     }
 
-
+    // Rotate image to be viewed
     private fun rotatePic(bitmap: Bitmap): Bitmap {
         // Get the dimensions of the View
 
@@ -79,7 +92,7 @@ class DownloadImageActivity : AppCompatActivity() {
         return Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.width, scaledBitmap.height, matrix, true)
     }
 
-
+    // Save image to gallery
     private fun galleryAddPic() {
 
         if (ContextCompat.checkSelfPermission(
@@ -108,13 +121,17 @@ class DownloadImageActivity : AppCompatActivity() {
 
         supportActionBar!!.title = "Images"
 
+        // Get user info
         userId = intent.getIntExtra("userId",-1)
         val projectId = intent.getIntExtra("pId",-1)
         location = intent.getStringExtra("projectPath")
         val name = intent.getStringExtra("projectName")
 
+        // Execute download
         DownloadFileAsync().execute("")
 
+
+        // Segue trigger
         BackToProject6.setOnClickListener {
             finish()
             val intent = Intent(this@DownloadImageActivity, ProjectActivity::class.java)
@@ -126,6 +143,7 @@ class DownloadImageActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // Save Image to Gallery
         saveImage2.setOnClickListener {
             if (mCurrentPath != "" && !saved) {
                 galleryAddPic()
@@ -151,7 +169,7 @@ class DownloadImageActivity : AppCompatActivity() {
         return false
     }
 
-
+    // Downloads file from server
     private inner class DownloadFileAsync : AsyncTask<String, Void, String>() {
 
         override fun doInBackground(vararg params: String): String {

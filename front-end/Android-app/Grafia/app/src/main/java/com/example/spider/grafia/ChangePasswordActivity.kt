@@ -1,3 +1,12 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
+//
+// File        : ChangePassword.kt
+// Description : Allows user to change password
+
 package com.example.spider.grafia
 
 import android.content.Context
@@ -16,6 +25,7 @@ import java.security.MessageDigest
 
 class ChangePasswordActivity : AppCompatActivity() {
 
+    // Is user registered request
     private fun isRegistered(email:String,password:String){
         val query = 0
         val connectToAPI = Connect(this, 0,email,password)
@@ -33,7 +43,7 @@ class ChangePasswordActivity : AppCompatActivity() {
 
         supportActionBar!!.setTitle("Change Password")
 
-
+        // text boxes
         val Email = findViewById<EditText>(R.id.emailChange)
         val Password = findViewById<EditText>(R.id.passwordChange)
         val ConPassword = findViewById<EditText>(R.id.confirmPasswordChange)
@@ -41,6 +51,7 @@ class ChangePasswordActivity : AppCompatActivity() {
 
         ChangePassword.setOnClickListener {
 
+            // Fetch text from activity text boxes
             val email = Email.text.toString()
             val password = Password.text.toString()
             val confirm = ConPassword.text.toString()
@@ -55,7 +66,7 @@ class ChangePasswordActivity : AppCompatActivity() {
         }
     }
 
-
+    // Check input fields
     private fun checkChange(password:String, email:String,confirm:String): Boolean{
         var canChange = true
         if(password.isNullOrBlank() || email.isNullOrBlank() || confirm.isNullOrBlank()){
@@ -65,7 +76,8 @@ class ChangePasswordActivity : AppCompatActivity() {
         return canChange
     }
 
-
+    // Connects to API to check if user is registered,
+    // if registered changes the password for such user
     companion object {
         class Connect(private val mContext: Context, private val flag: Int, private val email: String, private val password: String) :
             AsyncTask<String, Void, String>() {
@@ -78,6 +90,7 @@ class ChangePasswordActivity : AppCompatActivity() {
                 return URL(url).readText()
             }
 
+            // Get Response
             override fun onPostExecute(result: String) {
                 try {
                     val jSONObject = JSONObject(result)
@@ -122,37 +135,29 @@ class ChangePasswordActivity : AppCompatActivity() {
                 return md5(salted).toLowerCase()
             }
 
+
+            // Convert bytes to hex
             private fun byteArrayToHexString(array: Array<Byte>): String {
 
                 var result = StringBuilder(array.size * 2)
-
                 for (byte in array) {
                     val toAppend = String.format("%2X", byte).replace(" ", "0")
                     result.append(toAppend)
                 }
                 result.setLength(result.length)
-
                 return result.toString()
             }
 
+            // Generate md5 hash from given string
             private fun md5(data: String): String {
-
                 var result = ""
-
                 try{
-
                     val md5 = MessageDigest.getInstance("MD5")
                     val md5HashBytes = md5.digest(data.toByteArray()).toTypedArray()
-
                     result = byteArrayToHexString(md5HashBytes)
-
-                } catch (e: Exception) {
-                }
-
+                } catch (e: Exception) {}
                 return result
             }
-
-
         }
     }
 }

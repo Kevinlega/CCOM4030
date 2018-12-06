@@ -1,8 +1,16 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
+//
+// File        : CreateAccountActivity.kt
+// Description : Allows user to create an account
+
 package com.example.spider.grafia
 
 import android.content.Context
 import android.content.Intent
-import android.hardware.fingerprint.FingerprintManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.EditText
@@ -13,6 +21,8 @@ import java.net.URL
 import java.lang.StringBuilder
 import java.security.*
 import android.widget.Toast
+
+// import android.hardware.fingerprint.FingerprintManager
 
 
 open class CreateAccountActivity : AppCompatActivity(){
@@ -31,6 +41,7 @@ open class CreateAccountActivity : AppCompatActivity(){
         catch (error: Exception){}
     }
 
+    // Check for empty fields and matching passwords
     private fun checkLogin(name:String, password:String,confirm:String,email:String): Boolean{
         var canLogin = true
         if(name.isNullOrBlank() || password.isNullOrBlank() || confirm.isNullOrBlank() || email.isNullOrBlank()){
@@ -88,6 +99,7 @@ open class CreateAccountActivity : AppCompatActivity(){
                 return URL(url).readText()
             }
 
+            // Get Response
             override fun onPostExecute(result: String?){
                 try{
                     val jSONObject = JSONObject(result)
@@ -134,6 +146,7 @@ open class CreateAccountActivity : AppCompatActivity(){
                 supportActionBar!!.setTitle("Create Account")
             }
 
+            // Call to register user
             fun triggerRegister() {
 
                 var salt = java.util.UUID.randomUUID().toString().replace("-", "")
@@ -143,6 +156,7 @@ open class CreateAccountActivity : AppCompatActivity(){
                 register(name, hashedPassword, email, salt)
             }
 
+            // Convert bytes to hex
             private fun byteArrayToHexString(array: Array<Byte>): String{
 
                 var result = StringBuilder(array.size * 2)
@@ -156,6 +170,7 @@ open class CreateAccountActivity : AppCompatActivity(){
                 return result.toString()
             }
 
+            // Generates md5 hash of string
             private fun md5(data: String):String {
 
                 var result = ""
@@ -178,6 +193,7 @@ open class CreateAccountActivity : AppCompatActivity(){
                 return md5(salted).toLowerCase()
             }
 
+            // connects to API and registers
             private fun register(name:String, password:String, email:String, salt: String){
                 val query = 0
                 val connectToAPI = Connect(mContext,1,name, email, password)

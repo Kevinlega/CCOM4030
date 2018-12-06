@@ -1,3 +1,12 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
+//
+// File        : DownloadNotesActivity.kt
+// Description : Downloads note from server
+
 package com.example.spider.grafia
 
 import android.content.Intent
@@ -13,12 +22,13 @@ import java.net.URL
 
 class DownloadNotesActivity : AppCompatActivity() {
 
+    // Global variables
     var mCurrentPath = ""
     var userId = -1
     private var location = ""
 
     private fun createTempFile(): File {
-        // Create an image file name
+        // Create a temporary Note file
         val timeStamp: String = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
         val storageDir: File = getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
 
@@ -32,6 +42,7 @@ class DownloadNotesActivity : AppCompatActivity() {
         }
     }
 
+    // Trigger delete
     override fun onDestroy() {
         super.onDestroy()
 
@@ -39,6 +50,7 @@ class DownloadNotesActivity : AppCompatActivity() {
 
     }
 
+    // Delete temporary files
     private fun deleteTempFiles(file: File): Boolean {
         if (file.isDirectory) {
             val files = file.listFiles()
@@ -54,14 +66,13 @@ class DownloadNotesActivity : AppCompatActivity() {
         }
         return file.delete()
     }
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_download_notes)
 
         supportActionBar!!.title = "Notes"
 
+        // Get user info
         userId = intent.getIntExtra("userId",-1)
         val projectId = intent.getIntExtra("pId",-1)
         location = intent.getStringExtra("projectPath")
@@ -70,6 +81,7 @@ class DownloadNotesActivity : AppCompatActivity() {
         DownloadFileAsync().execute("")
 
         BackToProject5.setOnClickListener {
+            // Delete
             finish()
             val intent = Intent(this@DownloadNotesActivity, ProjectActivity::class.java)
             // To pass any data to next activity
@@ -94,7 +106,7 @@ class DownloadNotesActivity : AppCompatActivity() {
         return false
     }
 
-
+    // Download file from server
     private inner class DownloadFileAsync : AsyncTask<String, Void, String>() {
 
         override fun doInBackground(vararg params: String): String {

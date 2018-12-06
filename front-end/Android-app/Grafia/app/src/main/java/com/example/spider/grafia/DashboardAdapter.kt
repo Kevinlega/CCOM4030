@@ -1,3 +1,13 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
+//
+// File        : DashboardAdapter.kt
+// Description : Handles the Dashboard view
+
+
 package com.example.spider.grafia
 
 import android.content.Context
@@ -7,16 +17,17 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import org.json.JSONArray
 
+
 class DashboardAdapter(private val project: MutableList<Int>, private val name: JSONArray, private val projects_id : JSONArray, private val mContext: Context,private val userId : Int)
     : RecyclerView.Adapter<DashboardHolder>() {
 
+    // creates the view
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DashboardHolder {
-
         val v = LayoutInflater.from(parent.context).inflate(R.layout.dashboard_recycler,parent, false)
         return DashboardHolder(v, mContext)
 
     }
-
+    // Makes the cell
     override fun onBindViewHolder(holder: DashboardHolder, position: Int) {
 
         holder?.index(project[position],name.get(position) as String)
@@ -34,11 +45,12 @@ class DashboardAdapter(private val project: MutableList<Int>, private val name: 
             mContext.startActivity(intent)
         }
     }
-
+    // gets the name of project at position
     fun getName(position: Int): String{
         return name.get(position) as String
     }
 
+    // gets the project_id
     fun getItem(position: Int): Int {
         return (projects_id.get(position) as String).toInt()
 
@@ -48,6 +60,7 @@ class DashboardAdapter(private val project: MutableList<Int>, private val name: 
         return position.toLong()
     }
 
+    // get size of list
     override fun getItemCount(): Int {
         return project.size
     }

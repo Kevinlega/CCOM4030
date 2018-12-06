@@ -1,3 +1,13 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
+//
+// File        : DownloadVideoActivity.kt
+// Description : Downloads video from server
+
+
 package com.example.spider.grafia
 
 import android.Manifest
@@ -34,11 +44,11 @@ class DownloadVideoActivity : AppCompatActivity() {
     private var saved = false
     private var location = ""
 
-    private var mediaPlayer = MediaPlayer()
+//    private var mediaPlayer = MediaPlayer()
 
 
     private fun createTempFile(): File {
-        // Create an image file name
+        // Create a temporary video file
         val timeStamp: String = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
         val storageDir: File = getExternalFilesDir(Environment.DIRECTORY_MOVIES)
 
@@ -52,6 +62,7 @@ class DownloadVideoActivity : AppCompatActivity() {
         }
     }
 
+    // Triggers Delete
     override fun onDestroy() {
         super.onDestroy()
 
@@ -59,6 +70,7 @@ class DownloadVideoActivity : AppCompatActivity() {
 
     }
 
+    // Delete temporary files
     private fun deleteTempFiles(file: File): Boolean {
         if (file.isDirectory) {
             val files = file.listFiles()
@@ -75,7 +87,7 @@ class DownloadVideoActivity : AppCompatActivity() {
         return file.delete()
     }
 
-
+    // Save video to gallery
     private fun galleryAddVideo() = if (ContextCompat.checkSelfPermission(
             this,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -136,15 +148,18 @@ class DownloadVideoActivity : AppCompatActivity() {
 
         videoView2.visibility = View.INVISIBLE
 
-
+        // Get user data
         userId = intent.getIntExtra("userId",-1)
         val projectId = intent.getIntExtra("pId",-1)
         location = intent.getStringExtra("projectPath")
         val name = intent.getStringExtra("projectName")
 
+        // Download File
         DownloadFileAsync().execute("")
 
+        // Segues
         BackToProject8.setOnClickListener {
+            // Delete temporary file
             finish()
             val intent = Intent(this@DownloadVideoActivity, ProjectActivity::class.java)
             // To pass any data to next activity
@@ -155,6 +170,8 @@ class DownloadVideoActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+
+        // play video
         playVideo2.setOnClickListener {
             if (restart) {
                 val video = Uri.fromFile(File(mCurrentPath))
@@ -164,17 +181,19 @@ class DownloadVideoActivity : AppCompatActivity() {
             }
             videoView2.requestFocus()
             videoView2.start()
-
         }
+        // pause video
         pauseVideo2.setOnClickListener {
             videoView2.pause()
         }
 
+        // stop video
         stopVideo2.setOnClickListener {
             videoView2.stopPlayback()
             restart = true
         }
 
+        // save video to gallery
         saveVideo2.setOnClickListener {
             if (mCurrentPath != "" && !saved) {
                 galleryAddVideo()
@@ -200,7 +219,7 @@ class DownloadVideoActivity : AppCompatActivity() {
         return false
     }
 
-
+    // Download file from server
     private inner class DownloadFileAsync : AsyncTask<String, Void, String>() {
 
         override fun doInBackground(vararg params: String): String {
@@ -226,7 +245,6 @@ class DownloadVideoActivity : AppCompatActivity() {
                 Toast.makeText(this@DownloadVideoActivity, "Try Again", Toast.LENGTH_LONG).show()
             }
         }
-
         override fun onPreExecute() {}
 
         override fun onProgressUpdate(vararg values: Void) {}

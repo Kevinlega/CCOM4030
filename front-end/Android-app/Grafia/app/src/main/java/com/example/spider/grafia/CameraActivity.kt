@@ -1,3 +1,13 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
+//
+// File        : CameraActivity.kt
+// Description : Allows user to import/export images into activiy.
+
+
 package com.example.spider.grafia
 
 import android.content.Intent
@@ -24,6 +34,7 @@ import android.provider.DocumentsContract
 
 class CameraActivity : AppCompatActivity() {
 
+    // Global variables
     private var mCurrentPhotoPath = ""
     private var mCurrentPickedPicture = ""
     private var mCurrentPickedPictureName = ""
@@ -32,6 +43,7 @@ class CameraActivity : AppCompatActivity() {
     private var projectId = -1
     private var projectPath = ""
 
+    // When activity is created, get user info
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
@@ -41,7 +53,7 @@ class CameraActivity : AppCompatActivity() {
         projectPath = intent.getStringExtra("projectPath")
         val name = intent.getStringExtra("projectName")
 
-
+        // Segue back to Project
         backToProject1.setOnClickListener {
             finish()
             if ((mCurrentPhotoPath != "") and !saved) {
@@ -59,8 +71,9 @@ class CameraActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // Open the camara trigger
         openCamera.setOnClickListener {
-
+            // delete images that were not used
             if ((mCurrentPhotoPath != "") and !saved) {
                 val myFile = File(mCurrentPhotoPath)
                 myFile.delete()
@@ -73,11 +86,13 @@ class CameraActivity : AppCompatActivity() {
             dispatchTakePictureIntent()
         }
 
+        // Open gallery
         openGallery.setOnClickListener {
 
             dispatchPicPictureIntent()
         }
 
+        // save image to gallery trigger
         saveImage.setOnClickListener {
             if (mCurrentPhotoPath != "" && !saved) {
                 galleryAddPic()
@@ -87,12 +102,14 @@ class CameraActivity : AppCompatActivity() {
             }
         }
 
+        // upload image to server
         uploadImage.setOnClickListener {
 
             UploadFileAsync(projectPath).execute("")
         }
     }
 
+    // Triggers segue to camera and creates a file to receive the data with
     private fun dispatchTakePictureIntent() {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             // Ensure that there's a camera activity to handle the intent
@@ -117,6 +134,7 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
+    // Open gallery handler
     private fun dispatchPicPictureIntent() {
         val intent = Intent()
         intent.type = "image/*"
@@ -124,7 +142,9 @@ class CameraActivity : AppCompatActivity() {
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), 2)
     }
 
+    // Get file from Intent to gallery or camera
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        // camera file
         if (requestCode == 1 && resultCode == RESULT_OK) {
 
             BitmapFactory.decodeFile(mCurrentPhotoPath)?.also { bitmap ->
@@ -134,12 +154,15 @@ class CameraActivity : AppCompatActivity() {
             val timeStamp: String = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
             mCurrentPickedPictureName = "IMAGE_${userId}_${timeStamp}_.jpg"
 
-        } else if (requestCode == 2 && resultCode == RESULT_OK) {
+        }
+        // gallery file
+        else if (requestCode == 2 && resultCode == RESULT_OK) {
             if (mCurrentPhotoPath != "") {
                 val myFile = File(mCurrentPhotoPath)
                 myFile.delete()
                 mCurrentPhotoPath = ""
             }
+            // get real path to the file
             val photoUri = data?.data
 
             val wholeID = DocumentsContract.getDocumentId(photoUri)
@@ -176,8 +199,8 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
+    // Create a temporary image file
     private fun createTempImageFile(): File {
-        // Create an image file name
         val timeStamp: String = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
         val storageDir: File = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
 
@@ -191,9 +214,9 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
+    // rotates the image to for it to fit in the imageView
     private fun rotatePic(bitmap: Bitmap): Bitmap {
         // Get the dimensions of the View
-
         val matrix = Matrix()
 
         if (bitmap.width > bitmap.height) {
@@ -205,6 +228,7 @@ class CameraActivity : AppCompatActivity() {
         return Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.width, scaledBitmap.height, matrix, true)
     }
 
+    // Saves image to gallery
     private fun galleryAddPic() {
 
         if (ContextCompat.checkSelfPermission(
@@ -226,6 +250,8 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
+
+    // Handles the destroy of class and triggers delete the temp files
     override fun onDestroy() {
         super.onDestroy()
         if (!isChangingConfigurations) {
@@ -233,6 +259,7 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
+    // delete temporary files
     private fun deleteTempFiles(file: File): Boolean {
         if (file.isDirectory) {
             val files = file.listFiles()
@@ -249,6 +276,7 @@ class CameraActivity : AppCompatActivity() {
         return file.delete()
     }
 
+    // Uploads files to the server
     private inner class UploadFileAsync(val projectPath: String) : AsyncTask<String, Void, String>() {
 
         override fun doInBackground(vararg params: String): String {
@@ -278,6 +306,7 @@ class CameraActivity : AppCompatActivity() {
 
         }
 
+        // Get Response
         override fun onPostExecute(result: String) {
 
             if (result == "YES") {

@@ -1,3 +1,12 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
+//
+// File        : DashboardActivity.kt
+// Description : Displays a project hub for user
+
 package com.example.spider.grafia
 
 import android.content.Intent
@@ -24,13 +33,15 @@ class DashboardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dashboard)
         supportActionBar!!.setTitle("Dashboard")
 
+        // Data from previous Activity
         val userId = intent.getIntExtra("userId",-1)
 
+        // To display projects
         val rview= findViewById<View>(R.id.rview) as RecyclerView
-
         val lManager = GridLayoutManager(this, 2, VERTICAL, false)
         rview.layoutManager = lManager
 
+        // Connect to API and retrieve projects for the userId
         val downloadData = Connect(this@DashboardActivity, rview, userId)
 
         try {
@@ -42,9 +53,9 @@ class DashboardActivity : AppCompatActivity() {
             println(e.message)
         }
 
+        // Segue Handlers
         logout.setOnClickListener {
             val intent = Intent(this@DashboardActivity, LoginActivity::class.java)
-            // To pass any data to next activity
             // start your next activity
             finish()
             startActivity(intent)
@@ -62,11 +73,12 @@ class DashboardActivity : AppCompatActivity() {
             val intent = Intent(this@DashboardActivity, FriendsActivity::class.java)
             // To pass any data to next activity
             intent.putExtra("userId", userId)
-//             start your next activity
+            // Start your next activity
             startActivity(intent)
         }
     }
 
+    // Connect to API and get every project that the current user participates in.
     companion object {
         class Connect(context: Context, recyclerView: RecyclerView, private val userId : Int): AsyncTask<String, Void, String>(){
             var names = JSONArray()
@@ -81,6 +93,8 @@ class DashboardActivity : AppCompatActivity() {
             private fun downloadJSON(url: String?): String{
                 return URL(url).readText()
             }
+
+            // Get Response
             override fun onPostExecute(result: String?){
                 try{
                     val jSONObject = JSONObject(result)

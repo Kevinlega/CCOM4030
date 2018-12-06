@@ -1,3 +1,12 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
+//
+// File        : DownloadAudioActivity.kt
+// Description : Create, download audio notes.
+
 package com.example.spider.grafia
 
 import android.content.Intent
@@ -16,6 +25,7 @@ import java.net.URL
 
 class DownloadAudioActivity : AppCompatActivity() {
 
+    // Global variables
     var mCurrentPath = ""
     var userId = -1
     var playing = false
@@ -23,9 +33,9 @@ class DownloadAudioActivity : AppCompatActivity() {
     private var mPlayer: MediaPlayer? = null
     private var location = ""
 
-
+    // Create Audio TempFile
     private fun createTempFile(): File {
-        // Create an image file name
+        // Create an audio file name
         val timeStamp: String = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
         val storageDir: File = getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
 
@@ -39,6 +49,7 @@ class DownloadAudioActivity : AppCompatActivity() {
         }
     }
 
+    // Triggers delete cache
     override fun onDestroy() {
         super.onDestroy()
 
@@ -46,6 +57,7 @@ class DownloadAudioActivity : AppCompatActivity() {
 
     }
 
+    // Deletes Temporary Files
     private fun deleteTempFiles(file: File): Boolean {
         if (file.isDirectory) {
             val files = file.listFiles()
@@ -63,12 +75,14 @@ class DownloadAudioActivity : AppCompatActivity() {
     }
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_download_audio)
 
         supportActionBar!!.title = "Audio"
 
+        // Receive user info
         userId = intent.getIntExtra("userId",-1)
         val projectId = intent.getIntExtra("pId",-1)
         location = intent.getStringExtra("projectPath")
@@ -87,12 +101,14 @@ class DownloadAudioActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+
+        // Disable buttons until there is a file to play
         stopVoice2.isEnabled = false
         playVoice2.isEnabled = false
         pauseVoice2.isEnabled = false
 
+        // Stop audio and restarts
         stopVoice2.setOnClickListener {
-
             if (playing){
                 playing = false
 
@@ -102,6 +118,7 @@ class DownloadAudioActivity : AppCompatActivity() {
             }
         }
 
+        // Plays downloaded voice
         playVoice2.setOnClickListener {
 
             if (mCurrentPath != "" && !playing) {
@@ -125,6 +142,7 @@ class DownloadAudioActivity : AppCompatActivity() {
             }
         }
 
+        // Pauses audio
         pauseVoice2.setOnClickListener {
             if (playing){
                 playing = false
@@ -148,7 +166,7 @@ class DownloadAudioActivity : AppCompatActivity() {
         return false
     }
 
-
+    // Download File from server
     private inner class DownloadFileAsync : AsyncTask<String, Void, String>() {
 
         override fun doInBackground(vararg params: String): String {
@@ -174,6 +192,7 @@ class DownloadAudioActivity : AppCompatActivity() {
                 playVoice2.isEnabled = true
                 pauseVoice2.isEnabled = true
 
+                // Was file download?
                 Toast.makeText(this@DownloadAudioActivity, "Downloaded!", Toast.LENGTH_LONG).show()
             } else {
                 Toast.makeText(this@DownloadAudioActivity, "Cannot Download Now Try Later.", Toast.LENGTH_LONG).show()
