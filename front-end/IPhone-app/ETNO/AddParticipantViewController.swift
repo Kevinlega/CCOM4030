@@ -133,7 +133,8 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        hideKeyboardWhenTappedAround()
+        
         let response = GetParticipants(project_id: project_id, user_id: user_id)
 
         if (response["empty"] as! Bool) == false{

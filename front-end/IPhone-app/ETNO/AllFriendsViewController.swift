@@ -89,6 +89,7 @@ class AllFriendsViewController: UIViewController, UITableViewDelegate, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         user_id = TabBarViewController.User.uid
+        hideKeyboardWhenTappedAround()
 
         let response = GetFriends(user_id: user_id)
         if (response["empty"] as! Bool) == false{

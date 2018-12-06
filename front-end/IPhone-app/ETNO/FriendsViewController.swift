@@ -153,7 +153,7 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         user_id = TabBarViewController.User.uid
-
+        hideKeyboardWhenTappedAround()
         // Do any additional setup after loading the view.
     }
     

@@ -10,7 +10,7 @@ import UIKit
 import LocalAuthentication
 
 class LoginViewController: UIViewController {
-
+    
     // MARK: - Variables
     //    This will be equal to database response
     var user_id = Int()
@@ -42,6 +42,7 @@ class LoginViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         BiometricLogin()
         super.viewDidLoad()
+        self.hideKeyboardWhenTappedAround() 
         }
     
     override func didReceiveMemoryWarning() {
@@ -74,11 +75,7 @@ class LoginViewController: UIViewController {
                     if response["verified"] as! Bool == true{
                         let vc = segue.destination as! DashboardViewController
                         vc.user_id = response["uid"] as! Int
-                        if !BiometricAuthentication{
-                            SaveToKeychain(email: emailField.text!, password: passwordField.text!)
-                        }
-                        
-                        
+                    
                     }
                     else{
                         performSegue(withIdentifier: "NotVerified", sender: nil)
@@ -134,5 +131,18 @@ class LoginViewController: UIViewController {
                 }
             })
         }
+    }
+}
+
+// Put this piece of code anywhere you like
+extension UIViewController {
+    func hideKeyboardWhenTappedAround() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
     }
 }

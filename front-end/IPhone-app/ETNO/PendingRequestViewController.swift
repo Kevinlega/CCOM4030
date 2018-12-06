@@ -162,6 +162,8 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        hideKeyboardWhenTappedAround()
+
         user_id = TabBarViewController.User.uid
 
         let response = GetPendingRequest(user_id: user_id)

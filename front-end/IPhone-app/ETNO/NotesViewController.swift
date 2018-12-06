@@ -20,6 +20,7 @@ class NotesViewController: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         CharacterCount.text = "Characters: 0"
+        hideKeyboardWhenTappedAround()
         // Do any additional setup after loading the view, typically from a nib.
     }
     

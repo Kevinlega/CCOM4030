@@ -59,7 +59,7 @@ class CreateAccountViewController: UIViewController {
     // MARK: - Default Functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        hideKeyboardWhenTappedAround()
         // Do any additional setup after loading the view.
     }
 
