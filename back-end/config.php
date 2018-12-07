@@ -1,5 +1,18 @@
 <?php
 
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
+//
+//  File: config.php
+//  Description: Configuration file. Holds important database 
+//   			 connection objects and functions.
+//
+//  Created by Los Duendes Malvados.
+//  Copyright © 2018 Los Duendes Malvados. All rights reserved.
+
 $projects_path = "/var/www/html/projects/";
 
 /*

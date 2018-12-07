@@ -1,15 +1,29 @@
 <?php
-/*
- * Update API: Changes column values from various tables in the database.
- */
 
-define("UPDATE_PASSWORD", 0);
-define("VERIFY_USER",     1);
-define("ANSWER_REQUEST",  2);
-define("DECLINE_REQUEST", 3);
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
+//
+//  File: updateAPI.php
+//  Description: Changes column values from various tables in the database.
+//
+//  Created by Los Duendes Malvados.
+//  Copyright © 2018 Los Duendes Malvados. All rights reserved.
+
+// Used for including the database object.
 include_once "config.php";
 
+define("UPDATE_PASSWORD", 0);	// Change a user's password.
+define("VERIFY_USER",     1);	// Given a user_id, mark them as a verified user.
+define("ANSWER_REQUEST",  2);	// Answer a request as accepted.
+define("DECLINE_REQUEST", 3);	// Answer a request as declined.
+
+// Nothing needs to be executed if query type is not given.
 if(!isset($_REQUEST['queryType'])) exit();
+
+// Get the query from the URL.
 $queryType = $_REQUEST["queryType"];
 
 if($queryType == UPDATE_PASSWORD) {
@@ -21,9 +35,12 @@ if($queryType == UPDATE_PASSWORD) {
 		  SET hashed_password = (?), salt = (?)  
 		  WHERE email = (?)";
 
+	// Prepare the query for execution.
 	$statement = $connection->prepare($query);
+	// Bind the given variables to the prepared query.
 	$statement->bind_param('sss', $password, $salt, $email);
 
+	// Get the variables from the URL.
 	$email = $_REQUEST["email"];
 	$password = $_REQUEST["password"];
 	$salt = $_REQUEST["salt"];
@@ -42,9 +59,12 @@ if($queryType == UPDATE_PASSWORD) {
 		  SET verified=1 
 		  WHERE email = (?)";
 
+	// Prepare the query for execution.
 	$statement = $connection->prepare($query);
+	// Bind the variables to the prepared query.
 	$statement->bind_param('s', $email);
 
+	// Get variable from URL.
 	$email = $_REQUEST["email"];
 
 	$statement->execute();
@@ -65,9 +85,12 @@ if($queryType == UPDATE_PASSWORD) {
 			FROM users 
 			WHERE email = (?))";
 
+	// Prepare the query for execution.
 	$statement = $connection->prepare($query);
+	// Bind the given variables to query.
 	$statement->bind_param('is', $user_id, $email);
 
+	// Get variables from URL.
 	$email = $_REQUEST["email"];
 	$user_id = $_REQUEST["uid"];
 
@@ -87,9 +110,12 @@ if($queryType == UPDATE_PASSWORD) {
 				from users where email=(?)) 
 					and second_friend=(?)";
 
+	// Prepare the query for execution.
 	$statement = $connection->prepare($query);
+	// Bind the variables given to the query.
 	$statement->bind_param('si', $email, $user_id);
 
+	// Get variables from URL.
 	$email = $_REQUEST["email"];
 	$user_id = $_REQUEST["uid"];
 
@@ -102,6 +128,7 @@ if($queryType == UPDATE_PASSWORD) {
 	}
 }
 
+// Display the contents from the results of query requested as a JSON string.
 echo json_encode($return);
     
 ?>

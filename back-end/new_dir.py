@@ -1,18 +1,21 @@
 #!/usr/bin/env python
 '''
-Create a new directory for some project. 
-Prints the ID of the newly created directory in JSON Format:
+ Authors     : Luis Fernando
+               Kevin Legarreta
+               David J. Ortiz Rivera
+               Bryan Pesquera
+               Enrique Rodriguez
 
-{"folder_link" : "<path to projects folder>/<user_id>/<project_identifier>"}
+ File : new_dir.py
+ Description: Create a new directory for some project. 
+              Prints the ID of the newly created directory in JSON Format:
+            {"folder_link"  : "<path to projects folder>/<user_id>/<project_identifier>"}
+
+
+Created by Los Duendes Malvados.
+Copyright © 2018 Los Duendes Malvados. All rights reserved.
+
 '''
-
-__filename__  = "new_dir.py"
-__author__    = "Enrique Rodriguez"
-__email__     = "enrique.rodriguez9@upr.edu"
-__version__   = "1.0.4"
-__credits__   = ["Bryan Pesquera", "David Ortiz", "Enrique Rodriguez", "Kevin Legarreta", "Luis Mieses"]
-__copyright__ = "Copyright 2018, Grafia"
-
 
 from uuid import uuid4                                      # Used for naming project directories with random identifiers.
 import os                                                   # Used for creating the directory.
