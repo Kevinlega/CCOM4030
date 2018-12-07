@@ -59,7 +59,7 @@ class NotesViewController: UIViewController, UITextViewDelegate {
     
     @IBAction func SaveButton(_ sender: Any){
         // Save note if character count is in boundary
-        if Note.text.count > 0 && Note.text.count < 501 {
+        if Note.text.count > 0 {
             
             // Project path in server
             let project_path = projectPath + "/docs/"
@@ -101,7 +101,7 @@ class NotesViewController: UIViewController, UITextViewDelegate {
         }
         else{
             //Display alert
-            self.present(Alert(title: "Could not save note.", message: "Character count should be in range (1,500) ", Dismiss: "Dismiss"),animated: true, completion: nil)
+            self.present(Alert(title: "Could not save note.", message: "Note cannot be empty.", Dismiss: "Dismiss"),animated: true, completion: nil)
         }
     }
     @IBAction func ClearButton(_ sender: Any){
