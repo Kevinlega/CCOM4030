@@ -47,14 +47,16 @@ class NotVerifiedActivity : AppCompatActivity() {
         Verify.setOnClickListener {
 
             val email = Email.text.toString()
-            if(!email.isNullOrBlank()){
+            if (!email.isNullOrBlank()) {
                 verify(email)
             }
+        }
 
         backToLogin.setOnClickListener {
             val intent = Intent(this@NotVerifiedActivity, LoginActivity::class.java)
+            finish()
+            intent.putExtra("Failed",true)
             startActivity(intent)
-            }
         }
     }
 

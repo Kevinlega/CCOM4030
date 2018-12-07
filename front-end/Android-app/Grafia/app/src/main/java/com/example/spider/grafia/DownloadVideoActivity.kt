@@ -43,9 +43,7 @@ class DownloadVideoActivity : AppCompatActivity() {
     private var restart = true
     private var saved = false
     private var location = ""
-
-//    private var mediaPlayer = MediaPlayer()
-
+    private var downloaded = false
 
     private fun createTempFile(): File {
         // Create a temporary video file
@@ -65,9 +63,7 @@ class DownloadVideoActivity : AppCompatActivity() {
     // Triggers Delete
     override fun onDestroy() {
         super.onDestroy()
-
         deleteTempFiles(getExternalFilesDir(Environment.DIRECTORY_MOVIES))
-
     }
 
     // Delete temporary files
@@ -195,7 +191,7 @@ class DownloadVideoActivity : AppCompatActivity() {
 
         // save video to gallery
         saveVideo2.setOnClickListener {
-            if (mCurrentPath != "" && !saved) {
+            if (mCurrentPath != "" && !saved && downloaded) {
                 galleryAddVideo()
                 Toast.makeText(this, "Saved to Gallery.", Toast.LENGTH_SHORT).show()
             } else {
@@ -239,6 +235,7 @@ class DownloadVideoActivity : AppCompatActivity() {
             if (result == "YES") {
 
                 videoView2.visibility = View.VISIBLE
+                downloaded = true
 
                 Toast.makeText(this@DownloadVideoActivity, "Downloaded!", Toast.LENGTH_LONG).show()
             } else {

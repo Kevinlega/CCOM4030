@@ -11,10 +11,12 @@
 package com.example.spider.grafia
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.widget.EditText
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_login.*
@@ -31,6 +33,37 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         supportActionBar!!.setTitle("Grafía Login")
+
+        var failed = false
+        try {
+            failed = intent.getBooleanExtra("Failed",false)
+        } catch (error: Exception){}
+
+        if (!failed) {
+            val sharedPreferences = getSharedPreferences("Grafia_Login", Context.MODE_PRIVATE)
+            val email = sharedPreferences.getString("Email", "")
+            val password = sharedPreferences.getString("Password", "")
+
+            if (!email.isNullOrBlank() && !password.isNullOrBlank()) {
+                val intent = Intent(this@LoginActivity, FingerprintActivity::class.java)
+                startActivity(intent)
+            }
+        }
+
+        // Trigger fingerprint
+        fingerprint.setOnClickListener {
+            val sharedPreferences = getSharedPreferences("Grafia_Login", Context.MODE_PRIVATE)
+            val email = sharedPreferences.getString("Email", "")
+            val password = sharedPreferences.getString("Password", "")
+
+            if (!email.isNullOrBlank() && !password.isNullOrBlank()) {
+                val intent = Intent(this@LoginActivity, FingerprintActivity::class.java)
+                startActivity(intent)
+            } else{
+                Toast.makeText(this@LoginActivity,"No credentials stored.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
 
         // Trigger login
         loginButton.setOnClickListener {
@@ -86,9 +119,9 @@ class LoginActivity : AppCompatActivity() {
             AsyncTask<String, Void, String>() {
 
             // Send uid retrieve request
-            private fun getUID(email:String){
+            private fun getUID(email:String,tryPassword: String){
                 val query = 2
-                val connectToAPI = LoginActivity.Companion.Connect(mContext, 1,email,"")
+                val connectToAPI = LoginActivity.Companion.Connect(mContext, 1,email,tryPassword)
                 try{
                     val url = "http://54.81.239.120/selectAPI.php?queryType=$query&email=$email"
                     println(url)
@@ -152,39 +185,19 @@ class LoginActivity : AppCompatActivity() {
 
                             val tryPassword = saltAndHash(password,dbSalt)
                             if (tryPassword == dbPassword) {
-                                getUID(email)
+                                getUID(email,tryPassword)
                             } else{
                                 Toast.makeText(mContext, "Incorrect login info, try again.", Toast.LENGTH_SHORT).show()
                             }
                         } else {
                             Toast.makeText(mContext, "Incorrect login info, try again.", Toast.LENGTH_SHORT).show()
                         }
-                    } else if (flag == 2){
-
-                        val registered = jSONObject.getBoolean("empty")
-
-                        if (!registered) {
-
-                            val dbPassword = jSONObject.getString("hashed_password")
-
-                            if (password == dbPassword) {
-                                getUID(email)
-                            } else{
-                                Toast.makeText(mContext, "Incorrect login info, try again.", Toast.LENGTH_SHORT).show()
-                            }
-                        } else {
-                            Toast.makeText(mContext, "Incorrect login info, try again.", Toast.LENGTH_SHORT).show()
-                        }
-
-
                     } else{
                         val uid = jSONObject.getInt("uid")
                         val verified = jSONObject.getInt("verified")
 
                         if (verified == 1) {
-                            val intent = Intent(mContext, DashboardActivity::class.java)
-                            intent.putExtra("userId", uid)
-                            mContext.startActivity(intent)
+                            showDialog(mContext,email,password,uid)
                         } else{
                             val intent = Intent(mContext, NotVerifiedActivity::class.java)
                             mContext.startActivity(intent)
@@ -201,6 +214,69 @@ class LoginActivity : AppCompatActivity() {
                 val salted = password + salt
                 return md5(salted).toLowerCase()
             }
+
+            // Method to show an alert dialog with yes, no and cancel button
+            private fun showDialog(mContext: Context,email: String,password: String,uid: Int){
+                // Late initialize an alert dialog object
+                lateinit var dialog:AlertDialog
+
+
+                // Initialize a new instance of alert dialog builder object
+                val builder = AlertDialog.Builder(mContext)
+
+                // Set a title for alert dialog
+                builder.setTitle("Fingerprint Update.")
+
+                // Set a message for alert dialog
+                builder.setMessage("Do you want to update the credentials stored?")
+
+
+                // On click listener for dialog buttons
+                val dialogClickListener = DialogInterface.OnClickListener{ _, which ->
+                    when(which){
+                        DialogInterface.BUTTON_POSITIVE -> {
+                            val sharedPreferences = mContext.getSharedPreferences("Grafia_Login", Context.MODE_PRIVATE)
+                            val editor = sharedPreferences.edit()
+                            editor.clear()
+                            editor.putString("Email", email)
+                            editor.putString("Password", password)
+                            editor.apply()
+
+                            val intent = Intent(mContext, DashboardActivity::class.java)
+                            intent.putExtra("userId", uid)
+                            mContext.startActivity(intent)
+                        }
+                        DialogInterface.BUTTON_NEGATIVE -> {
+                            val intent = Intent(mContext, DashboardActivity::class.java)
+                            intent.putExtra("userId", uid)
+                            mContext.startActivity(intent)
+                        }
+                        DialogInterface.BUTTON_NEUTRAL -> {
+                            val intent = Intent(mContext, DashboardActivity::class.java)
+                            intent.putExtra("userId", uid)
+                            mContext.startActivity(intent)
+                        }
+                    }
+                }
+
+
+                // Set the alert dialog positive/yes button
+                builder.setPositiveButton("YES",dialogClickListener)
+
+                // Set the alert dialog negative/no button
+                builder.setNegativeButton("NO",dialogClickListener)
+
+                // Set the alert dialog neutral/cancel button
+                builder.setNeutralButton("CANCEL",dialogClickListener)
+
+
+                // Initialize the AlertDialog using builder object
+                dialog = builder.create()
+
+                // Finally, display the alert dialog
+                dialog.show()
+            }
+
         }
     }
 }

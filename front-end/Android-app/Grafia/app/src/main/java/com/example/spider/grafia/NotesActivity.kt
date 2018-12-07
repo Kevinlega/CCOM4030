@@ -64,8 +64,8 @@ class NotesActivity : AppCompatActivity() {
             var name = Name.text.toString()
             val note = Note.text.toString()
 
-            if(note.isNullOrBlank() || note.length > 500){
-                Toast.makeText(this, "Character length must be in range (1,500)", Toast.LENGTH_LONG).show()
+            if(note.isNullOrBlank()){
+                Toast.makeText(this, "Cannot be empty", Toast.LENGTH_LONG).show()
             }
             else{
 

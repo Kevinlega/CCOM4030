@@ -47,7 +47,6 @@ class VideoActivity : AppCompatActivity() {
     private var restart = false
     private var projectPath = ""
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video)
@@ -105,7 +104,6 @@ class VideoActivity : AppCompatActivity() {
         saveVideo.setOnClickListener {
             if (mCurrentVideoPath != "" && !saved) {
                 galleryAddVideo()
-                Toast.makeText(this, "Saved to Gallery.", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "Nothing to Save.", Toast.LENGTH_SHORT).show()
             }
@@ -133,7 +131,9 @@ class VideoActivity : AppCompatActivity() {
 
         // upload video
         uploadVideo.setOnClickListener {
-            UploadFileAsync(projectPath).execute("")
+            if(!mCurrentPickedVideo.isNullOrBlank() || !mCurrentVideoPath.isNullOrBlank()){
+                UploadFileAsync(projectPath).execute("")
+            }
         }
     }
 
@@ -224,6 +224,26 @@ class VideoActivity : AppCompatActivity() {
     }
 
 
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            1 -> {
+
+                if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+
+                    Toast.makeText(
+                        this@VideoActivity,
+                        "Permission needed to save video.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else{
+                    save()
+                }
+            }
+        }
+    }
+
     private fun createTempVideoFile(): File {
         // Create a temporary video file
         val timeStamp: String = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
@@ -238,7 +258,7 @@ class VideoActivity : AppCompatActivity() {
         }
     }
 
-    // save video to gallery
+    // check permission and save video
     private fun galleryAddVideo() = if (ContextCompat.checkSelfPermission(
             this,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -250,6 +270,11 @@ class VideoActivity : AppCompatActivity() {
             arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1
         )
     } else {
+        save()
+    }
+
+
+    private fun save(){
         // Save video to gallery
 
         val retriever = MediaMetadataRetriever()
@@ -282,13 +307,14 @@ class VideoActivity : AppCompatActivity() {
             os!!.flush()
             istream.close()
             os.close()
-        } catch (e: Exception) {
-        }
+        } catch (e: Exception) {}
 
 
         sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri))
 
         saved = true
+
+        Toast.makeText(this, "Saved to Gallery.", Toast.LENGTH_SHORT).show()
     }
 
     // Delete Temps

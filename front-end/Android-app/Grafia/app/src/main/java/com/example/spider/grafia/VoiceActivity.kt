@@ -39,6 +39,7 @@ class VoiceActivity : AppCompatActivity(){
     private var paused = false
     private var myAudioRecorder = MediaRecorder()
     private var projectPath = ""
+    private var name = ""
 
     // Creates temporary audio file
     private fun createTempVoiceFile(): File {
@@ -54,9 +55,40 @@ class VoiceActivity : AppCompatActivity(){
         }
     }
 
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            1 -> {
+
+                if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+
+                    Toast.makeText(
+                        this@VoiceActivity,
+                        "Permission needed for activity. Try Again Later.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    val intent = Intent(this@VoiceActivity, ProjectActivity::class.java)
+                    // To pass any data to next activity
+                    intent.putExtra("userId", userId)
+                    intent.putExtra("pId", projectId)
+                    intent.putExtra("projectName", name)
+                    finish()
+                    // start your next activity
+                    startActivity(intent)
+
+                }
+            }
+        }
+    }
+
     override fun onCreate (savedInstanceState: Bundle?) {
         super.onCreate (savedInstanceState)
         setContentView (R.layout.activity_voice)
+
+        playVoice.isEnabled = false
+        pauseVoice.isEnabled = false
+        uploadVoice.isEnabled = false
 
         // record listener
         recordVoice.setOnClickListener {
@@ -94,6 +126,7 @@ class VoiceActivity : AppCompatActivity(){
                 recordVoice.isEnabled = false
                 playVoice.isEnabled = false
                 pauseVoice.isEnabled = false
+                uploadVoice.isEnabled = false
 
                 Toast.makeText(this@VoiceActivity, "Recording started", Toast.LENGTH_LONG).show()
             }
@@ -108,6 +141,7 @@ class VoiceActivity : AppCompatActivity(){
                 recordVoice.isEnabled = true
                 playVoice.isEnabled = true
                 pauseVoice.isEnabled = true
+                uploadVoice.isEnabled = true
 
                 myAudioRecorder.stop()
                 myAudioRecorder.release()
@@ -163,7 +197,7 @@ class VoiceActivity : AppCompatActivity(){
         userId = intent.getIntExtra("userId",-1)
         projectId = intent.getIntExtra("pId",-1)
         projectPath = intent.getStringExtra("projectPath")
-        val name = intent.getStringExtra("projectName")
+        name = intent.getStringExtra("projectName")
 
         // upload to server
         uploadVoice.setOnClickListener {

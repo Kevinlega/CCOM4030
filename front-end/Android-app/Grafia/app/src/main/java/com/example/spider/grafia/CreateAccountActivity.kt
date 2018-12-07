@@ -11,12 +11,14 @@
 package com.example.spider.grafia
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.EditText
 import kotlinx.android.synthetic.main.activity_create_account.*
 import android.os.AsyncTask
+import android.support.v7.app.AlertDialog
 import org.json.JSONObject
 import java.net.URL
 import java.lang.StringBuilder
@@ -92,6 +94,38 @@ open class CreateAccountActivity : AppCompatActivity(){
     companion object {
         class Connect(private val mContext: Context, private val type : Int, private val name: String,private val email: String,private val password: String): AsyncTask<String, Void, String>(){
 
+            // Method to show an alert dialog with yes, no and cancel button
+            private fun showDialog(mContext: Context,email: String,password: String) {
+                // Late initialize an alert dialog object
+                lateinit var dialog: AlertDialog
+
+
+                // Initialize a new instance of alert dialog builder object
+                val builder = AlertDialog.Builder(mContext)
+
+                // Set a title for alert dialog
+                builder.setTitle("Fingerprint Access.")
+
+                // Set a message for alert dialog
+                builder.setMessage("Do you want to store the credentials.")
+
+                // On click listener for dialog buttons
+                val dialogClickListener = DialogInterface.OnClickListener { _, which ->
+                    when (which) {
+                        DialogInterface.BUTTON_POSITIVE -> {
+                            val sharedPreferences = mContext.getSharedPreferences("Grafia_Login", Context.MODE_PRIVATE)
+                            val editor = sharedPreferences.edit()
+                            editor.putString("Email", email)
+                            editor.putString("Password", password)
+                            editor.apply()
+                        }
+                        DialogInterface.BUTTON_NEGATIVE -> println("No")
+                        DialogInterface.BUTTON_NEUTRAL -> println("Cancel")
+                    }
+                }
+            }
+
+
             override fun doInBackground(vararg p0: String?): String{
                 return downloadJSON(p0[0])
             }
@@ -110,9 +144,11 @@ open class CreateAccountActivity : AppCompatActivity(){
                     if(type == 1) {
 
                         if(registered) {
+                            showDialog(mContext,email,password)
                             val intent = Intent(mContext, LoginActivity::class.java)
                             Toast.makeText(mContext, "Account Created.", Toast.LENGTH_SHORT).show()
                             mContext.startActivity(intent)
+
                         }else{
                             Toast.makeText(mContext, "Account Not Created.", Toast.LENGTH_SHORT).show()
 

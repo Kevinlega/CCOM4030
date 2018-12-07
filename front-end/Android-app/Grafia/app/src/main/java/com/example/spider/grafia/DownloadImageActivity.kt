@@ -32,10 +32,12 @@ import java.net.URL
 class DownloadImageActivity : AppCompatActivity() {
 
     // Global variables
-    var mCurrentPath = ""
-    var userId = -1
+    private var mCurrentPath = ""
+    private var userId = -1
     private var saved = false
     private var location = ""
+    private var downloaded = false
+
 
     private fun createTempFile(): File {
         // Create an image temporary file
@@ -146,7 +148,7 @@ class DownloadImageActivity : AppCompatActivity() {
 
         // Save Image to Gallery
         saveImage2.setOnClickListener {
-            if (mCurrentPath != "" && !saved) {
+            if (mCurrentPath != "" && !saved && downloaded) {
                 galleryAddPic()
                 saved = true
                 Toast.makeText(this, "Saved to Gallery.", Toast.LENGTH_SHORT).show()
@@ -192,6 +194,7 @@ class DownloadImageActivity : AppCompatActivity() {
                 BitmapFactory.decodeFile(mCurrentPath)?.also { bitmap ->
                     imageView2.setImageBitmap(rotatePic(bitmap))
                 }
+                downloaded = true
 
                 Toast.makeText(this@DownloadImageActivity, "Downloaded!", Toast.LENGTH_LONG).show()
             } else {

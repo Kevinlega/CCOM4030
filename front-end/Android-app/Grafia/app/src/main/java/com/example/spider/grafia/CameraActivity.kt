@@ -104,8 +104,9 @@ class CameraActivity : AppCompatActivity() {
 
         // upload image to server
         uploadImage.setOnClickListener {
-
-            UploadFileAsync(projectPath).execute("")
+            if(!mCurrentPickedPicture.isNullOrBlank() || !mCurrentPhotoPath.isNullOrBlank()){
+                UploadFileAsync(projectPath).execute("")
+            }
         }
     }
 
@@ -228,7 +229,7 @@ class CameraActivity : AppCompatActivity() {
         return Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.width, scaledBitmap.height, matrix, true)
     }
 
-    // Saves image to gallery
+    // Check permissions and saves picture
     private fun galleryAddPic() {
 
         if (ContextCompat.checkSelfPermission(
@@ -242,11 +243,34 @@ class CameraActivity : AppCompatActivity() {
                 arrayOf(permission.WRITE_EXTERNAL_STORAGE), 1
             )
         } else {
-            // Save image to gallery via bitmap
-            BitmapFactory.decodeFile(mCurrentPhotoPath)?.also { bitmap ->
-                MediaStore.Images.Media.insertImage(contentResolver, rotatePic(bitmap), "test", "test")
+            save()
+        }
+    }
+
+    private fun save(){
+        // Save image to gallery via bitmap
+        BitmapFactory.decodeFile(mCurrentPhotoPath)?.also { bitmap ->
+            MediaStore.Images.Media.insertImage(contentResolver, rotatePic(bitmap), "test", "test")
+        }
+        saved = true
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            1 -> {
+
+                if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+
+                    Toast.makeText(
+                        this@CameraActivity,
+                        "Permission needed to save image.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else{
+                    save()
+                }
             }
-            saved = true
         }
     }
 
