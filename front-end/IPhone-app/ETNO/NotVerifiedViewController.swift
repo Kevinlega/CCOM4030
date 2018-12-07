@@ -68,7 +68,7 @@ class NotVerifiedViewController: UIViewController {
                     request.httpMethod = "POST"
                     let post = "queryType=\(QueryType)&email=\(UserEmail)"
                     request.httpBody = post.data(using: String.Encoding.utf8)
-                
+                    
                     response = ConnectToAPI(request: request)
                     
                     if (response["updated"] as! Bool == true){

@@ -131,8 +131,7 @@ if($queryType == UPDATE_PASSWORD) {
 } else if($queryType == RESEND_VERIFY) {
 	if(!isset($_REQUEST['email'])) 	exit();
 
-	$query = "SELECT verified FROM users 
-			WHERE email=(?)";
+	$query = "SELECT verified FROM users WHERE email=?";
 
 	// Prepare the query for execution.
 	$statement = $connection->prepare($query);
@@ -146,7 +145,7 @@ if($queryType == UPDATE_PASSWORD) {
 	$statement->bind_result($verified);	 // Asign the fetch value to these new variables.
 	$statement->fetch();
 	
-	if(!empty($verified))
+	if($verified == 0)
 		// send email aqui
 		$return = array("updated"=>true);
 	else
