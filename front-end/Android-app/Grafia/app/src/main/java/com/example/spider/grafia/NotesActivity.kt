@@ -19,6 +19,7 @@ import android.os.Environment
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_notes.*
 import org.json.JSONObject
@@ -83,7 +84,8 @@ class NotesActivity : AppCompatActivity() {
         clear_button.setOnClickListener {
             var Note = findViewById<EditText>(R.id.Note)
             Note.setText("")
-            character_count.text = "Characters: 0"
+            var Label = findViewById<TextView>(R.id.character_count)
+            Label.setText("Characters: 0")
             Toast.makeText(this, "Text cleared.", Toast.LENGTH_LONG).show()
         }
 

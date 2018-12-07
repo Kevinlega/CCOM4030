@@ -112,7 +112,7 @@ class AddParticipantsActivity : AppCompatActivity() {
                 val intent = Intent(this@AddParticipantsActivity, ProjectActivity::class.java)
                 // To pass any data to next activity
                 intent.putExtra("userId", userId)
-                intent.putExtra("projectId",projectId)
+                intent.putExtra("pId",projectId)
                 intent.putExtra("projectName",name)
                 // start your next activity
                 startActivity(intent)
