@@ -106,6 +106,7 @@ class NotesViewController: UIViewController, UITextViewDelegate {
     }
     @IBAction func ClearButton(_ sender: Any){
         Note.text = ""
+        CharacterCount.text = "Characters: 0"
     }
     
     //MARK: - Text Change
@@ -123,8 +124,6 @@ class NotesViewController: UIViewController, UITextViewDelegate {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "BackToProject"){
             let vc = segue.destination as! ProjectViewController
-            print(user_id)
-            print(project_id)
             vc.user_id = user_id
             vc.project_id = project_id
         }

@@ -40,16 +40,8 @@ class AllFriendsViewController: UIViewController, UITableViewDelegate, UITableVi
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if Searching{
             return FilteredUsers.count
-        }
-        else if !FirstSelected{
-            if users[0] == ""{
-                return 0
-            } else {
-                return users.count
-            }
-        }
-        else{
-            return 0
+        } else{
+            return users.count
         }
     }
     
@@ -72,16 +64,14 @@ class AllFriendsViewController: UIViewController, UITableViewDelegate, UITableVi
         if searchBar.text == nil || searchBar.text == ""{
             Searching = false
             view.endEditing(true)
+            FilteredUsers = []
+
         }
-        else if (searchBar.text!.contains("@") && searchBar.text!.count > 5){
+        else {
             Searching = true
             FilteredUsers = users.filter({$0.localizedCaseInsensitiveContains(searchBar.text!)})
-            
         }
-        else{
-            Searching = false
-            FilteredUsers = []
-        }
+        
         tableView.reloadData()
     }
     
