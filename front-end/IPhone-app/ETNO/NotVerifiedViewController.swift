@@ -55,12 +55,9 @@ class NotVerifiedViewController: UIViewController {
             let UserEmail = email.text!
             verify()
             if VerifyAble {
-                print("hr")
                 if(!(isRegistered(email: UserEmail))){
                     self.present(Alert(title: "Something went wrong.", message: "Cannot change password.", Dismiss: "Dismiss"),animated: true, completion: nil)
                 } else{
-                    
-                    print("here")
                     
                     var response : NSDictionary = NSDictionary()
                 
@@ -74,7 +71,6 @@ class NotVerifiedViewController: UIViewController {
                 
                     response = ConnectToAPI(request: request)
                     
-                    print(response)
                     if (response["updated"] as! Bool == true){
                         let _ = segue.destination as! LoginViewController
                     } else{
