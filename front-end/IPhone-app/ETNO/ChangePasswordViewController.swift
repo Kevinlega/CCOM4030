@@ -15,8 +15,7 @@ class ChangePasswordViewController: UIViewController {
     // MARK: - Variables
     // Receiving input from user
     @IBOutlet weak var email: UITextField!
-    @IBOutlet weak var ConfirmPassword: UITextField!
-    @IBOutlet weak var NewPassword: UITextField!
+    @IBOutlet weak var answer: UITextField!
     
     // Flag to prevent non registered users from making a password change request.
     var UserCanBeAdded = false
@@ -25,25 +24,19 @@ class ChangePasswordViewController: UIViewController {
     // Verify if all fields are entered and can proceed
     @IBAction func ChangeThePassword(_ sender: Any) {
         
-        let UserPassword = NewPassword.text
+        let answered = answer.text
         let UserEmail = email.text
-        let UserConfirmPassword = ConfirmPassword.text
         
-        if (UserEmail!.isEmpty || UserPassword!.isEmpty || UserConfirmPassword!.isEmpty){
+        if (UserEmail!.isEmpty || answered!.isEmpty){
            self.present(Alert(title: "Error", message: "All fields are requiered.", Dismiss: "Dismiss"),animated: true, completion: nil)
         }
-        else{ if(!(isRegistered(email: UserEmail!))){
+        else if(!(isRegistered(email: UserEmail!))){
             self.present(Alert(title: "Something went wrong.", message: "Cannot change password.", Dismiss: "Dismiss"),animated: true, completion: nil)
-        }
-        else{ if(UserPassword! != UserConfirmPassword!){
-                self.present(Alert(title: "Error", message: "Passwords don't match.", Dismiss: "Dismiss"),animated: true, completion: nil)
-            }
-        else{
+        } else{
             UserCanBeAdded = true
-                }
-            }
         }
     }
+    
     
     // MARK: - Default Functions
     // When view loads
@@ -69,13 +62,15 @@ class ChangePasswordViewController: UIViewController {
             // and insert it in database.
         else if (segue.identifier == "ChangePassword"){
             if UserCanBeAdded{
-                var UserPassword = NewPassword.text
+                let answered = answer.text
                 let UserEmail = email.text
-                let salt = saltGenerator(length: 5)
-                UserPassword = saltAndHash(password: UserPassword!, salt: salt)
-                ChangePassword(email: UserEmail!, password: UserPassword!,salt: salt)
-                SaveToKeychain(email: UserEmail!, password: UserPassword!)
-                let _ = segue.destination as! LoginViewController
+                let response = ChangePassword(email: UserEmail!, answer: answered!)
+                if (response){
+                     self.present(Alert(title: "Email was Sent.", message: "Please update password by tomorrow.", Dismiss: "Dismiss"),animated: true, completion: nil)
+                     let _ = segue.destination as! LoginViewController
+                } else{
+                     self.present(Alert(title: "Something went wrong.", message: "Cannot change password.", Dismiss: "Dismiss"),animated: true, completion: nil)
+                }
             }
         }
     }

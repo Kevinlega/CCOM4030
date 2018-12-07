@@ -19,6 +19,7 @@ define("UPDATE_PASSWORD", 0);	// Change a user's password.
 define("VERIFY_USER",     1);	// Given a user_id, mark them as a verified user.
 define("ANSWER_REQUEST",  2);	// Answer a request as accepted.
 define("DECLINE_REQUEST", 3);	// Answer a request as declined.
+define("RESEND_VERIFY",   4);   // Resend verification
 
 // Nothing needs to be executed if query type is not given.
 if(!isset($_REQUEST['queryType'])) exit();
@@ -127,7 +128,30 @@ if($queryType == UPDATE_PASSWORD) {
 	} else {
 		$return = array("updated" => false);
 	}
-}
+} else if($queryType == RESEND_VERIFY) {
+	if(!isset($_REQUEST['email'])) 	exit();
+
+	$query = "SELECT verified FROM users 
+			WHERE email=(?)";
+
+	// Prepare the query for execution.
+	$statement = $connection->prepare($query);
+	// Bind the variables given to the query.
+	$statement->bind_param('s', $email);
+
+	// Get variables from URL.
+	$email = $_REQUEST["email"];
+	$statement->execute();
+
+	$statement->bind_result($verified);	 // Asign the fetch value to these new variables.
+	$statement->fetch();
+	
+	if(!empty($verified))
+		// send email aqui
+		$return = array("updated"=>true);
+	else
+		$return = array("updated" => false);
+} 
 
 // Display the contents from the results of query requested as a JSON string.
 echo json_encode($return);

@@ -62,7 +62,7 @@ class NotVerifiedViewController: UIViewController {
                     var response : NSDictionary = NSDictionary()
                 
                     // Create the verify request to the API
-                    let QueryType = "1"
+                    let QueryType = "4"
                     let url = URL(string: "http://54.81.239.120/updateAPI.php")
                     var request = URLRequest(url:url!)
                     request.httpMethod = "POST"

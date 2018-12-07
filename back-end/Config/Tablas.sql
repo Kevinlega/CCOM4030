@@ -6,6 +6,7 @@ CREATE TABLE users (
   salt varchar(255) NOT NULL,
   UNIQUE (email),
   verified BOOLEAN DEFAULT false,
+  answer varchar(255) NOT NULL,
   PRIMARY KEY(user_id)
 );
 
@@ -39,10 +40,16 @@ CREATE TABLE user_project (
   PRIMARY KEY (project_id,user_id)
 );
 
-CREATE TABLE reset_password_requests(
-				user_id INTEGER PRIMARY KEY,
-				request_id VARCHAR(64), 
-				FOREIGN KEY user_id REFERENCES users(user_id)
-				ON DELETE CASCADE
-);
+create table reset_password_requests( 
+  user_id INTEGER PRIMARY KEY,
+  request_id VARCHAR(64) NOT NULL,
+  FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE
+  );
+
+
+create table verify_requests( 
+  user_id INTEGER PRIMARY KEY,
+  request_id VARCHAR(64) NOT NULL,
+  FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE
+  );
 

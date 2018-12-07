@@ -17,9 +17,9 @@
 include_once "config.php";
 
 // For debugging purposes
-// error_reporting(E_ALL);
-// ini_set('display_errors', TRUE);
-// ini_set('display_startup_errors', TRUE);
+error_reporting(E_ALL);
+ini_set('display_errors', TRUE);
+ini_set('display_startup_errors', TRUE);
 
 // Valid query types that can be executed given the valid information.
 define("CREATE_USER",      0);		// Creates a new user given the name, email, password and salt
@@ -36,21 +36,28 @@ $queryType = $_REQUEST["queryType"];
 switch($queryType) {
 
 	   case CREATE_USER:
+	   		if(!isset($_REQUEST['email'])) exit();
+			if(!isset($_REQUEST['answer'])) exit();
+			if(!isset($_REQUEST['password'])) exit();
+			if(!isset($_REQUEST['salt'])) exit();
+			if(!isset($_REQUEST['name'])) exit();
 
 	   		// Get variables from url.
 	   		$name = $_REQUEST["name"];
 			$email = $_REQUEST["email"];
 			$password = $_REQUEST["password"];
 			$salt = $_REQUEST["salt"];
+			$answer = $_REQUEST["answer"];
 
-			$query = "INSERT INTO users (name,email,hashed_password,salt) VALUES (?, ?, ?,?)";
+
+			$query = "INSERT INTO users (name,email,hashed_password,salt,answer) VALUES (?, ?, ?,?,?)";
 
 			// Prepare the query for execution.
 			if(!$statement = $connection->prepare($query)) {
 				echo "Prepare failed: (" . $connection->errno . ") " . $connection->error; 
 			}
 			// Bind given variables to the prepared query.
-			$statement->bind_param("ssss", $name, $email, $password, $salt);
+			$statement->bind_param("sssss", $name, $email, $password, $salt,$answer);
 
 			if(!$statement->execute()) {
 				$return = array("registered"=>false);
@@ -144,25 +151,50 @@ switch($queryType) {
 
 			break;
 		case RESET_PASSWD:
-			if(!isset($_REQUEST['uid'])) exit();
+			if(!isset($_REQUEST['email'])) exit();
+			if(!isset($_REQUEST['answer'])) exit();
+
+			// Query to select uid
+			$querySelect = "SELECT user_id FROM users WHERE email=(?) AND answer=(?)";
+
+			// Get variables from url
+			$email = $_REQUEST["email"];
+			$answer = $_REQUEST["answer"];
+
+			// Prepare the query statement. (for sanitation)
+			$statement = $connection->prepare($querySelect);		
+			// Bind the parameters with the sql query.	
+			$statement->bind_param('ss', $email,$answer);	
+			// Execute the now sanitized query.		
+			$statement->execute();						
+			// Asign the fetch value to these new variables.
+			$statement->bind_result($user_id);	    	  
+			// Get the results.          		
+			$statement->fetch();
+			$statement->close();
 			
-			$query = "INSERT INTO reset_password_requests(user_id, request_id)
+			if(empty($user_id))
+				$return = array("inserted" => false);
+			else{
+
+				$query = "INSERT INTO reset_password_requests(user_id, request_id)
 				  VALUES(?, ?)";
 
-			// Prepare the query for execution.
-			$statement = $connection->prepare($query);
-			// Bind given variables to the prepared query.
-			$statement->bind_param('is', $user_id, $request_id);
-			
-			// Get variables from url.
-			$user_id = $_REQUEST['uid'];
-			$request_id = md5(uniqid(rand(), true));
-			
-			if($statement->execute()) {
-				$return = array("inserted" => true);
-			} else {
-				$return = array("inserted" => false);
+				// Prepare the query for execution.
+				$statement = $connection->prepare($query);
+				// Bind given variables to the prepared query.
+				$statement->bind_param('is', $user_id, $request_id);
+				
+				// Make unique ID for request
+				$request_id = md5(uniqid(rand(), true));
+				
+				if($statement->execute()) {
+					$return = array("inserted" => true);
+				} else {
+					$return = array("inserted" => false);
+				}
 			}
+
 			break;
 
 	default:

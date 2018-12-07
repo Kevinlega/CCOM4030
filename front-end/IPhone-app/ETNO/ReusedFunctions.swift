@@ -83,24 +83,37 @@ public func isRegistered(email: String) -> Bool{
 
 // MARK: - Changes the Password
 // Sends request for updating password
-public func ChangePassword(email: String, password: String, salt: String) {
+public func ChangePassword(email: String, answer: String) -> Bool{
     
     // Create the request to the API
-    let QueryType = "0"
-    let url = URL(string: "http://54.81.239.120/updateAPI.php")
+    let QueryType = "4"
+    let url = URL(string: "http://54.81.239.120/insertAPI.php")
     var request = URLRequest(url:url!)
     request.httpMethod = "POST"
-    let post = "queryType=\(QueryType)&email=\(email)&password=\(password)&salt=\(salt)"
+    let post = "queryType=\(QueryType)&email=\(email)&answer=\(answer)"
     request.httpBody = post.data(using: String.Encoding.utf8)
 
-    let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in }
+    var json : NSDictionary = NSDictionary()
+    let group = DispatchGroup()
+    group.enter()
+    
+    let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
+        do{
+            // Server response
+            json = try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! NSDictionary
+            group.leave()
+        }
+    }
+    // Wait until task is finished
     task.resume()
+    group.wait()
+    return json["inserted"] as! Bool
 }
 
 // MARK: - Creates the Account
 // Create an account
 
-public func CreateAccount(name: String, email: String, password: String, salt: String) -> Bool{
+public func CreateAccount(name: String, email: String, password: String, salt: String, answer: String) -> Bool{
     // Create the request to the API
     var response : NSDictionary = NSDictionary()
     // Tells API which query to execute
@@ -111,7 +124,7 @@ public func CreateAccount(name: String, email: String, password: String, salt: S
     // Request method
     request.httpMethod = "POST"
     // Request parameters
-    let post = "queryType=\(QueryType)&name=\(name)&email=\(email)&password=\(password)&salt=\(salt)"
+    let post = "queryType=\(QueryType)&name=\(name)&email=\(email)&password=\(password)&salt=\(salt)&answer=\(answer)"
     request.httpBody = post.data(using: String.Encoding.utf8)
     
     // Receive response from API
