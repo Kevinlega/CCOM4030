@@ -116,10 +116,6 @@ class NotesViewController: UIViewController, UITextViewDelegate {
         CharacterCount.text = count
     }
     
-    func textViewDidEndEditing(_ textView: UITextView) {
-        print("Done")
-    }
-    
     // MARK: - Segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "BackToProject"){
