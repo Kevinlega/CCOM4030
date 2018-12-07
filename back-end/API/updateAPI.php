@@ -48,6 +48,7 @@ if($queryType == UPDATE_PASSWORD) {
 
 	if($statement->affected_rows == 1) {
 		$return = array("updated" => true);
+		sendEmail($email, "Your Password was Changed", $RESET_PASSWORD_MESSAGE);
 	} else {
 		$return = array("updated" => false);
 	}

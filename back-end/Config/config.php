@@ -48,4 +48,7 @@ function emailI($id, $subj, $msg)
 
 //format
 //sendEmail("email@somewhere.com", "subject", "content");
+
+// Message to send when password is reset. 
+$RESET_PASSWORD_MESSAGE = "Hello, we want to inform you that your password was just changed, if you did not approve this change, please contact developers.";
 ?>
