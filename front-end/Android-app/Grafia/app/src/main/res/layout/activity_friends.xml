@@ -49,10 +49,11 @@
             app:layout_constraintStart_toEndOf="@+id/Return" app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="8dp"/>
     <ListView
-            android:layout_width="386dp"
-            android:layout_height="341dp"
+            android:layout_width="380dp"
+            android:layout_height="331dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="5dp"
             app:layout_constraintTop_toBottomOf="@+id/searchBarFriends" app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/listaFriends"/>
+            android:id="@+id/listaFriends"
+    />
 
 </android.support.constraint.ConstraintLayout>

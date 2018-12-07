@@ -35,7 +35,7 @@ class CreateProjectActivity : AppCompatActivity() {
 
         DontCreateProject.setOnClickListener {
             val intent = Intent(this@CreateProjectActivity, DashboardActivity::class.java)
-
+            intent.putExtra("userId",userId)
             startActivity(intent)
         }
 
@@ -98,12 +98,14 @@ class CreateProjectActivity : AppCompatActivity() {
 
                     if(created){
                         projectId = (jSONObject.getString("project_id")).toInt()
+
                         Toast.makeText(mContext, "Project Created.", Toast.LENGTH_SHORT).show()
 
                         val intent = Intent(mContext, ProjectActivity::class.java)
                         intent.putExtra("userId", userId)
-                        intent.putExtra("pid", projectId)
+                        intent.putExtra("pId", projectId)
                         intent.putExtra("projectName",Name)
+
                         mContext.startActivity(intent)
 
                     } else {

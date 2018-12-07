@@ -30,6 +30,7 @@ class AddParticipantsActivity : AppCompatActivity() {
     var selectedEmails: MutableList<String> = ArrayList()
     var FilteredNames = JSONArray()
     var FilteredEmail = JSONArray()
+    var name = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +41,7 @@ class AddParticipantsActivity : AppCompatActivity() {
         // Retrieve data from another view
         val userId = intent.getIntExtra("userId",-1)
         val projectId = intent.getIntExtra("pId",-1)
-        val name = intent.getStringExtra("projectName")
+        name = intent.getStringExtra("projectName")
 
 
         // Local variables of view and view triggers
@@ -139,7 +140,9 @@ class AddParticipantsActivity : AppCompatActivity() {
                 }
                 // To pass any data to next activity
                 intent.putExtra("userId", userId)
-                intent.putExtra("projectId",projectId)
+                intent.putExtra("pId",projectId)
+                intent.putExtra("projectName",name)
+
                 // start your next activity
                 Toast.makeText(this, "Participants added.", Toast.LENGTH_SHORT).show()
                 startActivity(intent)

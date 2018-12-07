@@ -135,6 +135,7 @@ class ProjectActivity : AppCompatActivity() {
     // fetch files
     private fun fetchJson(mContext: Context) {
         println("Fetching Json.")
+
         val url = "http://54.81.239.120/listdir.php?path=$projectPath"
 
         var request = Request.Builder().url(url).build()
@@ -149,7 +150,10 @@ class ProjectActivity : AppCompatActivity() {
 
                 // list adapter
                 runOnUiThread {
-                    listview.adapter = MyCustomAdapter(this@ProjectActivity, myfiles)
+
+
+                   listview.adapter = MyCustomAdapter(this@ProjectActivity, myfiles)
+
 
                     listview.setOnItemClickListener { parent, view, position, id ->
 
@@ -197,23 +201,30 @@ class ProjectActivity : AppCompatActivity() {
             this.myfiles = myfiles
         }
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+
             val layoutinflator = LayoutInflater.from(mContext)
             val row_main = layoutinflator.inflate(R.layout.file_row, parent, false)
 
-            val name_text_view = row_main.findViewById<TextView>(R.id.filename)
-            name_text_view.text = myfiles.files[position].filename
-            val filetype_texview = row_main.findViewById<TextView>(R.id.filetype)
-            filetype_texview.text = myfiles.files[position].type
+            if (!myfiles.empty) {
 
+                val name_text_view = row_main.findViewById<TextView>(R.id.filename)
+                name_text_view.text = myfiles.files[position].filename
+                val filetype_texview = row_main.findViewById<TextView>(R.id.filetype)
+                filetype_texview.text = myfiles.files[position].type
+            }
             return row_main
         }
 
         override fun getItem(position: Int): Array<String> {
-            val filename =  myfiles.files.get(position).filename
+            if (!myfiles.empty) {
+                val filename = myfiles.files.get(position).filename
 
-            val type = myfiles.files.get(position).type
+                val type = myfiles.files.get(position).type
 
-            return arrayOf(filename,type)
+                return arrayOf(filename, type)
+            } else {
+                return emptyArray()
+            }
         }
 
         override fun getItemId(position: Int): Long {
@@ -221,7 +232,11 @@ class ProjectActivity : AppCompatActivity() {
         }
 
         override fun getCount(): Int {
-            return myfiles.files.size
+            if (myfiles.empty){
+                return 0
+            } else{
+                return myfiles.files.size
+            }
         }
     }
 
@@ -259,7 +274,7 @@ class ProjectActivity : AppCompatActivity() {
         }
     }
 }
-    class myFiles(val files : List<mFile>) {
+    class myFiles(val empty : Boolean,val files : List<mFile>) {
 
     }
 
