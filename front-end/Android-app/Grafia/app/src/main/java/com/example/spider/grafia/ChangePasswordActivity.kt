@@ -27,12 +27,11 @@ import java.security.MessageDigest
 class ChangePasswordActivity : AppCompatActivity() {
 
     // Is user registered request
-    private fun isRegistered(email:String,password:String){
+    private fun isRegistered(email:String, answer: String){
         val query = 0
-        val connectToAPI = Connect(this, 0,email,password)
+        val connectToAPI = Connect(this, 0,email,answer)
         try{
             val url = "http://54.81.239.120/selectAPI.php?queryType=$query&email=$email"
-            println(url)
             connectToAPI.execute(url)
         }
         catch (error: Exception){}
@@ -46,41 +45,27 @@ class ChangePasswordActivity : AppCompatActivity() {
 
         // text boxes
         val Email = findViewById<EditText>(R.id.emailChange)
-        val Password = findViewById<EditText>(R.id.passwordChange)
-        val ConPassword = findViewById<EditText>(R.id.confirmPasswordChange)
+        val Answer = findViewById<EditText>(R.id.passwordChange)
 
 
         ChangePassword.setOnClickListener {
 
             // Fetch text from activity text boxes
             val email = Email.text.toString()
-            val password = Password.text.toString()
-            val confirm = ConPassword.text.toString()
-
-            if (checkChange(password,email,confirm)){
-                if (password == confirm){
-                    isRegistered(email,password)
-                } else{
-                    Toast.makeText(this@ChangePasswordActivity,"Passwords Do Not Match", Toast.LENGTH_LONG).show()
+            val answer = Answer.text.toString()
+            if (!email.isNullOrBlank() && !answer.isNullOrBlank()) {
+                isRegistered(email,answer)
+            }
+                else{
+                    Toast.makeText(this@ChangePasswordActivity,"Fields are required.", Toast.LENGTH_LONG).show()
                 }
             }
         }
-    }
-
-    // Check input fields
-    private fun checkChange(password:String, email:String,confirm:String): Boolean{
-        var canChange = true
-        if(password.isNullOrBlank() || email.isNullOrBlank() || confirm.isNullOrBlank()){
-            canChange = false
-            Toast.makeText(this, "All Fields are Required.", Toast.LENGTH_LONG).show()
-        }
-        return canChange
-    }
 
     // Connects to API to check if user is registered,
     // if registered changes the password for such user
     companion object {
-        class Connect(private val mContext: Context, private val flag: Int, private val email: String, private val password: String) :
+        class Connect(private val mContext: Context, private val flag: Int, private val email: String, private val answer: String) :
             AsyncTask<String, Void, String>() {
 
             override fun doInBackground(vararg p0: String?): String {
@@ -102,28 +87,26 @@ class ChangePasswordActivity : AppCompatActivity() {
 
                         if (registered) {
 
-                            val salt = java.util.UUID.randomUUID().toString().replace("-", "")
-                            val hashed = saltAndHash(password,salt)
-
-                            val query = 0
-                            val connectToAPI = Connect(mContext, 1,email,hashed)
+                            val query = 4
+                            val connectToAPI = Connect(mContext, 1,email,answer)
                             try{
-                                val url = "http://54.81.239.120/updateAPI.php?queryType=$query&email=$email&password=$hashed&salt=$salt"
+                                val url = "http://54.81.239.120/insertAPI.php?queryType=$query&email=$email&answer=$answer"
                                 connectToAPI.execute(url)
                             }
                             catch (error: Exception){}
 
                         } else {
-                            Toast.makeText(mContext, "Something went wrong cannot change password, try again.", Toast.LENGTH_LONG).show()
+                            Toast.makeText(mContext, "Something went wrong cannot send change password request, try again.", Toast.LENGTH_LONG).show()
                         }
                     } else{
 
-                        val update = jSONObject.getBoolean("updated")
+                        val update = jSONObject.getBoolean("inserted")
                         if (update) {
                             val intent = Intent(mContext, LoginActivity::class.java)
                             mContext.startActivity(intent)
+                            Toast.makeText(mContext, "Sent change password request.", Toast.LENGTH_LONG).show()
                         } else{
-                            Toast.makeText(mContext, "Something went wrong cannot change password, try again.", Toast.LENGTH_LONG).show()
+                            Toast.makeText(mContext, "Something went wrong cannot send change password request, try again.", Toast.LENGTH_LONG).show()
                         }
                     }
                 } catch (error: Exception) {}

@@ -26,7 +26,7 @@ class NotVerifiedActivity : AppCompatActivity() {
 
     // verifies email request to API
     fun verify(email: String){
-        val query = 1
+        val query = 4
         val connectToAPI = Connect(this@NotVerifiedActivity)
         try{
             val url = "http://54.81.239.120/updateAPI.php?queryType=$query&email=$email"

@@ -31,12 +31,11 @@ import android.widget.Toast
 open class CreateAccountActivity : AppCompatActivity(){
 
     // Checks if an email is already registered.
-    private fun isRegistered(email:String,name: String,password: String){
+    private fun isRegistered(email:String,name: String,password: String,answer: String){
         val query = 0
-        val connectToAPI = Connect(this,0,name,email,password)
+        val connectToAPI = Connect(this,0,name,email,password,answer)
         try{
             val url = "http://54.81.239.120/selectAPI.php?queryType=$query&email=$email"
-            println(url)
 
             connectToAPI.execute(url)
 
@@ -45,9 +44,9 @@ open class CreateAccountActivity : AppCompatActivity(){
     }
 
     // Check for empty fields and matching passwords
-    private fun checkLogin(name:String, password:String,confirm:String,email:String): Boolean{
+    private fun checkLogin(name:String, password:String,confirm:String,email:String, answer: String): Boolean{
         var canLogin = true
-        if(name.isNullOrBlank() || password.isNullOrBlank() || confirm.isNullOrBlank() || email.isNullOrBlank()){
+        if(name.isNullOrBlank() || password.isNullOrBlank() || confirm.isNullOrBlank() || email.isNullOrBlank() || answer.isNullOrBlank()){
             canLogin = false
             Toast.makeText(this, "All Fields are Required.", Toast.LENGTH_LONG).show()
         }
@@ -79,12 +78,15 @@ open class CreateAccountActivity : AppCompatActivity(){
             val Email = findViewById(R.id.caEmail) as EditText
             val Password = findViewById(R.id.caPassword) as EditText
             val ConfirmPassword = findViewById(R.id.caConfirmPassword) as EditText
+            val answerText = findViewById<EditText>(R.id.Answer)
+
             val name = Name.text.toString()
             val email = Email.text.toString()
             val password = Password.text.toString()
             val confirm = ConfirmPassword.text.toString()
-            if (checkLogin(name, password, confirm, email)) {
-                isRegistered(email,name, password)
+            val answer = answerText.text.toString()
+            if (checkLogin(name, password, confirm, email,answer)) {
+                isRegistered(email,name, password, answer)
             }
         }
     }
@@ -92,7 +94,7 @@ open class CreateAccountActivity : AppCompatActivity(){
     // Connect class that checks if user is registered,
     // if not, registers said user.
     companion object {
-        class Connect(private val mContext: Context, private val type : Int, private val name: String,private val email: String,private val password: String): AsyncTask<String, Void, String>(){
+        class Connect(private val mContext: Context, private val type : Int, private val name: String,private val email: String,private val password: String,private val answer: String): AsyncTask<String, Void, String>(){
 
             // Method to show an alert dialog with yes, no and cancel button
             private fun showDialog(mContext: Context,email: String,password: String) {
@@ -123,6 +125,24 @@ open class CreateAccountActivity : AppCompatActivity(){
                         DialogInterface.BUTTON_NEUTRAL -> println("Cancel")
                     }
                 }
+
+                // Set the alert dialog positive/yes button
+                builder.setPositiveButton("YES",dialogClickListener)
+
+                // Set the alert dialog negative/no button
+                builder.setNegativeButton("NO",dialogClickListener)
+
+                // Set the alert dialog neutral/cancel button
+                builder.setNeutralButton("CANCEL",dialogClickListener)
+
+
+                // Initialize the AlertDialog using builder object
+                dialog = builder.create()
+
+                // Finally, display the alert dialog
+                dialog.show()
+
+
             }
 
 
@@ -157,7 +177,7 @@ open class CreateAccountActivity : AppCompatActivity(){
                         if (registered){
                             Toast.makeText(mContext, "Account Already Exists.", Toast.LENGTH_SHORT).show()
                         } else{
-                            val reg = Registered(name,email,password,mContext)
+                            val reg = Registered(name,email,password,mContext,answer)
                             reg.triggerRegister()
                         }
 
@@ -168,7 +188,7 @@ open class CreateAccountActivity : AppCompatActivity(){
             }
         }
 
-        private class Registered(private val name: String,private val email: String,private val password: String, private val mContext: Context) : CreateAccountActivity(){
+        private class Registered(private val name: String,private val email: String,private val password: String, private val mContext: Context,private val answer: String) : CreateAccountActivity(){
             override fun onCreate(savedInstanceState: Bundle?) {
                 super.onCreate(savedInstanceState)
                 setContentView(R.layout.activity_create_account)
@@ -225,10 +245,10 @@ open class CreateAccountActivity : AppCompatActivity(){
             // connects to API and registers
             private fun register(name:String, password:String, email:String, salt: String){
                 val query = 0
-                val connectToAPI = Connect(mContext,1,name, email, password)
+                val connectToAPI = Connect(mContext,1,name, email, password,answer)
 
                 try{
-                    val url = "http://54.81.239.120/insertAPI.php?queryType=$query&name=$name&password=$password&email=$email&salt=$salt"
+                    val url = "http://54.81.239.120/insertAPI.php?queryType=$query&name=$name&password=$password&email=$email&salt=$salt&answer=$answer"
                     println(url)
                     connectToAPI.execute(url)
                 } catch (error: Exception){}
