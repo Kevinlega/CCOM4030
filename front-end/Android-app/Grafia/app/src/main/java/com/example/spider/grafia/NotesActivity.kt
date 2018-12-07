@@ -80,7 +80,7 @@ class NotesActivity : AppCompatActivity() {
             }
         }
 
-        // clear Note
+        // clear Text View
         clear_button.setOnClickListener {
             var Note = findViewById<EditText>(R.id.Note)
             Note.setText("")
