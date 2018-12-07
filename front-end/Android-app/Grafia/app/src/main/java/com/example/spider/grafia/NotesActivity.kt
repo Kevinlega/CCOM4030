@@ -6,6 +6,7 @@
 //
 // File        : NotesActivity.kt
 // Description : Creates a note and saves it to server
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 package com.example.spider.grafia
 

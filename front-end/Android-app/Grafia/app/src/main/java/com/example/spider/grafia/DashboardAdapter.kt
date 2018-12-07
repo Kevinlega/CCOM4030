@@ -6,7 +6,7 @@
 //
 // File        : DashboardAdapter.kt
 // Description : Handles the Dashboard view
-
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 package com.example.spider.grafia
 

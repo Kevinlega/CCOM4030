@@ -6,7 +6,7 @@
 //
 // File        : DownloadVideoActivity.kt
 // Description : Downloads video from server
-
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 package com.example.spider.grafia
 

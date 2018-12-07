@@ -6,6 +6,7 @@
 //
 // File        : CreateAccountActivity.kt
 // Description : Allows user to create an account
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 package com.example.spider.grafia
 

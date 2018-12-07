@@ -6,7 +6,7 @@
 //
 // File        : VoiceActivity.kt
 // Description : Takes audio and uploads it to server
-
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 package com.example.spider.grafia
 

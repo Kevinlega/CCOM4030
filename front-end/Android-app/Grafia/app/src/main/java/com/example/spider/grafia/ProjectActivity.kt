@@ -7,7 +7,7 @@
 // File        : ProjectActivity.kt
 // Description : Shows all the files on the server
 //               and segue to download and take data
-
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 package com.example.spider.grafia
 

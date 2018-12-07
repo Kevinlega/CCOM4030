@@ -6,6 +6,7 @@
 //
 // File        : DownloadAudioActivity.kt
 // Description : Create, download audio notes.
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 package com.example.spider.grafia
 

@@ -6,6 +6,7 @@
 //
 // File        : ChangePassword.kt
 // Description : Allows user to change password
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 package com.example.spider.grafia
 

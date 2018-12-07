@@ -6,6 +6,7 @@
 //
 // File        : DashboardActivity.kt
 // Description : Displays a project hub for user
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 package com.example.spider.grafia
 

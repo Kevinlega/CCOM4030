@@ -6,6 +6,7 @@
 //
 // File        : AddParticipantActivity.kt
 // Description : Activity that allows user to add other users to project
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 package com.example.spider.grafia
 

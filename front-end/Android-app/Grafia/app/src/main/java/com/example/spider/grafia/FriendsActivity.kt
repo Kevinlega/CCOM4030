@@ -7,7 +7,7 @@
 // File        : FriendsActivity.kt
 // Description : Send Friend Request, Accept or Reject Request and
 //               view all friends
-
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 package com.example.spider.grafia
 

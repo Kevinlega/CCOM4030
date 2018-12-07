@@ -7,6 +7,7 @@
 // File        : VideoActivity.kt
 // Description : Takes video or grabs from gallery
 //               and uploads it to server
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 package com.example.spider.grafia
 

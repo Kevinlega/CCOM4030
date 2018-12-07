@@ -6,6 +6,7 @@
 //
 // File        : DownloadNotesActivity.kt
 // Description : Downloads note from server
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 package com.example.spider.grafia
 

@@ -6,6 +6,7 @@
 //
 // File        : CreateProjectActivity.kt
 // Description : Allows user to create a project
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 package com.example.spider.grafia
 

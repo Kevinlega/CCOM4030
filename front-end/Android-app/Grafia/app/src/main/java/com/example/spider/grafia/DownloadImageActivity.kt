@@ -6,6 +6,7 @@
 //
 // File        : DownloadImageActivity.kt
 // Description : Fetches image from server and places it in image view
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 package com.example.spider.grafia
 

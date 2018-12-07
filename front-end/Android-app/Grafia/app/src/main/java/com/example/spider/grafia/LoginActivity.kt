@@ -6,6 +6,7 @@
 //
 // File        : LoginActivity.kt
 // Description : Login with email and password
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 package com.example.spider.grafia
 

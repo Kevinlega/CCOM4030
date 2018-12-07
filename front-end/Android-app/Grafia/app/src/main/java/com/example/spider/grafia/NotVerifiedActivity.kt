@@ -6,6 +6,7 @@
 //
 // File        : NotVerifiedActivity.kt
 // Description : Verifies user account
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 package com.example.spider.grafia
 

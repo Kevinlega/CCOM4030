@@ -6,7 +6,7 @@
 //
 // File        : DashboardHolder.kt
 // Description : Displays a project at cell
-
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 package com.example.spider.grafia
 
