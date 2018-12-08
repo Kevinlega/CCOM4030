@@ -57,6 +57,7 @@ class CreateAProjectViewController: UIViewController {
     // MARK: - Segue Function
     // Handles the data
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        ConnectionTest(self: self)
         if (segue.identifier == "BackToDashboard"){
             let vc = segue.destination as! DashboardViewController
             vc.user_id = user_id

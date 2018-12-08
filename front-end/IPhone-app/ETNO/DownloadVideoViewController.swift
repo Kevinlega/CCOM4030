@@ -74,6 +74,8 @@ class DownloadVideoViewController: UIViewController {
     
     // Handles the data
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        ConnectionTest(self: self)
+
         if (segue.identifier == "BackToProject"){
             let vc = segue.destination as! ProjectViewController
             vc.user_id = user_id

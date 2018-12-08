@@ -130,11 +130,13 @@ class VideoViewController: UIViewController, UINavigationControllerDelegate, UII
     
     // Pass user info to next segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    if (segue.identifier == "BackToProject"){
-    let vc = segue.destination as! ProjectViewController
-    vc.user_id = user_id
-    vc.project_id = project_id
-        }
+        ConnectionTest(self: self)
+
+        if (segue.identifier == "BackToProject"){
+        let vc = segue.destination as! ProjectViewController
+        vc.user_id = user_id
+        vc.project_id = project_id
+            }
     }
     
     

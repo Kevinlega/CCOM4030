@@ -156,6 +156,9 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
     // MARK: - Segue Function
     // Prepare user info for next segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        ConnectionTest(self: self)
+
         // Add particpants to project and move to the project view
         if (segue.identifier == "AddParticipants"){
             if (SelectedUsers.count > 0 && !FirstSelected){

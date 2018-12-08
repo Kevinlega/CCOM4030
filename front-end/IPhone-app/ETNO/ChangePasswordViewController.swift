@@ -55,6 +55,8 @@ class ChangePasswordViewController: UIViewController {
     // Makes sure that user is registered and changes user-password.
     // Performs segue for Login view.
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        ConnectionTest(self: self)
+        
         if (segue.identifier == "BackToLogin"){
             let _ = segue.destination as! LoginViewController
         }

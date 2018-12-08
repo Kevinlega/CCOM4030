@@ -54,6 +54,7 @@ class DashboardViewController: UIViewController, UICollectionViewDelegate, UICol
     // Selects the item and performs a Segue to it
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.project_id = Int(id[indexPath.row] as! String)!
+        ConnectionTest(self: self)
         performSegue(withIdentifier: "ViewProject", sender: nil)
     }
     
@@ -93,6 +94,9 @@ class DashboardViewController: UIViewController, UICollectionViewDelegate, UICol
     // MARK: - Segue Function
     // Handles the data
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        ConnectionTest(self: self)
+        
         if (segue.identifier == "ViewProject"){
             let vc = segue.destination as! ProjectViewController
             vc.user_id = user_id

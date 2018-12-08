@@ -166,6 +166,10 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
     // MARK: - Segue Function
     // Handles the data
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        ConnectionTest(self: self)
+
+        
         // Send friend request
         if (segue.identifier == "SendFriendRequest"){
             if(UsersCanBeAdded){

@@ -62,7 +62,7 @@ class ProjectViewController: UIViewController, UINavigationControllerDelegate, U
         }
 
         location = "http://54.81.239.120/" + path + "/" + type + "/" + name
-        
+        ConnectionTest(self: self)
         // Check type of download and move to the according view
         switch type {
         case "images":
@@ -114,8 +114,10 @@ class ProjectViewController: UIViewController, UINavigationControllerDelegate, U
     }
 
     // Download file names from server
-    func fetchPhotos()
-    {
+    func fetchPhotos(){
+        
+        ConnectionTest(self: self)
+        
         let url_parse = URL(string: "http://54.81.239.120/listdir.php?path=\(project_path)")
         if url_parse != nil {
             let task = URLSession.shared.dataTask(with: url_parse! as URL, completionHandler: {(data, response, error) -> Void in
@@ -143,6 +145,9 @@ class ProjectViewController: UIViewController, UINavigationControllerDelegate, U
     
     // Handles the segue and moves the data around.
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        ConnectionTest(self: self)
+        
         if (segue.identifier == "AddParticipants"){
             let vc = segue.destination as! AddParticipantViewController
             vc.user_id = user_id

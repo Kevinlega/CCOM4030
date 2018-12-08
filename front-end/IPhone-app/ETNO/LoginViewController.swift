@@ -47,7 +47,8 @@ class LoginViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         BiometricLogin()
         super.viewDidLoad()
-        self.hideKeyboardWhenTappedAround() 
+        self.hideKeyboardWhenTappedAround()
+        
         }
     
     override func didReceiveMemoryWarning() {
@@ -59,6 +60,10 @@ class LoginViewController: UIViewController {
     // MARK: - Segue Function
     // Handles the data and if the login is successful passes data to next view
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        
+        ConnectionTest(self: self)
+    
         if (segue.identifier == "CreateAccount"){
             let _ = segue.destination as! CreateAccountViewController
         }
@@ -66,6 +71,7 @@ class LoginViewController: UIViewController {
             let _ = segue.destination as! ChangePasswordViewController
         }
         else if (segue.identifier == "Dashboard"){
+    
             if CanSendLogin{
                 var response : NSDictionary = NSDictionary()
 
@@ -130,6 +136,7 @@ class LoginViewController: UIViewController {
                     self.LoadPassword(email)
                     
                     DispatchQueue.main.async{
+                        ConnectionTest(self: self)
                         self.performSegue(withIdentifier: "Dashboard", sender: nil)
                     }
                 }
@@ -138,15 +145,4 @@ class LoginViewController: UIViewController {
     }
 }
 
-// Put this piece of code anywhere you like
-extension UIViewController {
-    func hideKeyboardWhenTappedAround() {
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
-    }
-    
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
-    }
-}
+

@@ -104,7 +104,7 @@
         <!--Create Account View Controller-->
         <scene sceneID="xJ9-7i-7Ym">
             <objects>
-                <viewController id="UCp-4p-WhP" customClass="CreateAccountViewController" customModule="ETNO" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="myVCID" id="UCp-4p-WhP" customClass="CreateAccountViewController" customModule="ETNO" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="J23-uI-Gbt">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

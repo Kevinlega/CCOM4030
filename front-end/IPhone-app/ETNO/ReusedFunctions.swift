@@ -41,6 +41,7 @@ public func Alert(title: String, message: String, Dismiss: String) -> UIAlertCon
 // Connects to API after receiving request and returns API response as json
 public func ConnectToAPI(request: URLRequest) -> NSDictionary{
     
+    ConnectionTest(self: LoginViewController())
     var json : NSDictionary = NSDictionary()
     let group = DispatchGroup()
     group.enter()
@@ -457,5 +458,38 @@ public extension String{
         }
         
         return (hash.map { String(format: "%02x", $0) }.joined()) as String
+    }
+}
+
+// hides keyboard
+public extension UIViewController {
+    func hideKeyboardWhenTappedAround() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+}
+
+public func ConnectionTest(self: UIViewController){
+    var internet = true
+    
+    // check if internet
+    guard let status = Network.reachability?.status else { return }
+    switch status {
+    case .unreachable:
+        internet = false
+    case .wifi:
+        break
+    case .wwan:
+        break
+    }
+    if !internet{
+        self.present(Alert(title: "No Internet Connection", message: "Try Again Later", Dismiss: "Dismiss"),animated: true, completion: nil)
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "myVCID") as! CreateAccountViewController
+        self.present(vc, animated: true, completion: nil)
     }
 }

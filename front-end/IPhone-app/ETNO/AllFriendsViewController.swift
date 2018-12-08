@@ -41,7 +41,11 @@ class AllFriendsViewController: UIViewController, UITableViewDelegate, UITableVi
         if Searching{
             return FilteredUsers.count
         } else{
-            return users.count
+            if(users[0] == ""){
+                return 0
+            } else{
+                return users.count
+            }
         }
     }
     
@@ -99,6 +103,8 @@ class AllFriendsViewController: UIViewController, UITableViewDelegate, UITableVi
     // MARK: - Segue Function
     // Prepare segue for user validation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        ConnectionTest(self: self)
+        
         if (segue.identifier == "BackToDashboard"){
             let vc = segue.destination as! DashboardViewController
             vc.user_id = user_id

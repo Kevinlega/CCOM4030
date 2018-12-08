@@ -76,6 +76,9 @@ class CreateAccountViewController: UIViewController {
     // MARK: - Segue Function
     // Handles the data
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        ConnectionTest(self: self)
+        
         if (segue.identifier == "BackToLogin"){
             let _ = segue.destination as! LoginViewController
         }
