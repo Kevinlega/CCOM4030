@@ -220,10 +220,23 @@ class VideoActivity : AppCompatActivity() {
     }
     // takes intent to open gallery
     private fun dispatchPicVideoIntent(){
-        val intent = Intent()
-        intent.type = "video/*"
-        intent.action = Intent.ACTION_GET_CONTENT
-        startActivityForResult(Intent.createChooser(intent, "Select Video"), 2)
+
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 2)
+        } else {
+
+            val intent = Intent()
+            intent.type = "video/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            startActivityForResult(Intent.createChooser(intent, "Select Video"), 2)
+        }
     }
 
 
@@ -247,6 +260,7 @@ class VideoActivity : AppCompatActivity() {
                 myFile.delete()
                 mCurrentVideoPath = ""
             }
+
             val videoURI = data?.data
 
             val wholeID = DocumentsContract.getDocumentId(videoURI)
@@ -301,6 +315,23 @@ class VideoActivity : AppCompatActivity() {
                     save()
                 }
             }
+
+            2 -> {
+                if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+
+                    Toast.makeText(
+                        this@VideoActivity,
+                        "Permission needed to retrieve video.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    val intent = Intent()
+                    intent.type = "video/*"
+                    intent.action = Intent.ACTION_GET_CONTENT
+                    startActivityForResult(Intent.createChooser(intent, "Select Video"), 2)
+                }
+            }
+
         }
     }
 

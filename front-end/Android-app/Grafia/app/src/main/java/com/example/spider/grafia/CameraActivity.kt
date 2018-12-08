@@ -10,6 +10,7 @@
 
 package com.example.spider.grafia
 
+import android.Manifest
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.support.v7.app.AppCompatActivity
@@ -147,7 +148,6 @@ class CameraActivity : AppCompatActivity() {
         saveImage.setOnClickListener {
             if (mCurrentPhotoPath != "" && !saved) {
                 galleryAddPic()
-                Toast.makeText(this, "Saved to Gallery.", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "Nothing to Save.", Toast.LENGTH_SHORT).show()
             }
@@ -192,10 +192,23 @@ class CameraActivity : AppCompatActivity() {
 
     // Open gallery handler
     private fun dispatchPicPictureIntent() {
-        val intent = Intent()
-        intent.type = "image/*"
-        intent.action = Intent.ACTION_GET_CONTENT
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), 2)
+
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 2)
+        } else {
+
+            val intent = Intent()
+            intent.type = "image/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), 2)
+        }
     }
 
     // Get file from Intent to gallery or camera
@@ -308,6 +321,8 @@ class CameraActivity : AppCompatActivity() {
             MediaStore.Images.Media.insertImage(contentResolver, rotatePic(bitmap), "test", "test")
         }
         saved = true
+        Toast.makeText(this, "Saved to Gallery.", Toast.LENGTH_SHORT).show()
+
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -327,6 +342,23 @@ class CameraActivity : AppCompatActivity() {
                         save()
                 }
             }
+
+            2 -> {
+                if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+
+                    Toast.makeText(
+                        this@CameraActivity,
+                        "Permission needed to retrieve image.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    val intent = Intent()
+                    intent.type = "image/*"
+                    intent.action = Intent.ACTION_GET_CONTENT
+                    startActivityForResult(Intent.createChooser(intent, "Select Picture"), 2)
+                }
+            }
+
         }
     }
 

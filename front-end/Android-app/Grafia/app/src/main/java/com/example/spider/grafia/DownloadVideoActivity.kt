@@ -87,18 +87,26 @@ class DownloadVideoActivity : AppCompatActivity() {
         return file.delete()
     }
 
-    // Save video to gallery
-    private fun galleryAddVideo() = if (ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) != PackageManager.PERMISSION_GRANTED
-    ) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            1 -> {
 
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1
-        )
-    } else {
+                if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+
+                    Toast.makeText(
+                        this@DownloadVideoActivity,
+                        "Permission needed to save video.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    save()
+                }
+            }
+        }
+    }
+
+    private fun save(){
         // Save video to gallery
 
         val retriever = MediaMetadataRetriever()
@@ -136,6 +144,24 @@ class DownloadVideoActivity : AppCompatActivity() {
         sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri))
 
         saved = true
+
+        Toast.makeText(this, "Saved to Gallery.", Toast.LENGTH_SHORT).show()
+    }
+
+
+    // Save video to gallery
+    private fun galleryAddVideo() = if (ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) != PackageManager.PERMISSION_GRANTED
+    ) {
+
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1
+        )
+    } else {
+        save()
     }
 
     // Method to show an alert dialog with yes, no and cancel button
@@ -243,7 +269,6 @@ class DownloadVideoActivity : AppCompatActivity() {
         saveVideo2.setOnClickListener {
             if (mCurrentPath != "" && !saved && downloaded) {
                 galleryAddVideo()
-                Toast.makeText(this, "Saved to Gallery.", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "Nothing to Save.", Toast.LENGTH_SHORT).show()
             }

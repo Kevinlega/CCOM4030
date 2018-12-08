@@ -51,7 +51,7 @@
             android:gravity="top|left"
     />
     <TextView
-            android:text="Characters: "
+            android:text="Characters: 0"
             android:layout_width="139dp"
             android:layout_height="29dp"
             android:id="@+id/character_count" android:layout_marginStart="12dp"

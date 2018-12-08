@@ -113,13 +113,40 @@ class DownloadImageActivity : AppCompatActivity() {
                 arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1
             )
         } else {
-            // Save image to gallery via bitmap
-            BitmapFactory.decodeFile(mCurrentPath)?.also { bitmap ->
-                MediaStore.Images.Media.insertImage(contentResolver, rotatePic(bitmap), "test", "test")
-            }
-             saved = true
+            save()
         }
     }
+
+    private fun save(){
+        // Save image to gallery via bitmap
+        BitmapFactory.decodeFile(mCurrentPath)?.also { bitmap ->
+            MediaStore.Images.Media.insertImage(contentResolver, rotatePic(bitmap), "test", "test")
+        }
+        saved = true
+        Toast.makeText(this, "Saved to Gallery.", Toast.LENGTH_SHORT).show()
+
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            1 -> {
+
+                if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+
+                    Toast.makeText(
+                        this@DownloadImageActivity,
+                        "Permission needed to save image.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    save()
+                }
+            }
+        }
+    }
+
+
 
     // Method to show an alert dialog with yes, no and cancel button
     private fun showInternetNotification(mContext: Context, intent: Intent){
@@ -201,8 +228,6 @@ class DownloadImageActivity : AppCompatActivity() {
         saveImage2.setOnClickListener {
             if (mCurrentPath != "" && !saved && downloaded) {
                 galleryAddPic()
-                saved = true
-                Toast.makeText(this, "Saved to Gallery.", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "Nothing to Save.", Toast.LENGTH_SHORT).show()
             }
