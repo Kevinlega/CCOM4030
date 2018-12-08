@@ -13,6 +13,7 @@ package com.example.spider.grafia
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.EditText
@@ -25,22 +26,72 @@ import java.lang.StringBuilder
 import java.security.*
 import android.widget.Toast
 
-// import android.hardware.fingerprint.FingerprintManager
-
-
 open class CreateAccountActivity : AppCompatActivity(){
 
-    // Checks if an email is already registered.
-    private fun isRegistered(email:String,name: String,password: String,answer: String){
-        val query = 0
-        val connectToAPI = Connect(this,0,name,email,password,answer)
-        try{
-            val url = "http://54.81.239.120/selectAPI.php?queryType=$query&email=$email"
 
-            connectToAPI.execute(url)
 
+    // Method to show an alert dialog with yes, no and cancel button
+    private fun showInternetNotification(mContext: Context, intent: Intent){
+        // Late initialize an alert dialog object
+        lateinit var dialog: AlertDialog
+
+
+        // Initialize a new instance of alert dialog builder object
+        val builder = AlertDialog.Builder(mContext)
+        // Set a title for alert dialog
+        builder.setTitle("Lost Internet Connection.")
+
+        // Set a message for alert dialog
+        builder.setMessage("Do you want to return home or retry?")
+
+        // On click listener for dialog buttons
+        val dialogClickListener = DialogInterface.OnClickListener{ _, which ->
+            when(which){
+                DialogInterface.BUTTON_POSITIVE -> {
+
+                    val Logout = Intent(mContext, LoginActivity::class.java)
+                    Logout.putExtra("Failed",true)
+                    mContext.startActivity(Logout)
+                }
+                DialogInterface.BUTTON_NEGATIVE -> {
+                    finish()
+                    startActivity(intent)
+                }
+            }
         }
-        catch (error: Exception){}
+
+        // Set the alert dialog positive/yes button
+        builder.setPositiveButton("Home",dialogClickListener)
+        // Set the alert dialog negative/no button
+        builder.setNegativeButton("Retry",dialogClickListener)
+        // Initialize the AlertDialog using builder object
+        dialog = builder.create()
+        // Finally, display the alert dialog
+        dialog.show()
+    }
+
+    private fun isNetworkAvailable(mContext: Context): Boolean {
+        val connectivityManager = mContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected
+    }
+
+    // Checks if an email is already registered.
+    private fun isRegistered(email:String,name: String,password: String,answer: String) {
+
+        if (isNetworkAvailable(this@CreateAccountActivity)) {
+            val query = 0
+            val connectToAPI = Connect(this@CreateAccountActivity, 0, name, email, password, answer, intent)
+            try {
+                val url = "http://54.81.239.120/selectAPI.php?queryType=$query&email=$email"
+
+                connectToAPI.execute(url)
+
+            } catch (error: Exception) {
+            }
+        } else {
+            showInternetNotification(this@CreateAccountActivity,intent)
+        }
     }
 
     // Check for empty fields and matching passwords
@@ -94,7 +145,7 @@ open class CreateAccountActivity : AppCompatActivity(){
     // Connect class that checks if user is registered,
     // if not, registers said user.
     companion object {
-        class Connect(private val mContext: Context, private val type : Int, private val name: String,private val email: String,private val password: String,private val answer: String): AsyncTask<String, Void, String>(){
+        class Connect(private val mContext: Context, private val type : Int, private val name: String,private val email: String,private val password: String,private val answer: String, private val intent: Intent): AsyncTask<String, Void, String>(){
 
             // Method to show an alert dialog with yes, no and cancel button
             private fun showDialog(mContext: Context,email: String,password: String) {
@@ -120,9 +171,19 @@ open class CreateAccountActivity : AppCompatActivity(){
                             editor.putString("Email", email)
                             editor.putString("Password", password)
                             editor.apply()
+
+                            val intent = Intent(mContext, LoginActivity::class.java)
+                            Toast.makeText(mContext, "Account Created.", Toast.LENGTH_SHORT).show()
+                            mContext.startActivity(intent)
                         }
-                        DialogInterface.BUTTON_NEGATIVE -> println("No")
-                        DialogInterface.BUTTON_NEUTRAL -> println("Cancel")
+                        DialogInterface.BUTTON_NEGATIVE -> {
+                            val intent = Intent(mContext, LoginActivity::class.java)
+                            Toast.makeText(mContext, "Account Created.", Toast.LENGTH_SHORT).show()
+                            mContext.startActivity(intent) }
+                        DialogInterface.BUTTON_NEUTRAL ->{
+                            val intent = Intent(mContext, LoginActivity::class.java)
+                            Toast.makeText(mContext, "Account Created.", Toast.LENGTH_SHORT).show()
+                            mContext.startActivity(intent)}
                     }
                 }
 
@@ -158,16 +219,14 @@ open class CreateAccountActivity : AppCompatActivity(){
             override fun onPostExecute(result: String?){
                 try{
                     val jSONObject = JSONObject(result)
-                    println(jSONObject)
                     val registered = jSONObject.getBoolean("registered")
 
                     if(type == 1) {
+                        println("hello")
+                        println(jSONObject)
 
                         if(registered) {
                             showDialog(mContext,email,password)
-                            val intent = Intent(mContext, LoginActivity::class.java)
-                            Toast.makeText(mContext, "Account Created.", Toast.LENGTH_SHORT).show()
-                            mContext.startActivity(intent)
 
                         }else{
                             Toast.makeText(mContext, "Account Not Created.", Toast.LENGTH_SHORT).show()
@@ -177,10 +236,9 @@ open class CreateAccountActivity : AppCompatActivity(){
                         if (registered){
                             Toast.makeText(mContext, "Account Already Exists.", Toast.LENGTH_SHORT).show()
                         } else{
-                            val reg = Registered(name,email,password,mContext,answer)
+                            val reg = Registered(name,email,password,mContext,answer,intent)
                             reg.triggerRegister()
                         }
-
                     }
                 }
                 catch (error: Exception){}
@@ -188,7 +246,7 @@ open class CreateAccountActivity : AppCompatActivity(){
             }
         }
 
-        private class Registered(private val name: String,private val email: String,private val password: String, private val mContext: Context,private val answer: String) : CreateAccountActivity(){
+        private class Registered(private val name: String,private val email: String,private val password: String, private val mContext: Context,private val answer: String, private val Move: Intent) : CreateAccountActivity(){
             override fun onCreate(savedInstanceState: Bundle?) {
                 super.onCreate(savedInstanceState)
                 setContentView(R.layout.activity_create_account)
@@ -199,9 +257,7 @@ open class CreateAccountActivity : AppCompatActivity(){
             fun triggerRegister() {
 
                 var salt = java.util.UUID.randomUUID().toString().replace("-", "")
-
                 val hashedPassword = saltAndHash(password, salt)
-
                 register(name, hashedPassword, email, salt)
             }
 
@@ -244,14 +300,68 @@ open class CreateAccountActivity : AppCompatActivity(){
 
             // connects to API and registers
             private fun register(name:String, password:String, email:String, salt: String){
-                val query = 0
-                val connectToAPI = Connect(mContext,1,name, email, password,answer)
+                if(isNetworkAvailable(mContext)) {
 
-                try{
-                    val url = "http://54.81.239.120/insertAPI.php?queryType=$query&name=$name&password=$password&email=$email&salt=$salt&answer=$answer"
-                    println(url)
-                    connectToAPI.execute(url)
-                } catch (error: Exception){}
+                    val query = 0
+                    try {
+                        val connectToAPI = Connect(mContext, 1, name, email, password, answer,Move)
+                        println("url")
+                        val url = "http://54.81.239.120/insertAPI.php?queryType=$query&name=$name&password=$password&email=$email&salt=$salt&answer=$answer"
+                        println(url)
+                        connectToAPI.execute(url)
+                    } catch (error: Exception) {
+                        println("Fuck")
+                        println(error)
+                    }
+                } else {
+                    showInternetNotification(mContext, Move)
+                }
+            }
+
+            // Method to show an alert dialog with yes, no and cancel button
+            private fun showInternetNotification(mContext: Context, intent: Intent){
+                // Late initialize an alert dialog object
+                lateinit var dialog: AlertDialog
+
+
+                // Initialize a new instance of alert dialog builder object
+                val builder = AlertDialog.Builder(mContext)
+                // Set a title for alert dialog
+                builder.setTitle("Lost Internet Connection.")
+
+                // Set a message for alert dialog
+                builder.setMessage("Do you want to log out or retry?")
+
+                // On click listener for dialog buttons
+                val dialogClickListener = DialogInterface.OnClickListener{ _, which ->
+                    when(which){
+                        DialogInterface.BUTTON_POSITIVE -> {
+
+                            val Logout = Intent(mContext, LoginActivity::class.java)
+                            Logout.putExtra("Failed",true)
+                            mContext.startActivity(Logout)
+                        }
+                        DialogInterface.BUTTON_NEGATIVE -> {
+                            finish()
+                            mContext.startActivity(intent)
+                        }
+                    }
+                }
+
+                // Set the alert dialog positive/yes button
+                builder.setPositiveButton("Log Out",dialogClickListener)
+                // Set the alert dialog negative/no button
+                builder.setNegativeButton("Retry",dialogClickListener)
+                // Initialize the AlertDialog using builder object
+                dialog = builder.create()
+                // Finally, display the alert dialog
+                dialog.show()
+            }
+
+            private fun isNetworkAvailable(mContext: Context): Boolean {
+                val connectivityManager = mContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                val activeNetworkInfo = connectivityManager.activeNetworkInfo
+                return activeNetworkInfo != null && activeNetworkInfo.isConnected
             }
         }
     }

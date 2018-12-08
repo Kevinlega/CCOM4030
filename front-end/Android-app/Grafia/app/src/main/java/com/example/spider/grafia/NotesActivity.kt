@@ -11,11 +11,14 @@
 package com.example.spider.grafia
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
+import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
@@ -29,7 +32,62 @@ import java.net.URL
 class NotesActivity : AppCompatActivity() {
 
     // global varibales
-    var projectPath = ""
+    private var projectPath = ""
+    private var projectName = ""
+    private var userId = -1
+    private var projectId = -1
+
+
+    // Method to show an alert dialog with yes, no and cancel button
+    private fun showInternetNotification(mContext: Context){
+        // Late initialize an alert dialog object
+        lateinit var dialog: AlertDialog
+
+
+        // Initialize a new instance of alert dialog builder object
+        val builder = AlertDialog.Builder(mContext)
+
+        // Set a title for alert dialog
+        builder.setTitle("Lost Internet Connection.")
+
+        // Set a message for alert dialog
+        builder.setMessage("Do you want to log out or retry?")
+
+
+        // On click listener for dialog buttons
+        val dialogClickListener = DialogInterface.OnClickListener{ _, which ->
+            when(which){
+                DialogInterface.BUTTON_POSITIVE -> {
+
+                    val intent = Intent(mContext, LoginActivity::class.java)
+                    intent.putExtra("Failed",true)
+                    mContext.startActivity(intent)
+                }
+                DialogInterface.BUTTON_NEGATIVE -> {
+                    finish()
+                    startActivity(intent)
+                }
+            }
+        }
+
+        // Set the alert dialog positive/yes button
+        builder.setPositiveButton("Log Out",dialogClickListener)
+
+        // Set the alert dialog negative/no button
+        builder.setNegativeButton("Retry",dialogClickListener)
+
+        // Initialize the AlertDialog using builder object
+        dialog = builder.create()
+
+        // Finally, display the alert dialog
+        dialog.show()
+    }
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,10 +95,10 @@ class NotesActivity : AppCompatActivity() {
 
         supportActionBar!!.title = "Notes"
         // get users data
-        val userId = intent.getIntExtra("userId",-1)
-        val projectId = intent.getIntExtra("pId",-1)
+        userId = intent.getIntExtra("userId",-1)
+        projectId = intent.getIntExtra("pId",-1)
         projectPath = intent.getStringExtra("projectPath")
-        val name = intent.getStringExtra("projectName")
+        projectName = intent.getStringExtra("projectName")
 
         // Segue
         backToProject4.setOnClickListener {
@@ -48,7 +106,7 @@ class NotesActivity : AppCompatActivity() {
             // To pass any data to next activity
             intent.putExtra("userId", userId)
             intent.putExtra("pId", projectId)
-            intent.putExtra("projectName",name)
+            intent.putExtra("projectName",projectName)
             // start your next activity
             startActivity(intent)
         }
@@ -94,14 +152,19 @@ class NotesActivity : AppCompatActivity() {
 
     // Post to API to upload file
     private fun save(text:String,name:String){
-        val fileType = 0
-        val path = projectPath + "/docs/" + name
-        val connectToAPI = Connect(this)//,fileType,path,text)
-        try{
-            val url = "http://54.81.239.120/fUploadAPI.php?fileType=$fileType&path=$path&text=$text"
-            connectToAPI.execute(url)
+
+        if(isNetworkAvailable()) {
+            val fileType = 0
+            val path = projectPath + "/docs/" + name
+            val connectToAPI = Connect(this,projectName,userId,projectId)//,fileType,path,text)
+            try {
+                val url = "http://54.81.239.120/fUploadAPI.php?fileType=$fileType&path=$path&text=$text"
+                connectToAPI.execute(url)
+            } catch (error: Exception) {
+            }
+        } else {
+            showInternetNotification(this@NotesActivity)
         }
-        catch (error: Exception){}
     }
 
     // Listener for text change
@@ -123,7 +186,7 @@ class NotesActivity : AppCompatActivity() {
 
     // Connect class that uploads string
     companion object {
-        class Connect(private val mContext: Context) :
+        class Connect(private val mContext: Context,private val name: String, private val userId: Int, private val projectId: Int) :
             AsyncTask<String, Void, String>() {//, private val type : Int, private val path: String, private val fileType: String,private val text: String): AsyncTask<String, Void, String>(){
 
             override fun doInBackground(vararg p0: String?): String {
@@ -143,6 +206,9 @@ class NotesActivity : AppCompatActivity() {
                     if (uploaded) {
                         val intent = Intent(mContext, ProjectActivity::class.java)
                         Toast.makeText(mContext, "File created.", Toast.LENGTH_SHORT).show()
+                        intent.putExtra("projectName",name)
+                        intent.putExtra("userId", userId)
+                        intent.putExtra("pId", projectId)
                         mContext.startActivity(intent)
 
                     } else {

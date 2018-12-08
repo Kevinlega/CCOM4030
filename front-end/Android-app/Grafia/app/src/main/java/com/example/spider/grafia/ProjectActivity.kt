@@ -12,10 +12,13 @@
 package com.example.spider.grafia
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,14 +35,64 @@ import org.json.JSONObject
 import java.io.IOException
 import java.net.URL
 
-
-
 class ProjectActivity : AppCompatActivity() {
     // Global variables
     private var projectPath = ""
     private var userId = -1
     private var projectId = -1
     private var title = ""
+
+
+    // Method to show an alert dialog with yes, no and cancel button
+    private fun showInternetNotification(mContext: Context){
+        // Late initialize an alert dialog object
+        lateinit var dialog: AlertDialog
+
+
+        // Initialize a new instance of alert dialog builder object
+        val builder = AlertDialog.Builder(mContext)
+
+        // Set a title for alert dialog
+        builder.setTitle("Lost Internet Connection.")
+
+        // Set a message for alert dialog
+        builder.setMessage("Do you want to log out or retry?")
+
+
+        // On click listener for dialog buttons
+        val dialogClickListener = DialogInterface.OnClickListener{ _, which ->
+            when(which){
+                DialogInterface.BUTTON_POSITIVE -> {
+
+                    val intent = Intent(mContext, LoginActivity::class.java)
+                    intent.putExtra("Failed",true)
+                    mContext.startActivity(intent)
+                }
+                DialogInterface.BUTTON_NEGATIVE -> {
+                    finish()
+                    startActivity(intent)
+                }
+            }
+        }
+
+        // Set the alert dialog positive/yes button
+        builder.setPositiveButton("Log Out",dialogClickListener)
+
+        // Set the alert dialog negative/no button
+        builder.setNegativeButton("Retry",dialogClickListener)
+
+        // Initialize the AlertDialog using builder object
+        dialog = builder.create()
+
+        // Finally, display the alert dialog
+        dialog.show()
+    }
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,22 +104,29 @@ class ProjectActivity : AppCompatActivity() {
         userId = intent.getIntExtra("userId",-1)
         projectId = intent.getIntExtra("pId",-1)
 
-
-        // Check if admin
         var connectToAPI = Connect(this,1)
-        try{
-            val url = "http://54.81.239.120/selectAPI.php?queryType=8&pid=$projectId"
-            connectToAPI.execute(url)
+        // Check if admin
+        if(isNetworkAvailable()) {
+            try{
+                val url = "http://54.81.239.120/selectAPI.php?queryType=8&pid=$projectId"
+                connectToAPI.execute(url)
+            }
+            catch (error: Exception){}
+        } else {
+            showInternetNotification(this@ProjectActivity)
         }
-        catch (error: Exception){}
 
-        // Get project path
-        connectToAPI = Connect(this,0)
-        try{
-            val url = "http://54.81.239.120/selectAPI.php?queryType=10&pid=$projectId"
-            connectToAPI.execute(url)
+        if(isNetworkAvailable()) {
+            // Get project path
+            connectToAPI = Connect(this, 0)
+            try {
+                val url = "http://54.81.239.120/selectAPI.php?queryType=10&pid=$projectId"
+                connectToAPI.execute(url)
+            } catch (error: Exception) {
+            }
+        } else {
+            showInternetNotification(this@ProjectActivity)
         }
-        catch (error: Exception){}
 
         // Segues
         BackToDashboard.setOnClickListener {
@@ -133,64 +193,64 @@ class ProjectActivity : AppCompatActivity() {
     }
 
     // fetch files
-    private fun fetchJson(mContext: Context) {
-        println("Fetching Json.")
+    private fun fetchJson() {
+        if (isNetworkAvailable()) {
 
-        val url = "http://54.81.239.120/listdir.php?path=$projectPath"
+            val url = "http://54.81.239.120/listdir.php?path=$projectPath"
 
-        var request = Request.Builder().url(url).build()
-        val client = OkHttpClient()
-        client.newCall(request).enqueue(object: Callback {
-            override fun onResponse(call: Call, response: Response) {
-                val body = response.body()?.string()
-                val gson = GsonBuilder().create()
-                val myfiles: myFiles?
-                myfiles = gson.fromJson(body, myFiles::class.java)
-                val listview = findViewById<ListView>(R.id.project_list_files)
+            var request = Request.Builder().url(url).build()
+            val client = OkHttpClient()
+            client.newCall(request).enqueue(object : Callback {
+                override fun onResponse(call: Call, response: Response) {
+                    val body = response.body()?.string()
+                    val gson = GsonBuilder().create()
+                    val myfiles: myFiles?
+                    myfiles = gson.fromJson(body, myFiles::class.java)
+                    val listview = findViewById<ListView>(R.id.project_list_files)
 
-                // list adapter
-                runOnUiThread {
-
-
-                   listview.adapter = MyCustomAdapter(this@ProjectActivity, myfiles)
+                    // list adapter
+                    runOnUiThread {
 
 
-                    listview.setOnItemClickListener { parent, view, position, id ->
+                        listview.adapter = MyCustomAdapter(this@ProjectActivity, myfiles)
 
-                        val file = listview.getItemAtPosition(position) as Array<String>
 
-                        var intent = Intent(this@ProjectActivity, ProjectActivity::class.java)
+                        listview.setOnItemClickListener { parent, view, position, id ->
 
-                        when(file[1]) {
-                            "voice" ->  intent = Intent(this@ProjectActivity, DownloadAudioActivity::class.java)
-                            "images" -> intent = Intent(this@ProjectActivity, DownloadImageActivity::class.java)
-                            "videos" -> intent = Intent(this@ProjectActivity, DownloadVideoActivity::class.java)
-                            "docs" ->  intent = Intent(this@ProjectActivity, DownloadNotesActivity::class.java)
+                            val file = listview.getItemAtPosition(position) as Array<String>
+
+                            var intent = Intent(this@ProjectActivity, ProjectActivity::class.java)
+
+                            when (file[1]) {
+                                "voice" -> intent = Intent(this@ProjectActivity, DownloadAudioActivity::class.java)
+                                "images" -> intent = Intent(this@ProjectActivity, DownloadImageActivity::class.java)
+                                "videos" -> intent = Intent(this@ProjectActivity, DownloadVideoActivity::class.java)
+                                "docs" -> intent = Intent(this@ProjectActivity, DownloadNotesActivity::class.java)
+                            }
+
+                            var path = projectPath.substringAfter("/var/www/html/")
+
+                            val location = "http://54.81.239.120/" + path + "/" + file[1] + "/" + file[0]
+
+                            // To pass any data to next activity
+                            intent.putExtra("userId", userId)
+                            intent.putExtra("pId", projectId)
+                            intent.putExtra("projectPath", location)
+                            intent.putExtra("projectName", title)
+                            // start your next activity
+                            startActivity(intent)
                         }
-
-                        var path = projectPath.substringAfter("/var/www/html/")
-
-                        val location = "http://54.81.239.120/" + path + "/" + file[1] + "/" + file[0]
-
-                        // To pass any data to next activity
-                        intent.putExtra("userId", userId)
-                        intent.putExtra("pId", projectId)
-                        intent.putExtra("projectPath",location)
-                        intent.putExtra("projectName",title)
-                        // start your next activity
-                        startActivity(intent)
-
-
                     }
                 }
-            }
 
-            override fun onFailure(call: Call, e: IOException) {
-                println("Error")
-            }
-        })
+                override fun onFailure(call: Call, e: IOException) {
+                    println("Error")
+                }
+            })
+        } else {
+            showInternetNotification(this@ProjectActivity)
+        }
     }
-
     // List Adapter
     private inner class MyCustomAdapter(context: Context, myfiles : myFiles) : BaseAdapter() {
         private val mContext: Context
@@ -261,7 +321,7 @@ class ProjectActivity : AppCompatActivity() {
 
                     if (!empty) {
                         projectPath = jSONObject.getString("path")
-                        fetchJson(mContext)
+                        fetchJson()
 
                     }
                 } else if (flag == 1) {

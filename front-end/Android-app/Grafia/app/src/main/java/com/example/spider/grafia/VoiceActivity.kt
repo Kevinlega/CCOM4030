@@ -11,16 +11,20 @@
 package com.example.spider.grafia
 
 import android.Manifest
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.media.MediaRecorder
+import android.net.ConnectivityManager
 import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_voice.*
 import java.io.File
@@ -40,6 +44,57 @@ class VoiceActivity : AppCompatActivity(){
     private var myAudioRecorder = MediaRecorder()
     private var projectPath = ""
     private var name = ""
+
+    // Method to show an alert dialog with yes, no and cancel button
+    private fun showInternetNotification(mContext: Context){
+        // Late initialize an alert dialog object
+        lateinit var dialog: AlertDialog
+
+
+        // Initialize a new instance of alert dialog builder object
+        val builder = AlertDialog.Builder(mContext)
+
+        // Set a title for alert dialog
+        builder.setTitle("Lost Internet Connection.")
+
+        // Set a message for alert dialog
+        builder.setMessage("Do you want to log out or retry?")
+
+
+        // On click listener for dialog buttons
+        val dialogClickListener = DialogInterface.OnClickListener{ _, which ->
+            when(which){
+                DialogInterface.BUTTON_POSITIVE -> {
+
+                    val intent = Intent(mContext, LoginActivity::class.java)
+                    intent.putExtra("Failed",true)
+                    mContext.startActivity(intent)
+                }
+                DialogInterface.BUTTON_NEGATIVE -> {
+                    finish()
+                    startActivity(intent)
+                }
+            }
+        }
+
+        // Set the alert dialog positive/yes button
+        builder.setPositiveButton("Log Out",dialogClickListener)
+
+        // Set the alert dialog negative/no button
+        builder.setNegativeButton("Retry",dialogClickListener)
+
+        // Initialize the AlertDialog using builder object
+        dialog = builder.create()
+
+        // Finally, display the alert dialog
+        dialog.show()
+    }
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected
+    }
 
     // Creates temporary audio file
     private fun createTempVoiceFile(): File {
@@ -77,6 +132,24 @@ class VoiceActivity : AppCompatActivity(){
                     // start your next activity
                     startActivity(intent)
 
+                } else {
+                    // records
+                    val NotUsed = createTempVoiceFile()
+                    myAudioRecorder = MediaRecorder()
+                    myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)
+                    myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+                    myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB)
+                    myAudioRecorder.setOutputFile(mCurrentVoicePath)
+
+
+                    myAudioRecorder.prepare()
+                    myAudioRecorder.start()
+                    recordVoice.isEnabled = false
+                    playVoice.isEnabled = false
+                    pauseVoice.isEnabled = false
+                    uploadVoice.isEnabled = false
+
+                    Toast.makeText(this@VoiceActivity, "Recording started", Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -201,7 +274,11 @@ class VoiceActivity : AppCompatActivity(){
 
         // upload to server
         uploadVoice.setOnClickListener {
-            UploadFileAsync(projectPath).execute("")
+            if(isNetworkAvailable()) {
+                UploadFileAsync(projectPath).execute("")
+            } else {
+                showInternetNotification(this@VoiceActivity)
+            }
         }
 
         // back to project view

@@ -5,7 +5,7 @@
 //               Enrique Rodriguez
 //
 // File        : CameraActivity.kt
-// Description : Allows user to import/export images into activiy.
+// Description : Allows user to import/export images into activity.
 // Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 package com.example.spider.grafia
@@ -24,15 +24,66 @@ import android.provider.MediaStore
 import android.support.v4.content.FileProvider
 import android.widget.Toast
 import android.Manifest.permission
+import android.content.Context
+import android.content.DialogInterface
 import android.support.v4.app.ActivityCompat
 import android.content.pm.PackageManager
+import android.net.ConnectivityManager
 import android.support.v4.content.ContextCompat
 import java.io.*
 import android.os.AsyncTask
 import java.net.*
 import android.provider.DocumentsContract
+import android.support.v7.app.AlertDialog
 
 class CameraActivity : AppCompatActivity() {
+
+    // Method to show an alert dialog with yes, no and cancel button
+    private fun showInternetNotification(mContext: Context, intent: Intent){
+        // Late initialize an alert dialog object
+        lateinit var dialog: AlertDialog
+
+
+        // Initialize a new instance of alert dialog builder object
+        val builder = AlertDialog.Builder(mContext)
+        // Set a title for alert dialog
+        builder.setTitle("Lost Internet Connection.")
+
+        // Set a message for alert dialog
+        builder.setMessage("Do you want to log out or retry?")
+
+        // On click listener for dialog buttons
+        val dialogClickListener = DialogInterface.OnClickListener{ _, which ->
+            when(which){
+                DialogInterface.BUTTON_POSITIVE -> {
+
+                    val Logout = Intent(mContext, LoginActivity::class.java)
+                    Logout.putExtra("Failed",true)
+                    mContext.startActivity(Logout)
+                }
+                DialogInterface.BUTTON_NEGATIVE -> {
+                    finish()
+                    startActivity(intent)
+                }
+            }
+        }
+
+        // Set the alert dialog positive/yes button
+        builder.setPositiveButton("Log Out",dialogClickListener)
+        // Set the alert dialog negative/no button
+        builder.setNegativeButton("Retry",dialogClickListener)
+        // Initialize the AlertDialog using builder object
+        dialog = builder.create()
+        // Finally, display the alert dialog
+        dialog.show()
+    }
+
+    private fun isNetworkAvailable(mContext: Context): Boolean {
+        val connectivityManager = mContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected
+    }
+
 
     // Global variables
     private var mCurrentPhotoPath = ""
@@ -71,7 +122,7 @@ class CameraActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Open the camara trigger
+        // Open the camera trigger
         openCamera.setOnClickListener {
             // delete images that were not used
             if ((mCurrentPhotoPath != "") and !saved) {
@@ -104,8 +155,12 @@ class CameraActivity : AppCompatActivity() {
 
         // upload image to server
         uploadImage.setOnClickListener {
-            if(!mCurrentPickedPicture.isNullOrBlank() || !mCurrentPhotoPath.isNullOrBlank()){
-                UploadFileAsync(projectPath).execute("")
+            if (isNetworkAvailable(this@CameraActivity)) {
+                if (!mCurrentPickedPicture.isNullOrBlank() || !mCurrentPhotoPath.isNullOrBlank()) {
+                    UploadFileAsync(projectPath).execute("")
+                }
+            } else {
+                showInternetNotification(this@CameraActivity,intent)
             }
         }
     }
@@ -268,7 +323,8 @@ class CameraActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                 } else{
-                    save()
+                    if(mCurrentPhotoPath != "")
+                        save()
                 }
             }
         }

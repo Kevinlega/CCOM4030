@@ -27,9 +27,13 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_video.*
 import java.lang.Exception
 import android.content.ContentValues
+import android.content.Context
+import android.content.DialogInterface
 import android.media.MediaMetadataRetriever
+import android.net.ConnectivityManager
 import android.os.AsyncTask
 import android.provider.DocumentsContract
+import android.support.v7.app.AlertDialog
 import java.io.*
 import java.net.URL
 
@@ -46,6 +50,57 @@ class VideoActivity : AppCompatActivity() {
     private var projectId = -1
     private var restart = false
     private var projectPath = ""
+
+    // Method to show an alert dialog with yes, no and cancel button
+    private fun showInternetNotification(mContext: Context){
+        // Late initialize an alert dialog object
+        lateinit var dialog: AlertDialog
+
+
+        // Initialize a new instance of alert dialog builder object
+        val builder = AlertDialog.Builder(mContext)
+
+        // Set a title for alert dialog
+        builder.setTitle("Lost Internet Connection.")
+
+        // Set a message for alert dialog
+        builder.setMessage("Do you want to log out or retry?")
+
+
+        // On click listener for dialog buttons
+        val dialogClickListener = DialogInterface.OnClickListener{ _, which ->
+            when(which){
+                DialogInterface.BUTTON_POSITIVE -> {
+
+                    val intent = Intent(mContext, LoginActivity::class.java)
+                    intent.putExtra("Failed",true)
+                    mContext.startActivity(intent)
+                }
+                DialogInterface.BUTTON_NEGATIVE -> {
+                    finish()
+                    startActivity(intent)
+                }
+            }
+        }
+
+        // Set the alert dialog positive/yes button
+        builder.setPositiveButton("Log Out",dialogClickListener)
+
+        // Set the alert dialog negative/no button
+        builder.setNegativeButton("Retry",dialogClickListener)
+
+        // Initialize the AlertDialog using builder object
+        dialog = builder.create()
+
+        // Finally, display the alert dialog
+        dialog.show()
+    }
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -131,9 +186,14 @@ class VideoActivity : AppCompatActivity() {
 
         // upload video
         uploadVideo.setOnClickListener {
-            if(!mCurrentPickedVideo.isNullOrBlank() || !mCurrentVideoPath.isNullOrBlank()){
-                UploadFileAsync(projectPath).execute("")
-            }
+            if(isNetworkAvailable()) {
+                if (!mCurrentPickedVideo.isNullOrBlank() || !mCurrentVideoPath.isNullOrBlank()) {
+                    UploadFileAsync(projectPath).execute("")
+                } else{
+                    Toast.makeText(this@VideoActivity, "Nothing to upload.", Toast.LENGTH_SHORT).show()
+                }
+            } else
+                showInternetNotification(this@VideoActivity)
         }
     }
 

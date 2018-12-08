@@ -11,10 +11,13 @@
 package com.example.spider.grafia
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.widget.EditText
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_not_verified.*
@@ -24,16 +27,72 @@ import java.net.URL
 
 class NotVerifiedActivity : AppCompatActivity() {
 
+    // Method to show an alert dialog with yes, no and cancel button
+    private fun showInternetNotification(mContext: Context){
+        // Late initialize an alert dialog object
+        lateinit var dialog: AlertDialog
+
+
+        // Initialize a new instance of alert dialog builder object
+        val builder = AlertDialog.Builder(mContext)
+
+        // Set a title for alert dialog
+        builder.setTitle("Lost Internet Connection.")
+
+        // Set a message for alert dialog
+        builder.setMessage("Do you want to return home or retry?")
+
+
+        // On click listener for dialog buttons
+        val dialogClickListener = DialogInterface.OnClickListener{ _, which ->
+            when(which){
+                DialogInterface.BUTTON_POSITIVE -> {
+
+                    val intent = Intent(mContext, LoginActivity::class.java)
+                    intent.putExtra("Failed",true)
+                    mContext.startActivity(intent)
+                }
+                DialogInterface.BUTTON_NEGATIVE -> {
+                    finish()
+                    startActivity(intent)
+                }
+            }
+        }
+
+        // Set the alert dialog positive/yes button
+        builder.setPositiveButton("Home",dialogClickListener)
+
+        // Set the alert dialog negative/no button
+        builder.setNegativeButton("Retry",dialogClickListener)
+
+        // Initialize the AlertDialog using builder object
+        dialog = builder.create()
+
+        // Finally, display the alert dialog
+        dialog.show()
+    }
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected
+    }
+
+
     // verifies email request to API
     fun verify(email: String){
-        val query = 4
-        val connectToAPI = Connect(this@NotVerifiedActivity)
-        try{
-            val url = "http://54.81.239.120/updateAPI.php?queryType=$query&email=$email"
-            println(url)
-            connectToAPI.execute(url)
+        if (isNetworkAvailable()) {
+            val query = 4
+            val connectToAPI = Connect(this@NotVerifiedActivity)
+            try {
+                val url = "http://54.81.239.120/updateAPI.php?queryType=$query&email=$email"
+                println(url)
+                connectToAPI.execute(url)
+            } catch (error: Exception) {
+            }
+        } else {
+            showInternetNotification(this@NotVerifiedActivity)
         }
-        catch (error: Exception){}
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

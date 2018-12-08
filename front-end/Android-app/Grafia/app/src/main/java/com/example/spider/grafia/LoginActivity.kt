@@ -25,8 +25,62 @@ import java.lang.Exception
 import java.lang.StringBuilder
 import java.net.URL
 import java.security.*
+import android.net.ConnectivityManager
+
+
 
 class LoginActivity : AppCompatActivity() {
+
+    // Method to show an alert dialog with yes, no and cancel button
+    private fun showInternetNotification(mContext: Context){
+        // Late initialize an alert dialog object
+        lateinit var dialog:AlertDialog
+
+
+        // Initialize a new instance of alert dialog builder object
+        val builder = AlertDialog.Builder(mContext)
+
+        // Set a title for alert dialog
+        builder.setTitle("Lost Internet Connection.")
+
+        // Set a message for alert dialog
+        builder.setMessage("Do you want to return home or retry?")
+
+
+        // On click listener for dialog buttons
+        val dialogClickListener = DialogInterface.OnClickListener{ _, which ->
+            when(which){
+                DialogInterface.BUTTON_POSITIVE -> {
+
+                    val intent = Intent(mContext, LoginActivity::class.java)
+                    intent.putExtra("Failed",true)
+                    mContext.startActivity(intent)
+                }
+                DialogInterface.BUTTON_NEGATIVE -> {
+                    finish()
+                    startActivity(intent)
+                }
+            }
+        }
+
+        // Set the alert dialog positive/yes button
+        builder.setPositiveButton("Home",dialogClickListener)
+
+        // Set the alert dialog negative/no button
+        builder.setNegativeButton("Retry",dialogClickListener)
+
+        // Initialize the AlertDialog using builder object
+        dialog = builder.create()
+
+        // Finally, display the alert dialog
+        dialog.show()
+    }
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,24 +122,26 @@ class LoginActivity : AppCompatActivity() {
         // Trigger login
         loginButton.setOnClickListener {
 
-            val Email = findViewById<EditText>(R.id.loginEmail)
-            val Password = findViewById<EditText>(R.id.loginPassword)
-            val email = Email.text.toString()
-            val password = Password.text.toString()
-            if (checkLogin(password, email)) {
-                isRegistered(email, password)
+            if(isNetworkAvailable()) {
+                val Email = findViewById<EditText>(R.id.loginEmail)
+                val Password = findViewById<EditText>(R.id.loginPassword)
+                val email = Email.text.toString()
+                val password = Password.text.toString()
+                if (checkLogin(password, email)) {
+                    isRegistered(email, password)
+                }
+            } else{
+                showInternetNotification(this@LoginActivity)
             }
         }
 
         // Segues
         createAccount.setOnClickListener {
             val intent = Intent(this@LoginActivity, CreateAccountActivity::class.java)
-
             startActivity(intent)
         }
         changePassword.setOnClickListener {
             val intent = Intent(this@LoginActivity, ChangePasswordActivity::class.java)
-
             startActivity(intent)
         }
     }
@@ -93,7 +149,7 @@ class LoginActivity : AppCompatActivity() {
     // Checks if an email is already registered.
     private fun isRegistered(email:String,password:String){
         val query = 4
-        val connectToAPI = Connect(this, 0,email,password)
+        val connectToAPI = Connect(this, 0,email,password,intent)
         try{
             val url = "http://54.81.239.120/selectAPI.php?queryType=$query&email=$email"
             println(url)
@@ -115,19 +171,23 @@ class LoginActivity : AppCompatActivity() {
 
     // Verifies Login data
     companion object {
-        class Connect(private val mContext: Context,private val flag: Int, private val email: String, private val password: String) :
+        class Connect(private val mContext: Context,private val flag: Int, private val email: String, private val password: String,private val intent: Intent) :
             AsyncTask<String, Void, String>() {
 
             // Send uid retrieve request
             private fun getUID(email:String,tryPassword: String){
-                val query = 2
-                val connectToAPI = LoginActivity.Companion.Connect(mContext, 1,email,tryPassword)
-                try{
-                    val url = "http://54.81.239.120/selectAPI.php?queryType=$query&email=$email"
-                    println(url)
-                    connectToAPI.execute(url)
+                if (isNetworkAvailable()) {
+                    val query = 2
+                    val connectToAPI = LoginActivity.Companion.Connect(mContext, 1, email, tryPassword, intent)
+                    try {
+                        val url = "http://54.81.239.120/selectAPI.php?queryType=$query&email=$email"
+                        println(url)
+                        connectToAPI.execute(url)
+                    } catch (error: Exception) {
+                    }
+                } else {
+                    showInternetNotification()
                 }
-                catch (error: Exception){}
             }
             // Byte Array To String
             private fun byteArrayToHexString(array: Array<Byte>): String {
@@ -277,6 +337,55 @@ class LoginActivity : AppCompatActivity() {
                 dialog.show()
             }
 
+            // Method to show an alert dialog with yes, no and cancel button
+            private fun showInternetNotification(){
+                // Late initialize an alert dialog object
+                lateinit var dialog:AlertDialog
+
+
+                // Initialize a new instance of alert dialog builder object
+                val builder = AlertDialog.Builder(mContext)
+
+                // Set a title for alert dialog
+                builder.setTitle("Lost Internet Connection.")
+
+                // Set a message for alert dialog
+                builder.setMessage("Do you want to return home or retry?")
+
+
+                // On click listener for dialog buttons
+                val dialogClickListener = DialogInterface.OnClickListener{ _, which ->
+                    when(which){
+                        DialogInterface.BUTTON_POSITIVE -> {
+
+                            val Logout = Intent(mContext, LoginActivity::class.java)
+                            Logout.putExtra("Failed",true)
+                            mContext.startActivity(Logout)
+                        }
+                        DialogInterface.BUTTON_NEGATIVE -> {
+                            mContext.startActivity(intent)
+                        }
+                    }
+                }
+
+                // Set the alert dialog positive/yes button
+                builder.setPositiveButton("Home",dialogClickListener)
+
+                // Set the alert dialog negative/no button
+                builder.setNegativeButton("Retry",dialogClickListener)
+
+                // Initialize the AlertDialog using builder object
+                dialog = builder.create()
+
+                // Finally, display the alert dialog
+                dialog.show()
+            }
+
+            private fun isNetworkAvailable(): Boolean {
+                val connectivityManager = mContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                val activeNetworkInfo = connectivityManager.activeNetworkInfo
+                return activeNetworkInfo != null && activeNetworkInfo.isConnected
+            }
         }
     }
 }

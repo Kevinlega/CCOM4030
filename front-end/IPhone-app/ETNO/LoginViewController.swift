@@ -45,7 +45,25 @@ class LoginViewController: UIViewController {
     // MARK: - Default Functions
     override func viewDidLoad() {
         // Do any additional setup after loading the view, typically from a nib.
-        BiometricLogin()
+        
+        
+        var internet = true
+        
+        // check if internet
+        guard let status = Network.reachability?.status else { return }
+        switch status {
+        case .unreachable:
+            internet = false
+        case .wifi:
+            break
+        case .wwan:
+            break
+        }
+        
+        if(internet){
+            BiometricLogin()
+        }
+        
         super.viewDidLoad()
         self.hideKeyboardWhenTappedAround()
         
@@ -100,9 +118,7 @@ class LoginViewController: UIViewController {
         }
     }
     
-    // MARK: - TOUCH/FACE ID
-    // Salvame papi dios
-    
+    // MARK: - TOUCH/FACE ID    
     // Get password from keychain
     func LoadPassword(_ email: String){
         let passwordItem = KeychainPasswordItem(service: KeychainConfiguration.serviceName, account: email, accessGroup: KeychainConfiguration.accessGroup)

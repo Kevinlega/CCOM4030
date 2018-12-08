@@ -201,56 +201,72 @@ public func CheckAdmin(project_id: Int, user_id: Int) -> Bool{
 
 // MARK: - Login Handler
 public func CheckLogin(email: String, psw: String, Biometric: Bool) -> NSDictionary{
-    var password = psw
-    var hashed_password = String()
-    var salt = String()
     
-    var response : NSDictionary
-    
-    // Create the request to the API
-    // Tells API which query to execute
-    var QueryType = "4"
-    // API URL
-    let url = URL(string: "http://54.81.239.120/selectAPI.php")
-    var request = URLRequest(url:url!)
-    // Request Method
-    request.httpMethod = "POST"
-    // Request parameters
-    let post = "queryType=\(QueryType)&email=\(email)"
-    request.httpBody = post.data(using: String.Encoding.utf8)
-    
-    // Connect to server
-    response = ConnectToAPI(request: request)
-    
-    if (response["empty"] as! Bool) == false{
-        hashed_password = response["hashed_password"] as! String
-        salt = response["salt"] as! String
-    }
-    else{
-        return ["registered": false]
-    }
-    
-    // If login is not biometric ust salt and hash given password
-    // if login is biometric password is given from icloud keychain
-    if !Biometric{
-        password = saltAndHash(password: password, salt: salt)
-    }
-    
-    // Login is succesful, get user id
-    if (password == hashed_password){
-        // Create Request
-        QueryType = "2";
-        let url = URL(string: "http://54.81.239.120/selectAPI.php");
-        var request = URLRequest(url:url!)
-        request.httpMethod = "POST"
-        let post = "queryType=\(QueryType)&email=\(email)";
-        request.httpBody = post.data(using: String.Encoding.utf8);
+    // check if internet
+    var internet = true
+    guard let status = Network.reachability?.status else { return ["registered": false] }
+        switch status {
+        case .unreachable:
+            internet = false
+        case .wifi:
+            break
+        case .wwan:
+            break
+        }
+    if internet {
+        var password = psw
+        var hashed_password = String()
+        var salt = String()
         
+        var response : NSDictionary
+        
+        // Create the request to the API
+        // Tells API which query to execute
+        var QueryType = "4"
+        // API URL
+        let url = URL(string: "http://54.81.239.120/selectAPI.php")
+        var request = URLRequest(url:url!)
+        // Request Method
+        request.httpMethod = "POST"
+        // Request parameters
+        let post = "queryType=\(QueryType)&email=\(email)"
+        request.httpBody = post.data(using: String.Encoding.utf8)
+        
+        // Connect to server
         response = ConnectToAPI(request: request)
-        return ["registered":true, "uid": response["uid"] as! Int, "verified": response["verified"] as! Bool]
-    }
-    else {
-        return ["registered": false]
+        
+        if (response["empty"] as! Bool) == false{
+            hashed_password = response["hashed_password"] as! String
+            salt = response["salt"] as! String
+        }
+        else{
+            return ["registered": false]
+        }
+        
+        // If login is not biometric ust salt and hash given password
+        // if login is biometric password is given from icloud keychain
+        if !Biometric{
+            password = saltAndHash(password: password, salt: salt)
+        }
+        
+        // Login is succesful, get user id
+        if (password == hashed_password){
+            // Create Request
+            QueryType = "2";
+            let url = URL(string: "http://54.81.239.120/selectAPI.php");
+            var request = URLRequest(url:url!)
+            request.httpMethod = "POST"
+            let post = "queryType=\(QueryType)&email=\(email)";
+            request.httpBody = post.data(using: String.Encoding.utf8);
+            
+            response = ConnectToAPI(request: request)
+            return ["registered":true, "uid": response["uid"] as! Int, "verified": response["verified"] as! Bool]
+        }
+        else {
+            return ["registered": false]
+        }
+    } else {
+         return ["registered": false]
     }
 }
 
@@ -475,21 +491,22 @@ public extension UIViewController {
 }
 
 public func ConnectionTest(self: UIViewController){
+   
     var internet = true
     
     // check if internet
     guard let status = Network.reachability?.status else { return }
-    switch status {
-    case .unreachable:
-        internet = false
-    case .wifi:
-        break
-    case .wwan:
-        break
+        switch status {
+        case .unreachable:
+            internet = false
+        case .wifi:
+            break
+        case .wwan:
+            break
     }
     if !internet{
         self.present(Alert(title: "No Internet Connection", message: "Try Again Later", Dismiss: "Dismiss"),animated: true, completion: nil)
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "myVCID") as! CreateAccountViewController
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "myVCID") as! LoginViewController
         self.present(vc, animated: true, completion: nil)
     }
 }

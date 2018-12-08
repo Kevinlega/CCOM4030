@@ -6,15 +6,11 @@ import android.app.KeyguardManager
 import android.content.Context
 import android.hardware.fingerprint.FingerprintManager
 import android.widget.Toast
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.support.v4.app.ActivityCompat
 import android.security.keystore.KeyProperties
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import kotlinx.android.synthetic.main.activity_fingerprint.*
-
 import java.security.KeyStore
 import java.security.NoSuchAlgorithmException
 import java.security.NoSuchProviderException
@@ -25,7 +21,6 @@ import java.io.IOException
 import java.security.InvalidKeyException
 import java.security.KeyStoreException
 import java.security.UnrecoverableKeyException
-
 import javax.crypto.NoSuchPaddingException
 import javax.crypto.SecretKey
 import javax.crypto.Cipher
@@ -39,6 +34,7 @@ class FingerprintActivity : AppCompatActivity() {
     private val KEYNAME = "Grafia_Key"
     private var cipher: Cipher? = null
     private var cryptoObject: FingerprintManager.CryptoObject? = null
+    private var helper = FingerprintHandler(this@FingerprintActivity)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,16 +50,15 @@ class FingerprintActivity : AppCompatActivity() {
                 }
             }
 
-            val helper = FingerprintHandler(this)
             if (fingerprintManager != null && cryptoObject != null) {
                 helper.startAuth(fingerprintManager!!, cryptoObject!!)
             }
         }
 
-
         BackToLogin2.setOnClickListener {
+            finish()
             val intent = Intent(this@FingerprintActivity, LoginActivity::class.java)
-            intent.putExtra("Failed",true)
+            intent.putExtra("Failed", true)
             startActivity(intent)
         }
     }
@@ -142,6 +137,13 @@ class FingerprintActivity : AppCompatActivity() {
         }
     }
 
+
+    override fun onPause() {
+        super.onPause()
+        helper.cancel()
+    }
+
+
     private fun getManagers(): Boolean {
         keyguardManager = getSystemService(Context.KEYGUARD_SERVICE)
                 as KeyguardManager
@@ -152,6 +154,7 @@ class FingerprintActivity : AppCompatActivity() {
             Toast.makeText(this,
                 "Lock screen security not enabled in Settings",
                 Toast.LENGTH_LONG).show()
+            finish()
             return false
         }
 
@@ -159,6 +162,7 @@ class FingerprintActivity : AppCompatActivity() {
             Toast.makeText(this,
                 "Register at least one fingerprint in Settings",
                 Toast.LENGTH_LONG).show()
+            finish()
             return false
         }
         return true

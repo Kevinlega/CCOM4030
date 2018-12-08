@@ -2,19 +2,22 @@ package com.example.spider.grafia
 
 import android.Manifest
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.fingerprint.FingerprintManager
+import android.net.ConnectivityManager
 import android.os.AsyncTask
 import android.os.CancellationSignal
 import android.support.v4.app.ActivityCompat
+import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
+import android.support.v7.app.AlertDialog
 import android.widget.Toast
 import org.json.JSONObject
 import java.lang.Exception
 import java.net.URL
 
-class FingerprintHandler(private val appContext: Context) : FingerprintManager.
-AuthenticationCallback() {
+class FingerprintHandler(private val appContext: Context) : FingerprintManager.AuthenticationCallback() {
 
     private var cancellationSignal: CancellationSignal? = null
     private var mContext : Context
@@ -23,8 +26,7 @@ AuthenticationCallback() {
         mContext = appContext
     }
 
-    fun startAuth(manager: FingerprintManager,
-                  cryptoObject: FingerprintManager.CryptoObject) {
+    fun startAuth(manager: FingerprintManager, cryptoObject: FingerprintManager.CryptoObject) {
         cancellationSignal = CancellationSignal()
         if (ActivityCompat.checkSelfPermission(appContext,
                 Manifest.permission.USE_FINGERPRINT) !=
@@ -34,8 +36,16 @@ AuthenticationCallback() {
         manager.authenticate(cryptoObject, cancellationSignal, 0, this, null)
     }
 
-    override fun onAuthenticationHelp(helpMsgId: Int,
-                                      helpString: CharSequence) {
+    fun cancel(){
+
+        cancellationSignal?.also {
+            it.cancel()
+        }
+        cancellationSignal = null
+
+    }
+
+    override fun onAuthenticationHelp(helpMsgId: Int, helpString: CharSequence) {
         Toast.makeText(appContext,
             "Authentication help\n" + helpString,
             Toast.LENGTH_LONG).show()
@@ -45,41 +55,144 @@ AuthenticationCallback() {
             "Authentication failed.",
             Toast.LENGTH_LONG).show()
     }
+
+
     override fun onAuthenticationSucceeded(
         result: FingerprintManager.AuthenticationResult) {
-        Toast.makeText(appContext,
-            "Authentication succeeded.",
-            Toast.LENGTH_LONG).show()
+
+        Toast.makeText(appContext,"Authentication succeeded.",Toast.LENGTH_LONG).show()
 
         val sharedPreferences = mContext.getSharedPreferences("Grafia_Login", Context.MODE_PRIVATE)
         val email = sharedPreferences.getString("Email", "")
         val password = sharedPreferences.getString("Password", "")
 
         val query = 4
-        val connectToAPI = Connect(mContext, 2,email as String,password as String)
-        try{
-            val url = "http://54.81.239.120/selectAPI.php?queryType=$query&email=$email"
-            println(url)
-            connectToAPI.execute(url)
+        val connectToAPI = Connect(mContext, 2, email as String, password as String)
+        if(isNetworkAvailable(mContext)) {
+            try {
+                val url = "http://54.81.239.120/selectAPI.php?queryType=$query&email=$email"
+                println(url)
+                connectToAPI.execute(url)
+            } catch (error: Exception) {
+            }
+        } else {
+            showInternetNotification(mContext)
         }
-        catch (error: Exception){}
-
     }
+
+
+    // Method to show an alert dialog with yes, no and cancel button
+    private fun showInternetNotification(mContext: Context){
+        // Late initialize an alert dialog object
+        lateinit var dialog: AlertDialog
+
+
+        // Initialize a new instance of alert dialog builder object
+        val builder = AlertDialog.Builder(mContext)
+        // Set a title for alert dialog
+        builder.setTitle("Lost Internet Connection.")
+
+        // Set a message for alert dialog
+        builder.setMessage("Do you want to log out or retry?")
+
+        // On click listener for dialog buttons
+        val dialogClickListener = DialogInterface.OnClickListener{ _, which ->
+            when(which){
+                DialogInterface.BUTTON_POSITIVE -> {
+
+                    val Logout = Intent(mContext, LoginActivity::class.java)
+                    Logout.putExtra("Failed",true)
+                    mContext.startActivity(Logout)
+                }
+                DialogInterface.BUTTON_NEGATIVE -> {
+                    val Logout = Intent(mContext, FingerprintActivity::class.java)
+                    mContext.startActivity(Logout)
+                }
+            }
+        }
+
+        // Set the alert dialog positive/yes button
+        builder.setPositiveButton("Log Out",dialogClickListener)
+        // Set the alert dialog negative/no button
+        builder.setNegativeButton("Retry",dialogClickListener)
+        // Initialize the AlertDialog using builder object
+        dialog = builder.create()
+        // Finally, display the alert dialog
+        dialog.show()
+    }
+
+    private fun isNetworkAvailable(mContext: Context): Boolean {
+        val connectivityManager = mContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected
+    }
+
 
     // Verifies Login data
     companion object {
         class Connect(private val mContext: Context,private val flag: Int, private val email: String, private val password: String) :
             AsyncTask<String, Void, String>() {
 
+
+            // Method to show an alert dialog with yes, no and cancel button
+            private fun showInternetNotification(mContext: Context){
+                // Late initialize an alert dialog object
+                lateinit var dialog: AlertDialog
+
+
+                // Initialize a new instance of alert dialog builder object
+                val builder = AlertDialog.Builder(mContext)
+                // Set a title for alert dialog
+                builder.setTitle("Lost Internet Connection.")
+
+                // Set a message for alert dialog
+                builder.setMessage("Do you want to return home or retry?")
+
+                // On click listener for dialog buttons
+                val dialogClickListener = DialogInterface.OnClickListener{ _, which ->
+                    when(which){
+                        DialogInterface.BUTTON_POSITIVE -> {
+
+                            val Logout = Intent(mContext, LoginActivity::class.java)
+                            Logout.putExtra("Failed",true)
+                            mContext.startActivity(Logout)
+                        }
+                        DialogInterface.BUTTON_NEGATIVE -> {
+                            val Logout = Intent(mContext, FingerprintActivity::class.java)
+                            mContext.startActivity(Logout)
+                        }
+                    }
+                }
+
+                // Set the alert dialog positive/yes button
+                builder.setPositiveButton("Home",dialogClickListener)
+                // Set the alert dialog negative/no button
+                builder.setNegativeButton("Retry",dialogClickListener)
+                // Initialize the AlertDialog using builder object
+                dialog = builder.create()
+                // Finally, display the alert dialog
+                dialog.show()
+            }
+
+            private fun isNetworkAvailable(mContext: Context): Boolean {
+                val connectivityManager = mContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                val activeNetworkInfo = connectivityManager.activeNetworkInfo
+                return activeNetworkInfo != null && activeNetworkInfo.isConnected
+            }
+
             // Send uid retrieve request
             private fun getUID(email: String) {
-                val query = 2
-                val connectToAPI = Connect(mContext, 1, email, password)
-                try {
-                    val url = "http://54.81.239.120/selectAPI.php?queryType=$query&email=$email"
-                    println(url)
-                    connectToAPI.execute(url)
-                } catch (error: Exception) {
+                if (isNetworkAvailable(mContext)) {
+                    val query = 2
+                    val connectToAPI = Connect(mContext, 1, email, password)
+                    try {
+                        val url = "http://54.81.239.120/selectAPI.php?queryType=$query&email=$email"
+                        println(url)
+                        connectToAPI.execute(url)
+                    } catch (error: Exception) {
+                    }
+                } else {
+                    showInternetNotification(mContext)
                 }
             }
 
