@@ -26,6 +26,10 @@
 
 - Usuarios: Participante de la aplicación que colabora en un proyecto. El mismo es añadido a un proyecto por un administrador.
 
+###### Manual de uso:
+
+![alt text](https://docs.google.com/document/d/1wn_tPHeMnMQNQZ0feWAn7cwmU55RZ2uZg9QMP1bTmJQ/edit?usp=sharing)
+
 
 
 
