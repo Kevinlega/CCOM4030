@@ -58,7 +58,7 @@
 
 ###### Manual de uso:
 
-- ![Error Loading](https://docs.google.com/viewer?url=https://raw.githubusercontent.com/Grafia/Manual_for_Grafia.pdf)
+- ![Error loading Manual](https://docs.google.com/viewer?url=https://raw.githubusercontent.com/KevinLega/Grafia/Manual_for_Grafia.pdf)
 
 
 
