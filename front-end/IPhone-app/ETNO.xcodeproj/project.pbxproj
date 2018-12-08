@@ -561,7 +561,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRIP_INSTALLED_PRODUCT = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "/Users/spider/Desktop/Software/CCOM4030/front-end/IPhone-app/ETNO/Grafia-BridgingHeader.h .h";
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/spider/Desktop/Software/Grafia/front-end/IPhone-app/ETNO/Grafia-BridgingHeader.h .h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -585,7 +585,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRIP_INSTALLED_PRODUCT = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "/Users/spider/Desktop/Software/CCOM4030/front-end/IPhone-app/ETNO/Grafia-BridgingHeader.h .h";
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/spider/Desktop/Software/Grafia/front-end/IPhone-app/ETNO/Grafia-BridgingHeader.h .h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

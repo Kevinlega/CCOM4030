@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Grafia</string>
+    <string name="app_name">Grafía</string>
     <string name="title_activity_friends">FriendsActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>

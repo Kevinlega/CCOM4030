@@ -18,12 +18,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Image-9" translatesAutoresizingMaskIntoConstraints="NO" id="uim-vX-SQS">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="Image-9" translatesAutoresizingMaskIntoConstraints="NO" id="uim-vX-SQS">
                                 <rect key="frame" x="30" y="264" width="315" height="285"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="0.60000002379999995" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="uim-vX-SQS" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="30" id="Ivn-ph-tAC"/>
+                            <constraint firstItem="uim-vX-SQS" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="NiY-Gy-mAe"/>
+                            <constraint firstItem="uim-vX-SQS" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="220" id="sTd-rv-V2r"/>
+                            <constraint firstItem="uim-vX-SQS" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="sgu-Cr-ah3"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                 </viewController>
