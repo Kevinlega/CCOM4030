@@ -145,10 +145,16 @@ if($queryType == UPDATE_PASSWORD) {
 	$statement->bind_result($verified);	 // Asign the fetch value to these new variables.
 	$statement->fetch();
 	
-	if($verified == 0)
+	if($verified == 0) {
 		// send email aqui
+		$query = "SELECT request_id FROM verify_requests WHERE user_id = (SELECT user_id FROM users WHERE email=\"$email\")";
+		$response = $connection->query($query);
+		$row = $response->fetch_assoc();
+		$request_id = $row['request_id'];
+		
+		sendEmail($email, "Verify Your Account", $VERIFY_MESSAGE . $request_id);
 		$return = array("updated"=>true);
-	else
+	} else
 		$return = array("updated" => false);
 } 
 
