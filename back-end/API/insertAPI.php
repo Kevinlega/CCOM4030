@@ -62,7 +62,16 @@ switch($queryType) {
 			if(!$statement->execute()) {
 				$return = array("registered"=>false);
 			} else {
+				$request_id = md5(uniqid(rand(), true));
+				$user_id = $statement->insert_id;
+
+				$query = "INSERT INTO verify_requests(user_id, request_id) VALUeS({$user_id}, \"$request_id\") ";
+				$connection->query($query);
+
+				$insert_id = $connection->insert_id;
 				$return = array("registered"=>true);
+
+				sendEmail($email, "Verify Your Account", $VERIFY_MESSAGE . $request_id);
 			}
 
 			break;
@@ -190,6 +199,8 @@ switch($queryType) {
 				
 				if($statement->execute()) {
 					$return = array("inserted" => true);
+					sendEmail($email, "Change Password", $CHANGE_PASSWD_MESSAGE . $request_id);
+					
 				} else {
 					$return = array("inserted" => false);
 				}
