@@ -257,7 +257,18 @@ class LoginActivity : AppCompatActivity() {
                         val verified = jSONObject.getInt("verified")
 
                         if (verified == 1) {
-                            showDialog(mContext,email,password,uid)
+
+                            val sharedPreferences = mContext.getSharedPreferences("Grafia_Login", Context.MODE_PRIVATE)
+                            val em = sharedPreferences.getString("Email", "")
+                            val pw = sharedPreferences.getString("Password", "")
+
+                            if (email != em ||password != pw){
+                                showDialog(mContext, email, password, uid)
+                            } else {
+                                val intent = Intent(mContext, DashboardActivity::class.java)
+                                intent.putExtra("userId", uid)
+                                mContext.startActivity(intent)
+                            }
                         } else{
                             val intent = Intent(mContext, NotVerifiedActivity::class.java)
                             mContext.startActivity(intent)
