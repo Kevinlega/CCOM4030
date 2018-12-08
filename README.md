@@ -58,7 +58,7 @@
 
 ###### Manual de uso:
 
-- [Ver Manueal](https://github.com/Kevinlega/Grafia/blob/master/Manual_for_Grafia.pdf)
+- [Ver Manual](https://github.com/Kevinlega/Grafia/blob/master/Manual_for_Grafia.pdf)
 
 
 
