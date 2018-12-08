@@ -158,10 +158,7 @@ class VideoViewController: UIViewController, UINavigationControllerDelegate, UII
         request.httpMethod = "POST";
         
         // Dictionary containing parameters for server API
-        let param = [
-            "fileType":"1",
-            "path":(projectPath + "/videos/")
-        ]
+        let param = [ "fileType":"1", "path":(projectPath + "/videos/"),"pid": String(project_id),"uid": String(user_id)]
         
         // Generate a UUID for request header
         let boundary = generateBoundaryString()

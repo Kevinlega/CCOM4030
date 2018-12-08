@@ -143,6 +143,12 @@ class FingerprintActivity : AppCompatActivity() {
         helper.cancel()
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (fingerprintManager != null && cryptoObject != null) {
+            helper.startAuth(fingerprintManager!!, cryptoObject!!)
+        }
+    }
 
     private fun getManagers(): Boolean {
         keyguardManager = getSystemService(Context.KEYGUARD_SERVICE)

@@ -259,7 +259,7 @@ class AudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudioRecor
         
         // POST parameters for API
         // fileType is given, and path to save file depends on user and project
-        let param = ["fileType":"1","path":(projectPath + "/voice/")]
+        let param = ["fileType":"1","path":(projectPath + "/voice/"),"pid": String(project_id),"uid": String(user_id)]
         
         // Hash to identify request
         let boundary = generateBoundaryString()

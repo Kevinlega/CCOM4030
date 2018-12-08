@@ -82,7 +82,7 @@ class NotesViewController: UIViewController, UITextViewDelegate {
             let url = URL(string: "http://54.81.239.120/fUploadAPI.php")
             var request = URLRequest(url:url!)
             request.httpMethod = "POST"
-            let post = "fileType=\(fileType)&text=\(text)&path=\(path)"
+            let post = "fileType=\(fileType)&text=\(text)&path=\(path)&pid=\(project_id)&uid=\(user_id)"
             request.httpBody = post.data(using: String.Encoding.utf8)
             
             

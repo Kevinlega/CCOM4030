@@ -123,7 +123,7 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
         request.httpMethod = "POST";
         
         // Dictionary containing parameters for server API
-        let param = ["fileType":"1", "path":(projectPath + "/images/")]
+        let param = ["fileType":"1", "path":(projectPath + "/images/"),"pid": String(project_id),"uid": String(user_id)]
         
         // Header for request
         let boundary = generateBoundaryString()

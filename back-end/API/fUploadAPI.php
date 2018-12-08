@@ -55,7 +55,7 @@ switch($fileType){
 
 			$query = "SELECT email FROM users WHERE user_id IN (SELECT user_id FROM user_project WHERE project_id=?) AND user_id<>?";
 
-			// // Prepare the query statement. (for sanitation)
+			// Prepare the query statement. (for sanitation)
 			$statement = $connection->prepare($query);			
 			// Bind the parameters with the sql query.
 			$statement->bind_param('ii', $pid,$uid);
@@ -69,10 +69,46 @@ switch($fileType){
 
 			}
 
-			// if(count($emails) != 0)
-				// for each email here
-			
 			$statement->close();
+
+			if(count($emails) != 0){
+
+				$query2 = "SELECT name FROM projects WHERE project_id=?";
+
+				// Prepare the query statement. (for sanitation)
+				$statement = $connection->prepare($query2);			
+				// Bind the parameters with the sql query.
+				$statement->bind_param('i', $pid);
+				// Execute the now sanitized query.	
+				$statement->execute();						
+				// Asign the fetch value to this new variable.
+				$statement->bind_result($project_name);
+
+				$statement->fetch();
+
+				$statement->close();
+
+
+				$query3 = "SELECT name FROM users WHERE user_id=?";
+
+				// Prepare the query statement. (for sanitation)
+				$statement = $connection->prepare($query3);			
+				// Bind the parameters with the sql query.
+				$statement->bind_param('i', $uid);
+				// Execute the now sanitized query.	
+				$statement->execute();						
+				// Asign the fetch value to this new variable.
+				$statement->bind_result($user_name);
+
+				$statement->fetch();
+
+				foreach($emails as $email) {
+					sendEmail($email, "{$user_name} uploaded a file to {$project_name}", $FILE_UPLOADED_MESSAGE . $project_name);
+
+				}
+
+
+			}
 
 			break;
 	    case OTHER_FILE:
@@ -106,13 +142,46 @@ switch($fileType){
 					$emails[] = $email;
 				}
 				
-				// if(count($emails) != 0)
-					// for each email here
-				
 				$statement->close();
 
-			}
-			else{
+
+				if(count($emails) != 0){
+
+					$query2 = "SELECT name FROM projects WHERE project_id=?";
+
+					// Prepare the query statement. (for sanitation)
+					$statement = $connection->prepare($query2);			
+					// Bind the parameters with the sql query.
+					$statement->bind_param('i', $pid);
+					// Execute the now sanitized query.	
+					$statement->execute();						
+					// Asign the fetch value to this new variable.
+					$statement->bind_result($project_name);
+
+					$statement->fetch();
+
+					$statement->close();
+
+
+					$query3 = "SELECT name FROM users WHERE user_id=?";
+
+					// Prepare the query statement. (for sanitation)
+					$statement = $connection->prepare($query3);			
+					// Bind the parameters with the sql query.
+					$statement->bind_param('i', $uid);
+					// Execute the now sanitized query.	
+					$statement->execute();						
+					// Asign the fetch value to this new variable.
+					$statement->bind_result($user_name);
+
+					$statement->fetch();
+					
+					foreach($emails as $email) {
+					sendEmail($email, "{$user_name} uploaded a file to {$project_name}", $FILE_UPLOADED_MESSAGE . $project_name);
+
+				}
+				}
+			} else{
 				$return = array("file_created"=>false);				
 			}
 			break;

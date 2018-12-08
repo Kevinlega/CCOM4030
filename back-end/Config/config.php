@@ -49,6 +49,14 @@ function emailI($id, $subj, $msg)
 //format
 //sendEmail("email@somewhere.com", "subject", "content");
 
-// Message to send when password is reset. 
-$RESET_PASSWORD_MESSAGE = "Hello, we want to inform you that your password was just changed, if you did not approve this change, please contact developers.";
+$RESET_PASSWORD_MESSAGE = "Hello, we want to inform you that your password was just changed, if you did not approve this change, please contact develpers.";
+
+$CHANGE_PASSWD_LINK = "http://54.81.239.120/account/changepassword/";
+$CHANGE_PASSWD_MESSAGE = "Please click on the following link to change your account password: " . $CHANGE_PASSWD_LINK;
+
+$VERIFY_LINK = "http://54.81.239.120/account/verify/";
+$VERIFY_MESSAGE = "Your account was created, please verify your account at the following link: " . $VERIFY_LINK;
+
+$FILE_UPLOADED_MESSAGE = "Someone uploaded a new file to project: ";
+
 ?>
