@@ -652,10 +652,9 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4d7-pR-wuz">
-                                <rect key="frame" x="153" y="301" width="69" height="46"/>
-                                <color key="backgroundColor" red="0.75406885150000003" green="0.75408679249999999" blue="0.75407713649999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="28"/>
-                                <state key="normal" title="Verify"/>
+                                <rect key="frame" x="30.666666666666657" y="301" width="314" height="42"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                <state key="normal" title="Send Verification Email Again"/>
                                 <connections>
                                     <segue destination="BYZ-38-t0r" kind="show" identifier="Verify" id="cw9-yA-rVT"/>
                                 </connections>
@@ -1687,6 +1686,6 @@
     <inferredMetricsTieBreakers>
         <segue reference="N9O-bV-t0z"/>
         <segue reference="UWL-vV-kQq"/>
-        <segue reference="8Q6-CN-bGS"/>
+        <segue reference="wOM-C1-r7n"/>
     </inferredMetricsTieBreakers>
 </document>

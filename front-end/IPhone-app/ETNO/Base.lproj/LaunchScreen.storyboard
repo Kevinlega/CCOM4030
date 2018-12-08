@@ -18,26 +18,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Image" translatesAutoresizingMaskIntoConstraints="NO" id="gVO-2p-wR6">
-                                <rect key="frame" x="16" y="198" width="343" height="291"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Image-9" translatesAutoresizingMaskIntoConstraints="NO" id="uim-vX-SQS">
+                                <rect key="frame" x="30" y="264" width="315" height="285"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Grafía" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EVl-8S-hXm">
-                                <rect key="frame" x="99" y="301" width="177" height="84"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="70"/>
-                                <color key="textColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="0.60000002379999995" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="gVO-2p-wR6" firstAttribute="centerY" secondItem="EVl-8S-hXm" secondAttribute="centerY" id="1kv-9m-aXZ"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="gVO-2p-wR6" secondAttribute="bottom" constant="289" id="Dhu-IG-Y3E"/>
-                            <constraint firstItem="gVO-2p-wR6" firstAttribute="trailing" secondItem="Ze5-6b-2t3" secondAttribute="trailingMargin" id="DtM-GP-dPS"/>
-                            <constraint firstItem="EVl-8S-hXm" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="257" id="MGb-3f-b4S"/>
-                            <constraint firstItem="gVO-2p-wR6" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="154" id="ejm-Bw-b4F"/>
-                            <constraint firstItem="gVO-2p-wR6" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" id="ezf-pE-LJC"/>
-                            <constraint firstItem="gVO-2p-wR6" firstAttribute="centerX" secondItem="EVl-8S-hXm" secondAttribute="centerX" id="o7D-UJ-kkD"/>
-                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                 </viewController>
@@ -47,6 +33,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Image" width="256" height="256"/>
+        <image name="Image-9" width="256" height="236"/>
     </resources>
 </document>

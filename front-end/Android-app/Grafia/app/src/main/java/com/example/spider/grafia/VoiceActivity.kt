@@ -337,6 +337,8 @@ class VoiceActivity : AppCompatActivity(){
             val multipart = Multipart(URL("http://54.81.239.120/fUploadAPI.php"))
             multipart.addFormField("fileType", "1")
             multipart.addFormField("path", (projectPath + "/voice/"))
+            multipart.addFormField("uid", userId.toString())
+            multipart.addFormField("pid", projectId.toString())
             multipart.addFilePart("file", path, name, "voice/3gp")
 
             val bool = multipart.upload()

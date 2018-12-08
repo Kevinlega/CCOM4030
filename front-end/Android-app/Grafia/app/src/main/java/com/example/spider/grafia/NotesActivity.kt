@@ -158,7 +158,7 @@ class NotesActivity : AppCompatActivity() {
             val path = projectPath + "/docs/" + name
             val connectToAPI = Connect(this,projectName,userId,projectId)//,fileType,path,text)
             try {
-                val url = "http://54.81.239.120/fUploadAPI.php?fileType=$fileType&path=$path&text=$text"
+                val url = "http://54.81.239.120/fUploadAPI.php?fileType=$fileType&path=$path&pid=$projectId&uid=$userId&text=$text"
                 connectToAPI.execute(url)
             } catch (error: Exception) {
             }

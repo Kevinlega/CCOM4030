@@ -374,6 +374,8 @@ class CameraActivity : AppCompatActivity() {
             val multipart = Multipart(URL("http://54.81.239.120/fUploadAPI.php"))
             multipart.addFormField("fileType", "1")
             multipart.addFormField("path", (projectPath + "/images/"))
+            multipart.addFormField("uid", userId.toString())
+            multipart.addFormField("pid", projectId.toString())
             multipart.addFilePart("file", path, name, "image/jpg")
 
             val bool = multipart.upload()
