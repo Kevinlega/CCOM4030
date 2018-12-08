@@ -10,7 +10,6 @@
 		0A0836CA218555AD00E79E50 /* NotVerifiedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0836C9218555AD00E79E50 /* NotVerifiedViewController.swift */; };
 		0A29A4A021838F5300B35D25 /* KeychainConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A29A49E21838F5300B35D25 /* KeychainConfiguration.swift */; };
 		0A29A4A121838F5300B35D25 /* KeychainPasswordItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A29A49F21838F5300B35D25 /* KeychainPasswordItem.swift */; };
-		0A29A4A42183908600B35D25 /* LocalAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A29A4A32183908600B35D25 /* LocalAuthentication.framework */; };
 		0A421B8A216EDD0E00DA7452 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A421B89216EDD0E00DA7452 /* LoginViewController.swift */; };
 		0A4A29A42166521C00DF49EF /* ProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4A29A32166521C00DF49EF /* ProjectViewController.swift */; };
 		0A5807A121724978009874A8 /* ChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5807A021724978009874A8 /* ChangePasswordViewController.swift */; };
@@ -30,7 +29,14 @@
 		0AE8F2822180FA5600298297 /* AllFriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE8F2812180FA5600298297 /* AllFriendsViewController.swift */; };
 		0AFA5FDB217FE2D000CB360D /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFA5FDA217FE2D000CB360D /* FriendsViewController.swift */; };
 		3031F432219A37F30057C4CC /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3031F431219A37F30057C4CC /* CameraViewController.swift */; };
+		30477E5C21BB2467005CB1AB /* Rechability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30477E5B21BB2467005CB1AB /* Rechability.swift */; };
+		307DE85A21B44B1100071D07 /* NotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307DE85921B44B1100071D07 /* NotesViewController.swift */; };
 		30DC5F2C219A064D008E6085 /* AudioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DC5F2B219A064D008E6085 /* AudioViewController.swift */; };
+		30DE669E21B5F4B800C8DDBC /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DE669D21B5F4B800C8DDBC /* VideoViewController.swift */; };
+		30DFA5C621B7F61300A3216C /* DownloadNotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DFA5C521B7F61300A3216C /* DownloadNotesViewController.swift */; };
+		30DFA5C821B8056200A3216C /* DownloadImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DFA5C721B8056200A3216C /* DownloadImageViewController.swift */; };
+		30DFA5CA21B805A600A3216C /* DownloadVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DFA5C921B805A600A3216C /* DownloadVideoViewController.swift */; };
+		30DFA5CC21B805B300A3216C /* DownloadAudioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DFA5CB21B805B300A3216C /* DownloadAudioViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,7 +88,14 @@
 		0AFA5FDA217FE2D000CB360D /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
 		3003345F21925A7300BD1C11 /* Grafia-BridgingHeader.h .h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Grafia-BridgingHeader.h .h"; sourceTree = "<group>"; };
 		3031F431219A37F30057C4CC /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
+		30477E5B21BB2467005CB1AB /* Rechability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rechability.swift; sourceTree = "<group>"; };
+		307DE85921B44B1100071D07 /* NotesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesViewController.swift; sourceTree = "<group>"; };
 		30DC5F2B219A064D008E6085 /* AudioViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioViewController.swift; sourceTree = "<group>"; };
+		30DE669D21B5F4B800C8DDBC /* VideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
+		30DFA5C521B7F61300A3216C /* DownloadNotesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadNotesViewController.swift; sourceTree = "<group>"; };
+		30DFA5C721B8056200A3216C /* DownloadImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadImageViewController.swift; sourceTree = "<group>"; };
+		30DFA5C921B805A600A3216C /* DownloadVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadVideoViewController.swift; sourceTree = "<group>"; };
+		30DFA5CB21B805B300A3216C /* DownloadAudioViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadAudioViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,7 +103,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0A29A4A42183908600B35D25 /* LocalAuthentication.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -149,24 +161,31 @@
 				0A9B78BB215DA51500F48859 /* LaunchScreen.storyboard */,
 				0A9B78B9215DA51500F48859 /* Assets.xcassets */,
 				0A9B78BE215DA51500F48859 /* Info.plist */,
-				0A9B78B2215DA51300F48859 /* AppDelegate.swift */,
 				0A29A49E21838F5300B35D25 /* KeychainConfiguration.swift */,
 				0A29A49F21838F5300B35D25 /* KeychainPasswordItem.swift */,
 				0ABE28D321642A33001C2385 /* CreateAccountViewController.swift */,
-				0A5807A021724978009874A8 /* ChangePasswordViewController.swift */,
 				0A421B89216EDD0E00DA7452 /* LoginViewController.swift */,
 				0A0836C9218555AD00E79E50 /* NotVerifiedViewController.swift */,
 				0ABE28D7216430AB001C2385 /* DashboardViewController.swift */,
 				0A963BA2216EA7EA00EA187B /* CreateAProjectViewController.swift */,
-				0A4A29A32166521C00DF49EF /* ProjectViewController.swift */,
-				30DC5F2B219A064D008E6085 /* AudioViewController.swift */,
-				3031F431219A37F30057C4CC /* CameraViewController.swift */,
-				0ABE28DB216431CA001C2385 /* AddParticipantViewController.swift */,
+				30DFA5C521B7F61300A3216C /* DownloadNotesViewController.swift */,
+				30DFA5C721B8056200A3216C /* DownloadImageViewController.swift */,
+				30DFA5C921B805A600A3216C /* DownloadVideoViewController.swift */,
+				30DFA5CB21B805B300A3216C /* DownloadAudioViewController.swift */,
 				0AFA5FDA217FE2D000CB360D /* FriendsViewController.swift */,
 				0AE8F27F2180F97000298297 /* PendingRequestViewController.swift */,
 				0AE8F2812180FA5600298297 /* AllFriendsViewController.swift */,
+				0A4A29A32166521C00DF49EF /* ProjectViewController.swift */,
+				3031F431219A37F30057C4CC /* CameraViewController.swift */,
+				307DE85921B44B1100071D07 /* NotesViewController.swift */,
+				0A5807A021724978009874A8 /* ChangePasswordViewController.swift */,
+				30DC5F2B219A064D008E6085 /* AudioViewController.swift */,
+				0ABE28DB216431CA001C2385 /* AddParticipantViewController.swift */,
 				0A8B596021837B3B009EEDC6 /* TabBarViewController.swift */,
+				30DE669D21B5F4B800C8DDBC /* VideoViewController.swift */,
 				0A73FFFD2173D70100BB0664 /* ReusedFunctions.swift */,
+				0A9B78B2215DA51300F48859 /* AppDelegate.swift */,
+				30477E5B21BB2467005CB1AB /* Rechability.swift */,
 			);
 			path = ETNO;
 			sourceTree = "<group>";
@@ -337,17 +356,24 @@
 				0A963BA3216EA7EA00EA187B /* CreateAProjectViewController.swift in Sources */,
 				0A9B78B3215DA51300F48859 /* AppDelegate.swift in Sources */,
 				0A29A4A121838F5300B35D25 /* KeychainPasswordItem.swift in Sources */,
+				30DFA5C821B8056200A3216C /* DownloadImageViewController.swift in Sources */,
+				30DFA5CC21B805B300A3216C /* DownloadAudioViewController.swift in Sources */,
 				0A421B8A216EDD0E00DA7452 /* LoginViewController.swift in Sources */,
 				0AFA5FDB217FE2D000CB360D /* FriendsViewController.swift in Sources */,
+				307DE85A21B44B1100071D07 /* NotesViewController.swift in Sources */,
 				0A0836CA218555AD00E79E50 /* NotVerifiedViewController.swift in Sources */,
 				0A4A29A42166521C00DF49EF /* ProjectViewController.swift in Sources */,
+				30DFA5C621B7F61300A3216C /* DownloadNotesViewController.swift in Sources */,
 				0AE8F2822180FA5600298297 /* AllFriendsViewController.swift in Sources */,
 				0ABE28DC216431CA001C2385 /* AddParticipantViewController.swift in Sources */,
+				30477E5C21BB2467005CB1AB /* Rechability.swift in Sources */,
 				0A8B596121837B3B009EEDC6 /* TabBarViewController.swift in Sources */,
 				0ABE28D8216430AB001C2385 /* DashboardViewController.swift in Sources */,
 				0A29A4A021838F5300B35D25 /* KeychainConfiguration.swift in Sources */,
 				0AE8F2802180F97000298297 /* PendingRequestViewController.swift in Sources */,
 				30DC5F2C219A064D008E6085 /* AudioViewController.swift in Sources */,
+				30DE669E21B5F4B800C8DDBC /* VideoViewController.swift in Sources */,
+				30DFA5CA21B805A600A3216C /* DownloadVideoViewController.swift in Sources */,
 				3031F432219A37F30057C4CC /* CameraViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

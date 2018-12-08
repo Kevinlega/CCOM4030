@@ -1,10 +1,13 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
 //
-//  FriendsViewController.swift
-//  ETNO
-//
-//  Created by Kevin Legarreta on 10/23/18.
-//  Copyright © 2018 Los Duendes Malvados. All rights reserved.
-//
+// File        : FriendsViewController.swift
+// Description : View controller that lets the user search for friends
+//               and request friendship.
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 import UIKit
 
@@ -30,8 +33,6 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
     var Searching = false
     
     // Connections to the app view
-    
-    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     
@@ -49,7 +50,6 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     // MARK: - Modify the Tableview
     // Update the view of the table
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if Searching{
             return FilteredUsers.count
@@ -66,6 +66,7 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
+    // Fills the cell with data
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Row", for: indexPath)
         if Searching{
@@ -78,6 +79,7 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
         return cell
     }
     
+    // Selects the cell
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if !Searching{
             if let selectedUser = tableView.cellForRow(at: indexPath){
@@ -149,11 +151,10 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     // MARK: - Default Functions
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         user_id = TabBarViewController.User.uid
-
+        hideKeyboardWhenTappedAround()
         // Do any additional setup after loading the view.
     }
     
@@ -163,7 +164,12 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     // MARK: - Segue Function
+    // Handles the data
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        ConnectionTest(self: self)
+
+        
         // Send friend request
         if (segue.identifier == "SendFriendRequest"){
             if(UsersCanBeAdded){

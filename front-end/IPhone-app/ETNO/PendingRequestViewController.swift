@@ -1,14 +1,17 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
 //
-//  PendingRequestViewController.swift
-//  ETNO
-//
-//  Created by Kevin Legarreta on 10/24/18.
-//  Copyright © 2018 Los 5. All rights reserved.
-//
+// File        : PendingRequestViewController.swift
+// Description : View controller for pending request view that s
+//               lets the user accept and reject friend requests.
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 import UIKit
 
-class PendingRequestViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate{
+class PendingRequestViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     
     // MARK: - Variables
     // Flag that indicates if the admin has users to be added
@@ -38,7 +41,7 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     
-    
+    // Verifies if a friend Request can be accepted or rejected
     @IBAction func SendRequest(_ sender: Any) {
         if (SelectedUsers.count > 0 && !FirstSelected){
             UsersCanBeAdded = true
@@ -49,6 +52,7 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
         }
     }
     
+    // Rejects Request
     @IBAction func RemoveRequest(_ sender: Any) {
         if (SelectedUsers.count > 0 && !FirstSelected){
             UsersCanBeRemoved = true
@@ -62,7 +66,6 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
     
     // MARK: - Modify the Tableview
     // Update the view of the table
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if Searching{
             return FilteredUsers.count
@@ -79,6 +82,7 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
         }
     }
     
+    // Writes the data in the cell
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Row", for: indexPath)
         if Searching{
@@ -91,6 +95,7 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
         return cell
     }
     
+    // Selects the cell and adds them to the selected list
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if !Searching{
             if let selectedUser = tableView.cellForRow(at: indexPath){
@@ -138,7 +143,6 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     // MARK: - Search Bar Actions
-    
     // Use the search bar to search users
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text == nil || searchBar.text == ""{
@@ -159,9 +163,9 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     // MARK: - Default Functions
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        hideKeyboardWhenTappedAround()
         user_id = TabBarViewController.User.uid
 
         let response = GetPendingRequest(user_id: user_id)
@@ -180,8 +184,11 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     // MARK: - Segue Function
-    
+    // Handles the data
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        ConnectionTest(self: self)
+
         // Send friend request
         if (segue.identifier == "SendFriendRequestAnswer"){
             if(UsersCanBeAdded){

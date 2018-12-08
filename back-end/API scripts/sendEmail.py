@@ -1,5 +1,7 @@
-!/usr/bin/python
+#!/usr/bin/python
 # -*- coding:utf-8 -*-
+
+# Added a body to the message to be sent.
 
 import sys
 import urllib, urllib2
@@ -12,7 +14,7 @@ from email.mime.application import MIMEApplication
 arg = sys.argv #contains all the arguments from call
 email = str(arg[1])
 subject = str(arg[2])
-msg = str(arg[3])
+body = str(arg[3])
 
 #build for multipart message
 msg = MIMEMultipart('mixed')
@@ -21,7 +23,7 @@ msg['From'] = 'info.etnografia.digital@gmail.com'
 msg['To'] = email
 
 alternative = MIMEMultipart('alternative')
-textplain = MIMEText(str(msg), 'plain')
+textplain = MIMEText(str(body), 'plain')
 alternative.attach(textplain)
 
 #HTML section
@@ -31,7 +33,7 @@ msg.attach(alternative)
 
 #send email
 try:
-    	print"Sending Email..."
+	print"Sending Email..."
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server = smtplib.SMTP_SSL()
         server.connect('smtp.gmail.com')

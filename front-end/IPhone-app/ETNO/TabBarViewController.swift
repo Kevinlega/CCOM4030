@@ -1,10 +1,13 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
 //
-//  TabBarViewController.swift
-//  ETNO
-//
-//  Created by Kevin Legarreta on 10/26/18.
-//  Copyright © 2018 Los 5. All rights reserved.
-//
+// File        : TabBarViewController.swift
+// Description : Store user id in tab bar
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
+
 
 import UIKit
 

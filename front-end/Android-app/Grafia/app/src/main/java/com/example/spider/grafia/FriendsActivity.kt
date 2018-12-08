@@ -1,16 +1,31 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
+//
+// File        : FriendsActivity.kt
+// Description : Send Friend Request, Accept or Reject Request and
+//               view all friends
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
+
 package com.example.spider.grafia
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
+import android.net.ConnectivityManager
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import kotlinx.android.synthetic.main.activity_add_participants.*
 import kotlinx.android.synthetic.main.activity_friends.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -18,6 +33,7 @@ import java.net.URL
 
 class FriendsActivity : AppCompatActivity() {
 
+    // Global variables
     var selectedEmails: MutableList<String> = ArrayList()
     var selectedNames: MutableList<String> = ArrayList()
 
@@ -29,29 +45,36 @@ class FriendsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_friends)
 
+        // get user id from previous
         setuid(intent.getIntExtra("userId",-1))
 
+        // Set view to Pending Request
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         navigation.selectedItemId = R.id.navigation_pending
-        navigation.selectedItemId = R.id.navigation_search
+
+        // list view clear
+        val listView = findViewById<ListView>(R.id.listaFriends)
+        listView.adapter = ListFriendAdapter(this@FriendsActivity, JSONArray(), JSONArray(),  ArrayList(), ArrayList())
 
         Return.setOnClickListener {
             val intent = Intent(this, DashboardActivity::class.java)
             // To pass any data to next activity
-//            intent.putExtra("userId", userId)
+            intent.putExtra("userId", userId)
             // start your next activity
             startActivity(intent)
         }
     }
-
+    // sets userId to uid
     private fun setuid(uid : Int){
         userId = uid
     }
 
+    // Return uid
     private fun getuid(): Int{
         return userId
     }
 
+    // Tab changer
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_search -> {
@@ -91,68 +114,149 @@ class FriendsActivity : AppCompatActivity() {
         false
     }
 
+    // Method to show an alert dialog with yes, no and cancel button
+    private fun showInternetNotification(mContext: Context, intent: Intent){
+        // Late initialize an alert dialog object
+        lateinit var dialog: AlertDialog
+
+
+        // Initialize a new instance of alert dialog builder object
+        val builder = AlertDialog.Builder(mContext)
+        // Set a title for alert dialog
+        builder.setTitle("Lost Internet Connection.")
+
+        // Set a message for alert dialog
+        builder.setMessage("Do you want to log out or retry?")
+
+        // On click listener for dialog buttons
+        val dialogClickListener = DialogInterface.OnClickListener{ _, which ->
+            when(which){
+                DialogInterface.BUTTON_POSITIVE -> {
+
+                    val Logout = Intent(mContext, LoginActivity::class.java)
+                    Logout.putExtra("Failed",true)
+                    mContext.startActivity(Logout)
+                }
+                DialogInterface.BUTTON_NEGATIVE -> {
+                    finish()
+                    startActivity(intent)
+                }
+            }
+        }
+
+        // Set the alert dialog positive/yes button
+        builder.setPositiveButton("Log Out",dialogClickListener)
+        // Set the alert dialog negative/no button
+        builder.setNegativeButton("Retry",dialogClickListener)
+        // Initialize the AlertDialog using builder object
+        dialog = builder.create()
+        // Finally, display the alert dialog
+        dialog.show()
+    }
+
+    private fun isNetworkAvailable(mContext: Context): Boolean {
+        val connectivityManager = mContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected
+    }
+
+
+
+    // Send Friend Request View
     private fun sendRequest() {
         val listView = findViewById<ListView>(R.id.listaFriends)
         // empty list view
         listView.adapter = ListFriendAdapter(this@FriendsActivity, JSONArray(), JSONArray(), selectedEmails, selectedNames)
         val user = getuid()
 
+        // Searches for Friends
         val search = findViewById<SearchView>(R.id.searchBarFriends)
-
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return true
             }
 
+            // Filter data
             override fun onQueryTextChange(newText: String?): Boolean {
+                if (isNetworkAvailable(this@FriendsActivity)){
+                    if (newText!!.isNotEmpty() and newText!!.contains(".com") and newText!!.contains("@") and (newText!!.length > 13) and (!selectedEmails.contains(
+                            newText!!
+                        ))
+                    ) {
+                        val downloadData =
+                            ConnectFriends(this@FriendsActivity, 0, listView, selectedEmails, selectedNames)
+                        try {
+                            val url = "http://54.81.239.120/selectAPI.php?queryType=9&email=$newText&uid=$user"
+                            downloadData.execute(url)
 
-                if (newText!!.isNotEmpty() and newText!!.contains(".com") and newText!!.contains("@") and (newText!!.length > 13) and (!selectedEmails.contains(newText!!))) {
-                    val downloadData = ConnectFriends(this@FriendsActivity, 0, listView, selectedEmails,selectedNames)
-                    try {
-                        val url = "http://54.81.239.120/selectAPI.php?queryType=9&email=$newText&uid=$user"
-                        downloadData.execute(url)
-
-                    } catch (e: Exception) {
-                        println(e.message)
+                        } catch (e: Exception) {
+                            println(e.message)
+                        }
+                    } else if (selectedEmails.size > 0) {
+                        listView.adapter = ListFriendAdapter(
+                            this@FriendsActivity,
+                            JSONArray(selectedNames),
+                            JSONArray(selectedEmails),
+                            selectedEmails,
+                            selectedNames
+                        )
+                    } else {
+                        listView.adapter = ListFriendAdapter(
+                            this@FriendsActivity,
+                            JSONArray(selectedNames),
+                            JSONArray(selectedEmails),
+                            selectedEmails,
+                            selectedNames
+                        )
                     }
-                } else if(selectedEmails.size > 0){
-                    listView.adapter = ListFriendAdapter(this@FriendsActivity,JSONArray(selectedNames), JSONArray(selectedEmails), selectedEmails,selectedNames)
-                } else{
-                    listView.adapter = ListFriendAdapter(this@FriendsActivity,JSONArray(selectedNames), JSONArray(selectedEmails), selectedEmails,selectedNames)
-                }
                 return true
+                } else {
+                    showInternetNotification(this@FriendsActivity,intent)
+                    return false
+                }
             }
         })
 
+        // Sends request
         ButtonAction2.setOnClickListener {
-            if (selectedEmails.size > 0) {
+            if(isNetworkAvailable(this@FriendsActivity)) {
+                if (selectedEmails.size > 0) {
 
-                for (i in 0..(selectedEmails.size - 1)) {
-                    try {
+                    for (i in 0..(selectedEmails.size - 1)) {
+                        try {
 
-                        val insertData = ConnectFriends(this, 3, listView, selectedEmails,selectedNames)
+                            val insertData = ConnectFriends(this, 3, listView, selectedEmails, selectedNames)
 
-                        val email = selectedEmails.get(i)
+                            val email = selectedEmails.get(i)
 
-                        val url = "http://54.81.239.120/insertAPI.php?queryType=3&uid=$user&email=$email"
-                        insertData.execute(url)
+                            val url = "http://54.81.239.120/insertAPI.php?queryType=3&uid=$user&email=$email"
+                            insertData.execute(url)
 
-                    } catch (e: Exception) {
-                        println(e.message)
+                        } catch (e: Exception) {
+                            println(e.message)
+                        }
                     }
+                    listView.adapter = ListFriendAdapter(
+                        this@FriendsActivity,
+                        JSONArray(),
+                        JSONArray(),
+                        selectedEmails,
+                        selectedNames
+                    )
+                    Toast.makeText(this, "Request Sent.", Toast.LENGTH_SHORT).show()
+                    selectedEmails = ArrayList()
+                    selectedNames = ArrayList()
+                } else {
+                    Toast.makeText(this, "Nothing to Request.", Toast.LENGTH_SHORT).show()
                 }
-                listView.adapter = ListFriendAdapter(this@FriendsActivity, JSONArray(), JSONArray(), selectedEmails,selectedNames)
-                Toast.makeText(this, "Request Sent.", Toast.LENGTH_SHORT).show()
-                selectedEmails = ArrayList()
-                selectedNames = ArrayList()
-            }
-            else{
-                Toast.makeText(this, "Nothing to Request.", Toast.LENGTH_SHORT).show()
+            } else {
+                showInternetNotification(this@FriendsActivity,intent)
             }
 
         }
     }
 
+    // Makes pending Request View
     private fun pendingRequest(){
         val listView = findViewById<ListView>(R.id.listaFriends)
         // empty list view
@@ -160,23 +264,27 @@ class FriendsActivity : AppCompatActivity() {
 
         val user = getuid()
         val downloadData = ConnectFriends(this,1,listView,selectedEmails,selectedNames)
-        try
-        {
-            val url = "http://54.81.239.120/selectAPI.php?queryType=7&uid=$user"
-            downloadData.execute(url)
 
-        }catch (e: Exception)
-        {
-            println(e.message)
+        if(isNetworkAvailable(this@FriendsActivity)) {
+            try {
+                val url = "http://54.81.239.120/selectAPI.php?queryType=7&uid=$user"
+                downloadData.execute(url)
+
+            } catch (e: Exception) {
+                println(e.message)
+            }
+        } else {
+            showInternetNotification(this@FriendsActivity,intent)
         }
 
+        // Searches pending Requests
         val search = findViewById<SearchView>(R.id.searchBarFriends)
-
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return true
             }
 
+            // Filter data
             override fun onQueryTextChange(newText: String?): Boolean {
                 var empty: Boolean
                 if (downloadData.names.length() > 0) {
@@ -215,6 +323,7 @@ class FriendsActivity : AppCompatActivity() {
             }
         })
 
+        // Accept Friend Request selected
         ButtonAction.setOnClickListener {
             if(selectedEmails.size > 0){
 
@@ -242,7 +351,11 @@ class FriendsActivity : AppCompatActivity() {
                         val email = selectedEmails.get(i)
 
                         val url = "http://54.81.239.120/updateAPI.php?queryType=2&uid=$user&email=$email"
-                        insertData.execute(url)
+
+                        if (isNetworkAvailable(this@FriendsActivity))
+                            insertData.execute(url)
+                        else
+                            showInternetNotification(this@FriendsActivity,intent)
 
                     }catch (e: Exception)
                     {
@@ -257,6 +370,8 @@ class FriendsActivity : AppCompatActivity() {
             }
 
         }
+
+        // Reject Friend Request selected
         ButtonAction2.setOnClickListener {
             if(selectedEmails.size > 0){
 
@@ -284,7 +399,11 @@ class FriendsActivity : AppCompatActivity() {
                         val email = selectedEmails.get(i)
 
                         val url = "http://54.81.239.120/updateAPI.php?queryType=3&uid=$user&email=$email"
-                        insertData.execute(url)
+
+                        if (isNetworkAvailable(this@FriendsActivity))
+                            insertData.execute(url)
+                        else
+                            showInternetNotification(this@FriendsActivity,intent)
 
                     }catch (e: Exception)
                     {
@@ -301,6 +420,7 @@ class FriendsActivity : AppCompatActivity() {
         }
     }
 
+    // View All friends
     private fun allFriends(){
         val listView = findViewById<ListView>(R.id.listaFriends)
         // empty list view
@@ -308,23 +428,26 @@ class FriendsActivity : AppCompatActivity() {
         listView.adapter = ListFriendAdapter(this@FriendsActivity, JSONArray(),JSONArray(),selectedEmails,selectedNames)
         val user = getuid()
         val downloadData = ConnectFriends(this,1,listView,selectedEmails,selectedNames)
-        try
-        {
-            val url = "http://54.81.239.120/selectAPI.php?queryType=6&uid=$user"
-            downloadData.execute(url)
 
-        }catch (e: Exception)
-        {
-            println(e.message)
+        if (isNetworkAvailable(this@FriendsActivity)) {
+            try {
+                val url = "http://54.81.239.120/selectAPI.php?queryType=6&uid=$user"
+                downloadData.execute(url)
+
+            } catch (e: Exception) {
+                println(e.message)
+            }
+        } else {
+            showInternetNotification(this@FriendsActivity,intent)
         }
 
+        // Search Bar handler
         val search = findViewById<SearchView>(R.id.searchBarFriends)
-
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return true
             }
-
+            // Filter data
             override fun onQueryTextChange(newText: String?): Boolean {
                 var empty: Boolean
                 if (downloadData.names.length() > 0) {
@@ -364,6 +487,8 @@ class FriendsActivity : AppCompatActivity() {
         })
     }
 
+
+    // Handles the list display
     private class ListFriendAdapter(context: Context, names: JSONArray, emails: JSONArray, selectedEmail: MutableList<String>,selectedName: MutableList<String>) : BaseAdapter() {
 
         private val mContext: Context
@@ -391,6 +516,7 @@ class FriendsActivity : AppCompatActivity() {
             return emailsArray.get(position)
         }
 
+        // Sets the view
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
 
             val layoutInflater = LayoutInflater.from(mContext)
@@ -400,7 +526,6 @@ class FriendsActivity : AppCompatActivity() {
 
                 override fun onClick(v: View?) {
                     //use getItem(position) to get the item
-
                     if (selected.contains(position)){
                         val index = selected.indexOf(position)
                         selectedNames.removeAt(index)
@@ -433,6 +558,7 @@ class FriendsActivity : AppCompatActivity() {
         }
     }
 
+    // Connects to the API and gets the data
     companion object {
         class ConnectFriends(context: Context, queryType: Int, listView: ListView, selectedEmail: MutableList<String>, selectedName: MutableList<String> ) :
             AsyncTask<String, Void, String>() {

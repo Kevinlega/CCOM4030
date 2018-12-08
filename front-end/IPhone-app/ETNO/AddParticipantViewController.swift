@@ -1,10 +1,12 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
 //
-//  AddParticipantViewController.swift
-//  ETNO
-//
-//  Created by Kevin Legarreta on 10/2/18.
-//  Copyright © 2018 Los Duendes Malvados. All rights reserved.
-//
+// File        : AddParticipantViewController.swift
+// Description : View controller that allows user to add other users to project
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 import UIKit
 
@@ -50,6 +52,7 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
         }
     }
     
+    // Display users in table.
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Row", for: indexPath)
         if Searching{
@@ -63,7 +66,6 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     // MARK: - Search Bar Actions
-    
     // Use the search bar to search users
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text == nil || searchBar.text == ""{
@@ -130,10 +132,11 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
     
     
   // MARK: - Default Functions
-    
+  // Get participants from a proect when view loads
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        hideKeyboardWhenTappedAround()
+        
         let response = GetParticipants(project_id: project_id, user_id: user_id)
 
         if (response["empty"] as! Bool) == false{
@@ -143,15 +146,19 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
         
         // Do any additional setup after loading the view.
     }
-
+    
+    // Default Function
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
     // MARK: - Segue Function
-    
+    // Prepare user info for next segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        ConnectionTest(self: self)
+
         // Add particpants to project and move to the project view
         if (segue.identifier == "AddParticipants"){
             if (SelectedUsers.count > 0 && !FirstSelected){
@@ -165,7 +172,8 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
             else{
                 self.present(Alert(title: "Error", message: "No participant selected.", Dismiss: "Dismiss"),animated: true, completion: nil)
             }
-        } // Go back to the project view
+        }
+        // Go back to the project view
         else if (segue.identifier == "BackToProject"){
             let vc = segue.destination as! ProjectViewController
             vc.user_id = user_id

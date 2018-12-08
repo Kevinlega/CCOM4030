@@ -4,15 +4,16 @@
           package="com.example.spider.grafia">
 
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
+    <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
 
     <uses-feature
             android:name="android.hardware.camera"
             android:required="true"/>
-
-
 
     <application
             android:allowBackup="true"
@@ -21,14 +22,19 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
+            android:usesCleartextTraffic="true"
             tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".LoginActivity">
+
+        <activity android:name=".SplashActivity" android:theme="@style/launch">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+
+        <activity android:name=".LoginActivity"></activity>
         <activity android:name=".DashboardActivity">
         </activity>
         <activity android:name=".CreateAccountActivity">
@@ -51,12 +57,13 @@
                 android:name=".CameraActivity"
                 android:theme="@style/AppThemeNoToolbar">
         </activity>
-        <activity android:name=".VoiceActivity"
-                  android:theme="@style/AppThemeNoToolbar">
+        <activity
+                android:name=".VoiceActivity"
+                android:theme="@style/AppThemeNoToolbar">
         </activity>
-
-        <activity android:name=".VideoActivity"
-                  android:theme="@style/AppThemeNoToolbar">
+        <activity
+                android:name=".VideoActivity"
+                android:theme="@style/AppThemeNoToolbar">
         </activity>
 
         <provider
@@ -68,6 +75,20 @@
                     android:name="android.support.FILE_PROVIDER_PATHS"
                     android:resource="@xml/file_paths"/>
         </provider>
+
+        <activity android:name=".NotesActivity">
+        </activity>
+        <activity android:name=".DownloadNotesActivity">
+        </activity>
+        <activity android:name=".DownloadImageActivity">
+        </activity>
+        <activity android:name=".DownloadAudioActivity">
+        </activity>
+        <activity android:name=".DownloadVideoActivity">
+        </activity>
+        <activity android:name=".FingerprintActivity">
+        </activity>
+
     </application>
 
 </manifest>

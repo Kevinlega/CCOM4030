@@ -1,10 +1,13 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
 //
-//  CreateAccountViewController.swift
-//  ETNO
-//
-//  Created by Kevin Legarreta on 10/2/18.
-//  Copyright © 2018 Los Duendes Malvados. All rights reserved.
-//
+// File        : CreateAccountViewController.swift
+// Description : View controller that lets the user create an account with the server.
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
+
 import UIKit
 import Foundation
 
@@ -20,7 +23,8 @@ class CreateAccountViewController: UIViewController {
     @IBOutlet weak var Email: UITextField!
     @IBOutlet weak var Password: UITextField!
     @IBOutlet weak var ConfirmPassword: UITextField!
-   
+    @IBOutlet weak var answer: UITextField!
+    
     var UserCanBeAdded = false
     
     // MARK: - Create User Action (Button Press)
@@ -37,8 +41,9 @@ class CreateAccountViewController: UIViewController {
         let UserName = Name.text
         let UserEmail = Email.text
         let UserConfirmPassword = ConfirmPassword.text
+        let answered = answer.text
 
-        if (UserName!.isEmpty || UserEmail!.isEmpty || UserPassword!.isEmpty || UserConfirmPassword!.isEmpty){
+        if (UserName!.isEmpty || UserEmail!.isEmpty || UserPassword!.isEmpty || UserConfirmPassword!.isEmpty || answered!.isEmpty){
             self.present(Alert(title: "Error", message: "All fields are requiered.", Dismiss: "Dismiss"),animated: true, completion: nil)
             }
         else{ if(isRegistered(email: UserEmail!)){
@@ -59,17 +64,21 @@ class CreateAccountViewController: UIViewController {
     // MARK: - Default Functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        hideKeyboardWhenTappedAround()
         // Do any additional setup after loading the view.
     }
-
+    // Default
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
     // MARK: - Segue Function
+    // Handles the data
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        ConnectionTest(self: self)
+        
         if (segue.identifier == "BackToLogin"){
             let _ = segue.destination as! LoginViewController
         }
@@ -82,13 +91,14 @@ class CreateAccountViewController: UIViewController {
                 var UserPassword = Password.text
                 let UserName = Name.text
                 let UserEmail = Email.text
+                let answered = answer.text
                 
 
                 let Salt = saltGenerator(length: 5)
                 UserPassword = saltAndHash(password: UserPassword!,salt: Salt)
                 
                 SaveToKeychain(email: UserEmail!, password: UserPassword!)
-                if CreateAccount(name: UserName!, email: UserEmail!,password: UserPassword!, salt: Salt){
+                if CreateAccount(name: UserName!, email: UserEmail!,password: UserPassword!, salt: Salt, answer: answered!){
                     let _ = segue.destination as! LoginViewController
                 }
                 else{

@@ -1,16 +1,21 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
 //
-//  LoginViewController.swift
-//  ETNO
-//
-//  Created by Kevin Legarreta on 10/10/18.
-//  Copyright © 2018 Los Duendes Malvados. All rights reserved.
-//
+// File        :  LoginViewController.swift
+// Description : View controller that lets the user authenticate with the server
+//              to pass to the dashboard and see all the projects
+//               the user owns and participates, gateway to change password
+//               and create account.
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
 
 import UIKit
 import LocalAuthentication
 
 class LoginViewController: UIViewController {
-
+    
     // MARK: - Variables
     //    This will be equal to database response
     var user_id = Int()
@@ -40,8 +45,28 @@ class LoginViewController: UIViewController {
     // MARK: - Default Functions
     override func viewDidLoad() {
         // Do any additional setup after loading the view, typically from a nib.
-        BiometricLogin()
+        
+        
+        var internet = true
+        
+        // check if internet
+        guard let status = Network.reachability?.status else { return }
+        switch status {
+        case .unreachable:
+            internet = false
+        case .wifi:
+            break
+        case .wwan:
+            break
+        }
+        
+        if(internet){
+            BiometricLogin()
+        }
+        
         super.viewDidLoad()
+        self.hideKeyboardWhenTappedAround()
+        
         }
     
     override func didReceiveMemoryWarning() {
@@ -51,9 +76,12 @@ class LoginViewController: UIViewController {
     
     
     // MARK: - Segue Function
-    // We think is only needed if we send information from view to view
-    
+    // Handles the data and if the login is successful passes data to next view
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        
+        ConnectionTest(self: self)
+    
         if (segue.identifier == "CreateAccount"){
             let _ = segue.destination as! CreateAccountViewController
         }
@@ -61,6 +89,7 @@ class LoginViewController: UIViewController {
             let _ = segue.destination as! ChangePasswordViewController
         }
         else if (segue.identifier == "Dashboard"){
+    
             if CanSendLogin{
                 var response : NSDictionary = NSDictionary()
 
@@ -74,14 +103,14 @@ class LoginViewController: UIViewController {
                     if response["verified"] as! Bool == true{
                         let vc = segue.destination as! DashboardViewController
                         vc.user_id = response["uid"] as! Int
+                    
                     }
                     else{
                         performSegue(withIdentifier: "NotVerified", sender: nil)
                     }
-                    
-                    
                 }
                 else{
+                    BiometricAuthentication = false
                     self.present(Alert(title: "Error", message: "Credentials are incorrect.", Dismiss: "Dismiss"),animated: true, completion: nil)
                 }
                 
@@ -89,9 +118,7 @@ class LoginViewController: UIViewController {
         }
     }
     
-    // MARK: - TOUCH/FACE ID
-    // Salvame papi dios
-    
+    // MARK: - TOUCH/FACE ID    
     // Get password from keychain
     func LoadPassword(_ email: String){
         let passwordItem = KeychainPasswordItem(service: KeychainConfiguration.serviceName, account: email, accessGroup: KeychainConfiguration.accessGroup)
@@ -125,6 +152,7 @@ class LoginViewController: UIViewController {
                     self.LoadPassword(email)
                     
                     DispatchQueue.main.async{
+                        ConnectionTest(self: self)
                         self.performSegue(withIdentifier: "Dashboard", sender: nil)
                     }
                 }
@@ -132,3 +160,5 @@ class LoginViewController: UIViewController {
         }
     }
 }
+
+

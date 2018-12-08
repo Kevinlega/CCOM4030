@@ -1,14 +1,25 @@
+// Authors     : Luis Fernando
+//               Kevin Legarreta
+//               David J. Ortiz Rivera
+//               Bryan Pesquera
+//               Enrique Rodriguez
+//
+// File        : AddParticipantActivity.kt
+// Description : Activity that allows user to add other users to project
+// Copyright © 2018 Los Duendes Malvados. All rights reserved.
+
 package com.example.spider.grafia
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
+import android.net.ConnectivityManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_add_participants.*
-
-
 import android.os.AsyncTask
+import android.support.v7.app.AlertDialog
 import org.json.JSONArray
 import org.json.JSONObject
 import java.net.URL
@@ -18,9 +29,57 @@ import android.widget.*
 
 class AddParticipantsActivity : AppCompatActivity() {
 
+    // Initiating globals
     var selectedEmails: MutableList<String> = ArrayList()
     var FilteredNames = JSONArray()
     var FilteredEmail = JSONArray()
+    var name = ""
+
+    // Method to show an alert dialog with yes, no and cancel button
+    private fun showInternetNotification(mContext: Context, intent: Intent){
+        // Late initialize an alert dialog object
+        lateinit var dialog: AlertDialog
+
+
+        // Initialize a new instance of alert dialog builder object
+        val builder = AlertDialog.Builder(mContext)
+        // Set a title for alert dialog
+        builder.setTitle("Lost Internet Connection.")
+
+        // Set a message for alert dialog
+        builder.setMessage("Do you want to log out or retry?")
+
+        // On click listener for dialog buttons
+        val dialogClickListener = DialogInterface.OnClickListener{ _, which ->
+            when(which){
+                DialogInterface.BUTTON_POSITIVE -> {
+
+                    val Logout = Intent(mContext, LoginActivity::class.java)
+                    Logout.putExtra("Failed",true)
+                    mContext.startActivity(Logout)
+                }
+                DialogInterface.BUTTON_NEGATIVE -> {
+                    finish()
+                    startActivity(intent)
+                }
+            }
+        }
+
+        // Set the alert dialog positive/yes button
+        builder.setPositiveButton("Log Out",dialogClickListener)
+        // Set the alert dialog negative/no button
+        builder.setNegativeButton("Retry",dialogClickListener)
+        // Initialize the AlertDialog using builder object
+        dialog = builder.create()
+        // Finally, display the alert dialog
+        dialog.show()
+    }
+
+    private fun isNetworkAvailable(mContext: Context): Boolean {
+        val connectivityManager = mContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,28 +87,36 @@ class AddParticipantsActivity : AppCompatActivity() {
 
         supportActionBar!!.setTitle("Add Participants")
 
-        // retrieve data from another view
-
+        // Retrieve data from another view
         val userId = intent.getIntExtra("userId",-1)
         val projectId = intent.getIntExtra("pId",-1)
+        name = intent.getStringExtra("projectName")
 
 
+        // Local variables of view and view triggers
         val listView = findViewById<ListView>(R.id.listView)
         val mContext = this
-        val downloadData = Connect(this,0,listView, selectedEmails)
 
-        try
-        {
-            val url = "http://54.81.239.120/selectAPI.php?queryType=1&pid=$projectId&uid=$userId"
-            downloadData.execute(url)
+        // Connect to API
+        val downloadData = Connect(this, 0, listView, selectedEmails)
 
-        }catch (e: Exception)
-        {
-            println(e.message)
+        if(isNetworkAvailable(this@AddParticipantsActivity)) {
+
+            try {
+                val url = "http://54.81.239.120/selectAPI.php?queryType=1&pid=$projectId&uid=$userId"
+                downloadData.execute(url)
+
+            } catch (e: Exception) {
+                println(e.message)
+            }
+        } else {
+            showInternetNotification(this@AddParticipantsActivity,intent)
         }
 
+        // Search bar
         val search = findViewById<SearchView>(R.id.searchBarFriends)
 
+        // Search bar listener for text change
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return true
@@ -93,49 +160,53 @@ class AddParticipantsActivity : AppCompatActivity() {
             }
             })
 
-        // Segue trigger
+        // Segue triggers
         BackToProject.setOnClickListener {
                 val intent = Intent(this@AddParticipantsActivity, ProjectActivity::class.java)
                 // To pass any data to next activity
                 intent.putExtra("userId", userId)
-                intent.putExtra("projectId",projectId)
+                intent.putExtra("pId",projectId)
+                intent.putExtra("projectName",name)
                 // start your next activity
                 startActivity(intent)
             }
 
         AddParticipants.setOnClickListener {
-            val intent = Intent(this@AddParticipantsActivity, ProjectActivity::class.java)
+            if(isNetworkAvailable(this@AddParticipantsActivity)) {
+                val intent = Intent(this@AddParticipantsActivity, ProjectActivity::class.java)
 
-            if(downloadData.selectedEmails.size > 0){
+                if (downloadData.selectedEmails.size > 0) {
+                    // Insert n selected users into project
+                    for (i in 0..(selectedEmails.size - 1)) {
+                        try {
+                            println(i)
+                            val insertData = Connect(this, 1, listView, selectedEmails)
+                            val email = selectedEmails.get(i)
 
-                for (i in 0..(selectedEmails.size-1)){
-                    try
-                    {
-                        println(i)
-                        val insertData = Connect(this,1,listView, selectedEmails)
-                        val email = selectedEmails.get(i)
-
-                        val url = "http://54.81.239.120/insertAPI.php?queryType=1&pid=$projectId&email=$email"
-                        insertData.execute(url)
-                    }catch (e: Exception)
-                    {
-                        println(e.message)
+                            val url = "http://54.81.239.120/insertAPI.php?queryType=1&pid=$projectId&email=$email"
+                            insertData.execute(url)
+                        } catch (e: Exception) {
+                            println(e.message)
+                        }
                     }
-                }
-                // To pass any data to next activity
-                intent.putExtra("userId", userId)
-                intent.putExtra("projectId",projectId)
-                // start your next activity
-                Toast.makeText(this, "Participants added.", Toast.LENGTH_SHORT).show()
-                startActivity(intent)
-            }
-            else{
-                Toast.makeText(this, "No participants selected.", Toast.LENGTH_SHORT).show()
-            }
+                    // To pass any data to next activity
+                    intent.putExtra("userId", userId)
+                    intent.putExtra("pId", projectId)
+                    intent.putExtra("projectName", name)
 
+                    // start your next activity
+                    Toast.makeText(this, "Participants added.", Toast.LENGTH_SHORT).show()
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(this, "No participants selected.", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                showInternetNotification(this@AddParticipantsActivity,intent)
+            }
         }
     }
 
+    // Display users to add in project.
     private class ListViewAdapter(context: Context, names: JSONArray,emails: JSONArray, selectedEmail: MutableList<String>) : BaseAdapter() {
 
         private val mContext: Context
@@ -199,6 +270,7 @@ class AddParticipantsActivity : AppCompatActivity() {
         }
     }
 
+    // Connect class that sends request to server, to insert another user to project.
     companion object {
         class Connect(context: Context, queryType: Int,listView: ListView, selectedEmail: MutableList<String>) : AsyncTask<String, Void, String>(){
 
@@ -220,11 +292,11 @@ class AddParticipantsActivity : AppCompatActivity() {
                 return downloadJSON(p0[0])
             }
 
-            private fun downloadJSON(url: String?): String
-            {
+            private fun downloadJSON(url: String?): String {
                 return URL(url).readText()
             }
 
+            // Get Response
             override fun onPostExecute(result: String?) {
 
                 try {
