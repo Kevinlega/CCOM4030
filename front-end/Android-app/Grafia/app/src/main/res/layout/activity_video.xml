@@ -14,8 +14,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/backToProject2"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="8dp" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="16dp"/>
+            android:layout_marginTop="12dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp"/>
     <ImageButton
             android:layout_width="58dp"
             android:layout_height="52dp" app:srcCompat="@drawable/video"
@@ -23,7 +23,7 @@
             android:scaleType="fitXY"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="8dp" app:layout_constraintStart_toEndOf="@+id/backToProject2"
-            android:layout_marginStart="20dp"/>
+            android:layout_marginStart="8dp"/>
     <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" app:srcCompat="@android:drawable/ic_menu_gallery"
@@ -44,7 +44,7 @@
             android:id="@+id/uploadVideo"
             android:layout_marginStart="8dp"
             app:layout_constraintStart_toEndOf="@+id/saveVideo" app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginTop="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="4dp"/>
     <VideoView
             android:layout_width="385dp"
             android:layout_height="450dp"
@@ -58,18 +58,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" app:srcCompat="@android:drawable/ic_media_play"
             android:id="@+id/play"
-            app:layout_constraintTop_toBottomOf="@+id/saveVideo"
-            app:layout_constraintStart_toEndOf="@+id/stop"/>
+            app:layout_constraintStart_toEndOf="@+id/stop" android:layout_marginStart="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/openVideoGallery"/>
     <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" app:srcCompat="@android:drawable/ic_media_pause"
             android:id="@+id/pause" android:layout_marginStart="8dp"
-            app:layout_constraintStart_toEndOf="@+id/play" app:layout_constraintTop_toBottomOf="@+id/uploadVideo"/>
+            app:layout_constraintStart_toEndOf="@+id/play" app:layout_constraintTop_toBottomOf="@+id/saveVideo"/>
     <ImageButton
             android:layout_width="54dp"
             android:layout_height="51dp" app:srcCompat="@drawable/stop"
             android:id="@+id/stop" android:scaleType="fitXY" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="192dp" app:layout_constraintTop_toBottomOf="@+id/openVideoGallery"/>
+            android:layout_marginStart="104dp"
+            app:layout_constraintTop_toBottomOf="@+id/openVideo"/>
 
 
 </android.support.constraint.ConstraintLayout>

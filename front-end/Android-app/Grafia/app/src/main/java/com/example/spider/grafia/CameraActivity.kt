@@ -25,14 +25,17 @@ import android.provider.MediaStore
 import android.support.v4.content.FileProvider
 import android.widget.Toast
 import android.Manifest.permission
+import android.content.ContentUris
 import android.content.Context
 import android.content.DialogInterface
 import android.support.v4.app.ActivityCompat
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.net.ConnectivityManager
 import android.support.v4.content.ContextCompat
 import java.io.*
 import android.os.AsyncTask
+import android.os.Build
 import java.net.*
 import android.provider.DocumentsContract
 import android.support.v7.app.AlertDialog
@@ -140,7 +143,6 @@ class CameraActivity : AppCompatActivity() {
 
         // Open gallery
         openGallery.setOnClickListener {
-
             dispatchPicPictureIntent()
         }
 
@@ -211,6 +213,80 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
+    // detects the path of the image selected
+    private fun getPath(context:Context, uri: Uri) : String? {
+
+    // DocumentProvider
+    if (DocumentsContract.isDocumentUri(context, uri)) {
+         if (isDownloadsDocument(uri)) {
+             return getDataColumn(context, uri, null, null).toString()
+        }
+        // MediaProvider
+        else
+        if (isMediaDocument(uri)) {
+            val docId = DocumentsContract.getDocumentId(uri);
+            val split = docId.split(":");
+            val type = split[0];
+            var contentUri = Uri.EMPTY
+            if ("image".equals(type)) {
+                contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            }
+            val selection = "_id=?";
+            val selectionArgs =  arrayOf(split[1])
+            return getDataColumn(context, contentUri, selection, selectionArgs);
+        }
+    }
+    // MediaStore (and general)
+    else if ("content".equals(uri.getScheme(),true)) {
+        // Return the remote address
+        if (isGooglePhotosUri(uri))
+            return uri.getLastPathSegment();
+        return getDataColumn(context, uri, null, null);
+    }
+    // File
+    else if ("file".equals(uri.getScheme(),true)) {
+        return uri.getPath();
+        }
+    return null
+    }
+
+    // get path to file
+    private fun getDataColumn(context: Context, uri: Uri, selection: String?, selectionArgs: Array<String>?): String? {
+        var cursor: Cursor? = null
+        val column = "_data"
+        val projection = arrayOf(column)
+        try {
+            cursor = context.contentResolver.query(uri, projection, selection, selectionArgs, null)
+            if (cursor != null && cursor.moveToFirst()) {
+                val index = cursor.getColumnIndexOrThrow(column)
+                return cursor.getString(index)
+            }
+        } finally {
+            if (cursor != null)
+                cursor.close()
+        }
+        return null
+    }
+
+
+     // return Whether the Uri authority is DownloadsProvider.
+    private fun isDownloadsDocument(uri: Uri): Boolean {
+        return "com.android.providers.downloads.documents" == uri.authority
+    }
+
+
+    // return Whether the Uri authority is MediaProvider.
+
+    private fun isMediaDocument(uri: Uri): Boolean {
+        return "com.android.providers.media.documents" == uri.authority
+    }
+
+
+     // return Whether the Uri authority is Google Photos.
+    private fun isGooglePhotosUri(uri: Uri): Boolean {
+        return "com.google.android.apps.photos.content" == uri.authority
+    }
+
     // Get file from Intent to gallery or camera
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         // camera file
@@ -222,48 +298,22 @@ class CameraActivity : AppCompatActivity() {
 
             val timeStamp: String = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
             mCurrentPickedPictureName = "IMAGE_${userId}_${timeStamp}_.jpg"
-
         }
         // gallery file
         else if (requestCode == 2 && resultCode == RESULT_OK) {
-            if (mCurrentPhotoPath != "") {
-                val myFile = File(mCurrentPhotoPath)
-                myFile.delete()
-                mCurrentPhotoPath = ""
-            }
-            // get real path to the file
-            val photoUri = data?.data
 
-            val wholeID = DocumentsContract.getDocumentId(photoUri)
-
-            // Split at colon, use second item in the array
-            val id = wholeID.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
-
-            val column = arrayOf(MediaStore.Images.Media.DATA)
-
-            // where id is equal to
-            val sel = MediaStore.Images.Media._ID + "=?"
-
-            val cursor = this.getContentResolver().query(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                column, sel, arrayOf(id), null
-            )
-
-            var filePath = ""
-            val columnIndex = cursor.getColumnIndex(column[0])
-
-            if (cursor.moveToFirst()) {
-                filePath = cursor.getString(columnIndex)
-            }
-            cursor.close()
-            mCurrentPickedPicture = filePath
+            mCurrentPickedPicture = getPath(this,data?.data as Uri).toString()
 
             val timeStamp: String = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
             mCurrentPickedPictureName = "IMAGE_${userId}_${timeStamp}_.jpg"
 
-            if (photoUri != null) {
-                val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, photoUri)
-                imageView.setImageBitmap(rotatePic(bitmap))
+            try {
+                if (data.data != null) {
+                    val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, data.data)
+                    imageView.setImageBitmap(rotatePic(bitmap))
+                }
+            } catch (e: Exception){
+                Toast.makeText(this@CameraActivity, "Only images are accepted.", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -403,14 +453,19 @@ class CameraActivity : AppCompatActivity() {
                 path = mCurrentPhotoPath
             }
 
-            val multipart = Multipart(URL("http://54.81.239.120/fUploadAPI.php"))
-            multipart.addFormField("fileType", "1")
-            multipart.addFormField("path", (projectPath + "/images/"))
-            multipart.addFormField("uid", userId.toString())
-            multipart.addFormField("pid", projectId.toString())
-            multipart.addFilePart("file", path, name, "image/jpg")
+            var bool = false
+            try {
 
-            val bool = multipart.upload()
+                val multipart = Multipart(URL("http://54.81.239.120/fUploadAPI.php"))
+                multipart.addFormField("fileType", "1")
+                multipart.addFormField("path", (projectPath + "/images/"))
+                multipart.addFormField("uid", userId.toString())
+                multipart.addFormField("pid", projectId.toString())
+                multipart.addFilePart("file", path, name, "image/jpg")
+                bool = multipart.upload()
+            } catch (e: Exception){
+                return "NO"
+            }
 
             if (bool) {
                 return "YES"
@@ -426,7 +481,7 @@ class CameraActivity : AppCompatActivity() {
             if (result == "YES") {
                 Toast.makeText(this@CameraActivity, "Uploaded!", Toast.LENGTH_LONG).show()
             } else {
-                Toast.makeText(this@CameraActivity, "Try Again", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@CameraActivity, "Try Again. Note: If image is from public download folder or drive it will not upload", Toast.LENGTH_LONG).show()
             }
 
         }

@@ -29,6 +29,7 @@ import java.lang.Exception
 import android.content.ContentValues
 import android.content.Context
 import android.content.DialogInterface
+import android.database.Cursor
 import android.media.MediaMetadataRetriever
 import android.net.ConnectivityManager
 import android.os.AsyncTask
@@ -260,35 +261,12 @@ class VideoActivity : AppCompatActivity() {
                 myFile.delete()
                 mCurrentVideoPath = ""
             }
-
             val videoURI = data?.data
-
-            val wholeID = DocumentsContract.getDocumentId(videoURI)
-
-            // Split at colon, use second item in the array
-            val id = wholeID.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
-
-            val column = arrayOf(MediaStore.Images.Media.DATA)
-
-            // where id is equal to
-            val sel = MediaStore.Video.Media._ID + "=?"
-
-            val cursor = this.getContentResolver().query(
-                MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                column, sel, arrayOf(id), null
-            )
-
-            var filePath = ""
-            val columnIndex = cursor.getColumnIndex(column[0])
-
-            if (cursor.moveToFirst()) {
-                filePath = cursor.getString(columnIndex)
-            }
-            cursor.close()
-            mCurrentPickedVideo = filePath
+            mCurrentPickedVideo = getPath(this@VideoActivity,videoURI as Uri).toString()
 
             val timeStamp: String = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
             mCurrentPickedVideoName = "VIDEO_${userId}_${timeStamp}_.mp4"
+
 
             if (videoURI != null) {
                 mCurrentVideoUri = videoURI
@@ -296,8 +274,6 @@ class VideoActivity : AppCompatActivity() {
             }
         }
     }
-
-
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -364,6 +340,77 @@ class VideoActivity : AppCompatActivity() {
         save()
     }
 
+    // detects the path of the video selected
+    private fun getPath(context:Context, uri: Uri) : String? {
+
+        // DocumentProvider
+        if (DocumentsContract.isDocumentUri(context, uri)) {
+            if (isDownloadsDocument(uri)) {
+                return getDataColumn(context, uri, null, null).toString()
+            }
+            // MediaProvider
+            else
+                if (isMediaDocument(uri)) {
+                    val docId = DocumentsContract.getDocumentId(uri);
+                    val split = docId.split(":");
+                    val type = split[0];
+                    var contentUri = Uri.EMPTY
+                    if ("video".equals(type)) {
+                        contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+                    }
+                    val selection = "_id=?";
+                    val selectionArgs =  arrayOf(split[1])
+                    return getDataColumn(context, contentUri, selection, selectionArgs);
+                }
+        }
+        // MediaStore (and general)
+        else if ("content".equals(uri.getScheme(),true)) {
+            // Return the remote address
+            if (isGooglePhotosUri(uri))
+                return uri.getLastPathSegment();
+            return getDataColumn(context, uri, null, null);
+        }
+        // File
+        else if ("file".equals(uri.getScheme(),true)) {
+            return uri.getPath();
+        }
+        return null
+    }
+
+    // get path to file
+    private fun getDataColumn(context: Context, uri: Uri, selection: String?, selectionArgs: Array<String>?): String? {
+        var cursor: Cursor? = null
+        val column = "_data"
+        val projection = arrayOf(column)
+        try {
+            cursor = context.contentResolver.query(uri, projection, selection, selectionArgs, null)
+            if (cursor != null && cursor.moveToFirst()) {
+                val index = cursor.getColumnIndexOrThrow(column)
+                return cursor.getString(index)
+            }
+        } finally {
+            if (cursor != null)
+                cursor.close()
+        }
+        return null
+    }
+
+
+    // return Whether the Uri authority is DownloadsProvider.
+    private fun isDownloadsDocument(uri: Uri): Boolean {
+        return "com.android.providers.downloads.documents" == uri.authority
+    }
+
+    // return Whether the Uri authority is MediaProvider.
+    private fun isMediaDocument(uri: Uri): Boolean {
+        return "com.android.providers.media.documents" == uri.authority
+    }
+
+
+    // return Whether the Uri authority is Google Photos.
+    private fun isGooglePhotosUri(uri: Uri): Boolean {
+        return "com.google.android.apps.photos.content" == uri.authority
+    }
 
     private fun save(){
         // Save video to gallery
@@ -449,14 +496,21 @@ class VideoActivity : AppCompatActivity() {
                 name = path.substringAfterLast("/")
             }
 
-            val multipart = Multipart(URL("http://54.81.239.120/fUploadAPI.php"))
-            multipart.addFormField("fileType", "1")
-            multipart.addFormField("path", (projectPath + "/videos/"))
-            multipart.addFormField("uid", userId.toString())
-            multipart.addFormField("pid", projectId.toString())
-            multipart.addFilePart("file", path, name, "video/mp4")
 
-            val bool = multipart.upload()
+            var bool = false
+            try {
+
+                val multipart = Multipart(URL("http://54.81.239.120/fUploadAPI.php"))
+                multipart.addFormField("fileType", "1")
+                multipart.addFormField("path", (projectPath + "/videos/"))
+                multipart.addFormField("uid", userId.toString())
+                multipart.addFormField("pid", projectId.toString())
+                multipart.addFilePart("file", path, name, "video/mp4")
+
+                bool = multipart.upload()
+            } catch (e: Exception){
+                return "NO"
+            }
 
             if (bool) {
                 return "YES"
@@ -470,7 +524,7 @@ class VideoActivity : AppCompatActivity() {
             if (result == "YES") {
                 Toast.makeText(this@VideoActivity, "Uploaded!", Toast.LENGTH_LONG).show()
             } else {
-                Toast.makeText(this@VideoActivity, "Try Again", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@VideoActivity, "Try Again. Note: If video is from public download folder or drive it will not upload", Toast.LENGTH_LONG).show()
             }
 
         }

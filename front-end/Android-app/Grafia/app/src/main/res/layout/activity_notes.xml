@@ -13,24 +13,30 @@
             android:text="Clear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/clear_button" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="46dp" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/Note"/>
+            android:id="@+id/clear_button"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/Note" app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="24dp" app:layout_constraintEnd_toStartOf="@+id/save_button"
+            android:layout_marginEnd="96dp" app:layout_constraintVertical_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="100dp"/>
     <Button
             android:text="Save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/save_button" android:layout_marginStart="99dp"
+            android:id="@+id/save_button" android:layout_marginStart="16dp"
             app:layout_constraintStart_toEndOf="@+id/clear_button" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/Note"/>
+            app:layout_constraintTop_toBottomOf="@+id/Note" app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="24dp" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="100dp"/>
     <TextView
             android:text="Notes:"
             android:layout_width="97dp"
             android:layout_height="36dp"
             android:id="@+id/text_view_title"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="136dp" app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="44dp" android:textColor="@android:color/background_dark" android:textSize="30sp"/>
+            android:textColor="@android:color/background_dark" android:textSize="30sp"
+            app:layout_constraintStart_toEndOf="@+id/backToProject4"
+            android:layout_marginStart="30dp" android:layout_marginTop="16dp"
+            app:layout_constraintTop_toTopOf="parent"/>
     <EditText
             android:layout_width="124dp"
             android:layout_height="40dp"
@@ -39,24 +45,25 @@
             android:id="@+id/Name"
             android:hint="Name of note"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="44dp"
-            android:layout_marginTop="44dp" app:layout_constraintTop_toBottomOf="@+id/text_view_title"/>
+            android:layout_marginTop="20dp" app:layout_constraintTop_toBottomOf="@+id/text_view_title"/>
     <EditText
             android:layout_width="354dp"
-            android:layout_height="267dp"
+            android:layout_height="319dp"
             android:ems="10"
             android:id="@+id/Note"
             android:hint="Write a note..." android:inputType="textMultiLine"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp" app:layout_constraintTop_toBottomOf="@+id/Name" android:allowUndo="true"
+            android:layout_marginStart="16dp" app:layout_constraintTop_toBottomOf="@+id/Name" android:allowUndo="true"
             android:gravity="top|left"
-    />
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="22dp" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/clear_button"/>
     <TextView
             android:text="Characters: 0"
             android:layout_width="139dp"
             android:layout_height="29dp"
-            android:id="@+id/character_count" android:layout_marginStart="12dp"
+            android:id="@+id/character_count" android:layout_marginStart="40dp"
             app:layout_constraintStart_toEndOf="@+id/Name" app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="132dp"/>
+            android:layout_marginTop="80dp"/>
     <Button
             android:text="Back"
             android:layout_width="wrap_content"
