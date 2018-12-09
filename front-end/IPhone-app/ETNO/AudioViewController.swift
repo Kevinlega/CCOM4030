@@ -248,7 +248,9 @@ class AudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudioRecor
     // --- Uploading an audio file to server
     // "Upload" button is pressed, initiate request by invoking function.
     @IBAction func Upload(_ sender: Any){
-        myVoiceUploadRequest()
+        if !Recorder.isRecording{
+            myVoiceUploadRequest()
+        }
     }
 
     // Send file to API to be stored in project folder.
