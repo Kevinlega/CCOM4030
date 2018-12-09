@@ -1,71 +1,35 @@
-# Etnografía Digital
+# Grafía - Digital Ethnography
 
-## Miembros
+## Members
 
-- Federico Cintrón (Manejador del proyecto)
+- Federico Cintrón (Project Manager)
 - Kevin Legarreta
 - Bryan Pesquera
 - Enrique Rodriguez
 - Luis Fernando
 - David J. Ortiz Rivera
 
+## Introduction
 
-## Introdución
+###### General Description:
 
-###### Descripcion General:
+- Mobil app that serves as a content manager for projects that contain ethnographic data. The app also contains the tools to recollect ethnographic data such as: images, video, audio and text files. The data stored in each project can be accessed from the app and the administrator has the ability to add participants to the project. Users will also have friends for them to not have to write the email of the user they want to add to the project. 
 
-- Aplicación móvil y web que tenga las herramientas que se utilizan para recolectar datos etnográficos tales como imágenes, video, audio, texto y localización para los diversos proyectos.
+###### Purpose of the System: 
 
-###### Propósito del Sistema: 
+- Acquire a platform where investigators can share recourses of text and multimedia with users which have access to the projects data.
 
-- Adquirir una plataforma donde un investigador comparte varios recursos de texto y multimedia con usuarios que forman parte del mismo grupo de proyecto.
+###### Systems Reach:
 
-###### Alcance del Sistema:
+- Users: The users can look and send friend request, view their friends and accept or reject friend request. They can also create projects which makes them administrators and participate in other users’ projects.
 
-- Administradores: Usuario que puede crear y manejar proyectos y su contenido. También podrán añadir usuarios a dichos proyectos.
+- Administrators: Users who create the project can add and view the ethnographic data on their project. They also can add users to their project. 
 
-- Usuarios: Participante de la aplicación que colabora en un proyecto. El mismo es añadido a un proyecto por un administrador.
+- Participants of a Project: They can view and add ethnographic data. 
 
-###### Manual de uso:
+###### Manual for the application:
 
-# Etnografía Digital
-
-## Miembros
-
-- Federico Cintrón (Manejador del proyecto)
-- Kevin Legarreta
-- Bryan Pesquera
-- Enrique Rodriguez
-- Luis Fernando
-- David J. Ortiz Rivera
-
-
-## Introdución
-
-###### Descripcion General:
-
-- Aplicación móvil y web que tenga las herramientas que se utilizan para recolectar datos etnográficos tales como imágenes, video, audio, texto y localización para los diversos proyectos.
-
-###### Propósito del Sistema: 
-
-- Adquirir una plataforma donde un investigador comparte varios recursos de texto y multimedia con usuarios que forman parte del mismo grupo de proyecto.
-
-###### Alcance del Sistema:
-
-- Administradores: Usuario que puede crear y manejar proyectos y su contenido. También podrán añadir usuarios a dichos proyectos.
-
-- Usuarios: Participante de la aplicación que colabora en un proyecto. El mismo es añadido a un proyecto por un administrador.
-
-###### Manual de uso:
-
-- [Ver Manual](https://github.com/Kevinlega/Grafia/blob/master/Manual_for_Grafia.pdf)
-
-
-
-
-
-
-
+- [Here you may find the layout and manual for the application.](https://github.com/Kevinlega/Grafia/blob/master/Manual_for_Grafia.pdf)
 
 
 
