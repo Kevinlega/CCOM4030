@@ -2,12 +2,17 @@
 
 ## Members
 
-- Federico Cintrón (Project Manager)
+###### Development Group: "Los Duendes Malvados"
+
 - Kevin Legarreta
 - David J. Ortiz Rivera
 - Enrique Rodriguez
 - Luis Fernando
 - Bryan Pesquera
+
+###### App Client
+
+- Federico Cintrón
 
 ## Introduction
 
