@@ -93,7 +93,6 @@ class CreateAccountViewController: UIViewController {
                 let UserEmail = Email.text
                 let answered = answer.text
                 
-
                 let Salt = saltGenerator(length: 5)
                 UserPassword = saltAndHash(password: UserPassword!,salt: Salt)
                 

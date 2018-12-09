@@ -39,7 +39,7 @@ class Reachability {
     }
     var isRunningOnDevice: Bool = {
         #if targetEnvironment(simulator)
-        return false
+        return true
         #else
         return true
         #endif

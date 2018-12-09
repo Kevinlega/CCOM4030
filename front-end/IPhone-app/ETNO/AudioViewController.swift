@@ -196,12 +196,16 @@ class AudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudioRecor
             IsRecording = false
         }
         else{
-            setupRecorder()
-            Recorder.record()
-            ATimer = Timer.scheduledTimer(timeInterval: 0.1, target:self, selector:#selector(self.updateAudioMeter(timer:)), userInfo:nil, repeats:true)
-            RecordRef.setTitle("Stop", for: .normal)
-            PlayRef.isEnabled = false
-            IsRecording = true
+            if Access {
+                setupRecorder()
+                Recorder.record()
+                ATimer = Timer.scheduledTimer(timeInterval: 0.1, target:self, selector:#selector(self.updateAudioMeter(timer:)), userInfo:nil, repeats:true)
+                RecordRef.setTitle("Stop", for: .normal)
+                PlayRef.isEnabled = false
+                IsRecording = true
+            } else {
+                self.present(Alert(title: "Permissions Denied", message: "Grant permission in settings", Dismiss: "Dismiss"),animated: true,completion: nil)
+            }
         }
     }
     // If "Record" button is pressed for the second time invoke function to stop recording session.
