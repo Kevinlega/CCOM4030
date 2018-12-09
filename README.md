@@ -20,7 +20,7 @@
 
 ###### General Description:
 
-- Mobile app that serves as a content manager for projects that contain ethnographic data. The app also contains the tools to recollect ethnographic data such as: images, video, audio and text files. The data stored in each project can be accessed from the app and the administrator has the ability to add participants to the project. The app contains a friendship mechanism, that will allow administrators to add participants to their projects.
+- Mobile app that serves as a content manager for projects that contain ethnographic data. The app also contains the tools to recollect ethnographic data such as: images, video, audio and text files. The data stored in each project can be accessed from the app and the administrator has the ability to add participants to the project. The app contains a friendship mechanism that will allow administrators to add participants to their projects.
 
 ###### Purpose of the System: 
 
