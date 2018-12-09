@@ -4,10 +4,10 @@
 
 - Federico Cintrón (Project Manager)
 - Kevin Legarreta
-- Bryan Pesquera
+- David J. Ortiz Rivera
 - Enrique Rodriguez
 - Luis Fernando
-- David J. Ortiz Rivera
+- Bryan Pesquera
 
 ## Introduction
 
