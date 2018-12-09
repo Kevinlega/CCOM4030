@@ -34,7 +34,7 @@
 
 ###### Manual for the application:
 
-- [Here you may find the layout and manual for the application.](https://github.com/Kevinlega/Grafia/blob/master/Manual_for_Grafia.pdf)
+- [Here you may find the manual for the application.](https://github.com/Kevinlega/Grafia/blob/master/Manual_for_Grafia.pdf)
 
 ## Task Trade Off
 
