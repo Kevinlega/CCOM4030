@@ -1,5 +1,7 @@
 # Grafía - Digital Ethnography
 
+![Grafía Logo](https://raw.githubusercontent.com/Kevinlega/Grafia/master/App_Icons/grafia.png)
+
 ## Members
 
 ###### Development Group: "Los Duendes Malvados"
@@ -10,11 +12,11 @@
 - Luis Fernando
 - Bryan Pesquera
 
-###### App Client
+###### Application Client
 
 - Federico Cintrón
 
-## Introduction
+## Application Introduction
 
 ###### General Description:
 
@@ -32,9 +34,9 @@
 
 - Participants of a Project: They can view and add ethnographic data. 
 
-###### Manual for the application:
+## Manual for the application:
 
-- [Here you may find the manual for the application.](https://github.com/Kevinlega/Grafia/blob/master/Manual_for_Grafia.pdf)
+- [Read the manual for Grafía.](https://docs.google.com/viewer?url=https://raw.githubusercontent.com/Kevinlega/Grafia/master/Manual_for_Grafia.pdf)
 
 ## Task Trade Off
 
@@ -87,4 +89,3 @@
 4. AWS machine creation. (Bryan)
 
 5. Application layout and data management around the Activities or Views.  (David and Kevin)
-
