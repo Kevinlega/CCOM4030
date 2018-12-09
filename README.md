@@ -1,6 +1,6 @@
-# Grafía - Digital Ethnography
-
 ![Grafía Logo](https://raw.githubusercontent.com/Kevinlega/Grafia/master/App_Icons/grafia.png)
+
+# Grafía - Digital Ethnography
 
 ## Members
 
