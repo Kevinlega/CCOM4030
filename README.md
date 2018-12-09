@@ -20,15 +20,15 @@
 
 ###### General Description:
 
-- Mobil app that serves as a content manager for projects that contain ethnographic data. The app also contains the tools to recollect ethnographic data such as: images, video, audio and text files. The data stored in each project can be accessed from the app and the administrator has the ability to add participants to the project. Users will also have friends for them to not have to write the email of the user they want to add to the project. 
+- Mobile app that serves as a content manager for projects that contain ethnographic data. The app also contains the tools to recollect ethnographic data such as: images, video, audio and text files. The data stored in each project can be accessed from the app and the administrator has the ability to add participants to the project. The app contains a friendship mechanism, that will allow administrators to add participants to their projects.
 
 ###### Purpose of the System: 
 
-- Acquire a platform where investigators can share recourses of text and multimedia with users which have access to the projects data.
+- Acquire a platform where investigators can share resources of text and multimedia with users that have access to the project.
 
 ###### Systems Reach:
 
-- Users: The users can look and send friend request, view their friends and accept or reject friend request. They can also create projects which makes them administrators and participate in other users’ projects.
+- Users: The users can look and send friend requests, view their friends and accept or reject friend requests. They can also create projects, that will make them administrators of a project and participate in other users’ projects.
 
 - Administrators: Users who create the project can add and view the ethnographic data on their project. They also can add users to their project. 
 
@@ -46,7 +46,7 @@
 
 2. As a user I would like to authenticate with my email and password in the application after creating an account. (Kevin iOS, David and Kevin Android)
 
-3. As a user I would like to be able to change my password if I were to forget so as not to lose the progress of my account. (Kevin apps and Enrique API (sends email))
+3. As a user I would like to be able to change my password if I were to forget it, this way I would not lose the progress of my account. (Kevin apps and Enrique API (sends email))
 
 4. As a user I would like to create a new project in my account and be an administrator of it. (Enrique with Kevin help)
 
@@ -58,7 +58,7 @@
 
 8. As a user I would like my stored data to be secure. Validate user input to avoid compromising resources and / or data. (Enrique)
 
-9. As a user I would like to have a list of contacts that I could then add to my projects. Also to be able to send friend request and reject and accept them. (Kevin)
+9. As a user I would like to have a list of contacts that I could then add to my projects. Also to be able to send friend requests and reject or accept them. (Kevin)
 
 10. As a user I would like my credentials to be stored in the system so that I do not have to enter my email and password at all times. (iOS David and Android Kevin the storing and loading of the credentials and Enrique the fingerprint handler)
 
@@ -66,7 +66,7 @@
 
 12. As a user I would like my password not to be stored in an unsecured way. (Kevin)
 
-13. As a user I would like for the creation of my project reserves a space on the server for my data. (Enrique)
+13. As a user I would like for the creation of my project to reserve a space on the server for my data. (Enrique)
 
 14. As a user I would like to be able to make audio recordings. (iOS David and Android Kevin)
 
@@ -76,7 +76,7 @@
 
 17. As a user I would like my files to be stored on the server and be able to access them from the mobile. (David and Kevin)
 
-18. As a user I would like the application not to crash when I lose the internet connection. (iOS David and Android Kevin)
+18. As a user I wouldn't like for the application to crash when the mobile device loses the internet connection. (iOS David and Android Kevin)
 
 ###### Functionalities for the project: 
 
