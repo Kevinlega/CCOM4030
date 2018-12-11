@@ -2,7 +2,6 @@
 // Authors     : Luis Fernando
 //               Kevin Legarreta
 //               David J. Ortiz Rivera
-//               Bryan Pesquera
 //               Enrique Rodriguez
 //
 //  File: fUploadAPI.php
@@ -19,6 +18,7 @@ include_once "config.php";
 // ini_set('display_startup_errors', TRUE);
 define("TEXT_FILE",      0);
 define("OTHER_FILE",     1);
+define("iOS_FILE",       2);
 // Exit if no request variables were passed when called.
 if(!isset($_REQUEST['fileType'])) exit();
 // Extract file type from URL parameter.
@@ -123,6 +123,86 @@ switch($fileType){
 			$target_dir = $_REQUEST['path'] . basename($_FILES["file"]["name"]);
 			// Move the file to the destination directory.
 			if(move_uploaded_file($_FILES["file"]["tmp_name"], $target_dir)){
+				$return = array("file_created"=>true);
+
+				$emails = array();
+
+				$query = "SELECT email FROM users WHERE user_id IN (SELECT user_id FROM user_project WHERE project_id=?) AND user_id<>?";
+
+				// // Prepare the query statement. (for sanitation)
+				$statement = $connection->prepare($query);			
+				// Bind the parameters with the sql query.
+				$statement->bind_param('ii', $pid,$uid);
+				// Execute the now sanitized query.	
+				$statement->execute();						
+				// Asign the fetch value to this new variable.
+				$statement->bind_result($email);				
+
+				while($statement->fetch()) {
+					$emails[] = $email;
+				}
+				
+				$statement->close();
+
+
+				if(count($emails) != 0){
+
+					$query2 = "SELECT name FROM projects WHERE project_id=?";
+
+					// Prepare the query statement. (for sanitation)
+					$statement = $connection->prepare($query2);			
+					// Bind the parameters with the sql query.
+					$statement->bind_param('i', $pid);
+					// Execute the now sanitized query.	
+					$statement->execute();						
+					// Asign the fetch value to this new variable.
+					$statement->bind_result($project_name);
+
+					$statement->fetch();
+
+					$statement->close();
+
+
+					$query3 = "SELECT name FROM users WHERE user_id=?";
+
+					// Prepare the query statement. (for sanitation)
+					$statement = $connection->prepare($query3);			
+					// Bind the parameters with the sql query.
+					$statement->bind_param('i', $uid);
+					// Execute the now sanitized query.	
+					$statement->execute();						
+					// Asign the fetch value to this new variable.
+					$statement->bind_result($user_name);
+
+					$statement->fetch();
+					
+					foreach($emails as $email) {
+					sendEmail($email, "{$user_name} uploaded a file to {$project_name}", $FILE_UPLOADED_MESSAGE . $project_name);
+
+				}
+				}
+			} else{
+				$return = array("file_created"=>false);				
+			}
+			break;
+
+
+		case iOS_FILE:
+	    	if(!isset($_REQUEST['path'])) exit();
+	    	if(!isset($_REQUEST['uid'])) exit();
+			if(!isset($_REQUEST['pid'])) exit();
+			
+	    	$pid = $_REQUEST["pid"];
+			$uid = $_REQUEST["uid"];
+
+			// Create the destination directory for the file from the request
+			$target_dir = $_REQUEST['path'] . basename($_FILES["file"]["name"]);
+			// Move the file to the destination directory.
+			// if(move_uploaded_file($_FILES["file"]["tmp_name"], $target_dir)){
+			$command = "/usr/local/bin/ffmpeg -i " . $_FILES["file"]["tmp_name"] . " " . $target_dir;
+			exec($command,$output,$return);
+
+			if($return == 0){
 				$return = array("file_created"=>true);
 
 				$emails = array();

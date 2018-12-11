@@ -1,7 +1,6 @@
 // Authors     : Luis Fernando
 //               Kevin Legarreta
 //               David J. Ortiz Rivera
-//               Bryan Pesquera
 //               Enrique Rodriguez
 //
 // File        : VideoActivity.kt
