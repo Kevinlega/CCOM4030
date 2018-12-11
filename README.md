@@ -43,8 +43,7 @@
 
 ## Server side tools:
 
-- FFMPEG was a tool used to encode iOS videos, this way making them visable in android app. The link to download the tool is: https://www.ffmpeg.org/download.html
-
+- FFMPEG was a tool used to encode iOS videos. With this we made the videos playable and downloadble for the android app. The link to download the tool is: https://www.ffmpeg.org/download.html
 
 ## Task Trade Off
 
