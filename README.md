@@ -10,11 +10,14 @@
 - David J. Ortiz Rivera
 - Enrique Rodriguez
 - Luis Fernando
-- Bryan Pesquera
 
 ###### Application Client
 
 - Federico Cintrón
+
+###### Server Provider:
+
+- Bryan Pesquera
 
 ## Application Introduction
 

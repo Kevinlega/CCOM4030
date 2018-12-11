@@ -71,7 +71,7 @@ switch($queryType) {
 				$insert_id = $connection->insert_id;
 				$return = array("registered"=>true);
 
-				sendEmail($email, "Verify Your Account", $VERIFY_MESSAGE . $request_id);
+				sendEmail($email, "Account Created.", $VERIFY_MESSAGE . $request_id);
 			}
 
 			break;
@@ -94,6 +94,7 @@ switch($queryType) {
 				$return = array("registered"=>false);
 			} else {
 				$return = array("registered"=>true);
+				sendEmail($email, "A project was shared!", $ADDED_PROJECT);
 			}
 			break;
 

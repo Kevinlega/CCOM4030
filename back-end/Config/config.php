@@ -3,7 +3,6 @@
 // Authors     : Luis Fernando
 //               Kevin Legarreta
 //               David J. Ortiz Rivera
-//               Bryan Pesquera
 //               Enrique Rodriguez
 //
 //  File: config.php
@@ -49,14 +48,15 @@ function emailI($id, $subj, $msg)
 //format
 //sendEmail("email@somewhere.com", "subject", "content");
 
-$RESET_PASSWORD_MESSAGE = "Hello, we want to inform you that your password was just changed, if you did not approve this change, please contact develpers.";
+$RESET_PASSWORD_MESSAGE = "We want to inform you that your password was just changed, if you did not approve this change please contact the developers.";
 
 $CHANGE_PASSWD_LINK = "http://54.81.239.120/account/changepassword/";
-$CHANGE_PASSWD_MESSAGE = "Please click on the following link to change your account password: " . $CHANGE_PASSWD_LINK;
+$CHANGE_PASSWD_MESSAGE = "A request to change the password of your account was made. Please click on the following link to change your account password: " . $CHANGE_PASSWD_LINK;
 
 $VERIFY_LINK = "http://54.81.239.120/account/verify/";
-$VERIFY_MESSAGE = "Your account was created, please verify your account at the following link: " . $VERIFY_LINK;
+$VERIFY_MESSAGE = "An account was made with your email address. If this is an error contact the developers of Grafía. If this is correct, please verify your account at the following link: " . $VERIFY_LINK;
 
-$FILE_UPLOADED_MESSAGE = "Someone uploaded a new file to project: ";
+$FILE_UPLOADED_MESSAGE = "A new file was uploaded to project: ";
+$ADDED_PROJECT = "A friend just added you to his project. You can now contribute his project.";
 
 ?>
