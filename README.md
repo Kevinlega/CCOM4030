@@ -41,6 +41,12 @@
 
 - [Read the manual for Grafía.](https://docs.google.com/viewer?url=https://raw.githubusercontent.com/Kevinlega/Grafia/master/Manual_for_Grafia.pdf)
 
+## FFMPEG:
+
+- This tool was used to encode iOS videos, this way making them visable in android app.
+
+- The link to download the tool is: https://www.ffmpeg.org/download.html
+
 ## Task Trade Off
 
 ###### User Stories
