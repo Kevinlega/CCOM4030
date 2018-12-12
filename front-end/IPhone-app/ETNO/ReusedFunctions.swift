@@ -536,13 +536,13 @@ public func ConnectionTest(self: UIViewController) -> Bool{
 
 // MARK: - Alert Internet
 func AlertInternet(self: UIViewController){
-    let refreshAlert = UIAlertController(title: "No Internet Connection", message: "Do you want to logout or retry?.", preferredStyle: UIAlertController.Style.alert)
+    let refreshAlert = UIAlertController(title: "Lost Internet Connection.", message: "Do you want to log out or retry?.", preferredStyle: UIAlertController.Style.alert)
     
-    refreshAlert.addAction(UIAlertAction(title: "Logout", style: .default, handler: { (action: UIAlertAction!) in
+    refreshAlert.addAction(UIAlertAction(title: "LOG OUT", style: .default, handler: { (action: UIAlertAction!) in
         self.performSegue(withIdentifier: "Logout", sender: nil)
     }))
     
-    refreshAlert.addAction(UIAlertAction(title: "Retry", style: .cancel, handler: { (action: UIAlertAction!) in
+    refreshAlert.addAction(UIAlertAction(title: "RETRY", style: .cancel, handler: { (action: UIAlertAction!) in
         self.viewDidLoad()
     }))
     

@@ -1,3 +1,13 @@
+<!-- Authors:      Luis Fernando
+                   Kevin Legarreta
+                   David J. Ortiz Rivera
+                   Enrique Rodriguez
+  
+    File: verify_account_success.php
+    Description: Bootstrap Web Page. Verify Successful Page Page.
+    Created by Los Duendes Malvados.
+    Copyright © 2018 Los Duendes Malvados. All rights reserved.
+-->
 <style type="text/css">
 	body {
 		background-color: #112b63;
