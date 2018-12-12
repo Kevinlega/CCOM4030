@@ -194,7 +194,6 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
         if (segue.identifier == "SendFriendRequestAnswer"){
             if(UsersCanBeAdded){
                 let response = AnswerRequest(self: self, user_id: user_id, SelectedUsersEmail: SelectedUsersEmail)
-                print(response)
                 if (response["success"] as! Bool) == true{
                     let vc = segue.destination as! DashboardViewController
                     vc.user_id = user_id
@@ -210,7 +209,6 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
         } else if (segue.identifier == "RejectRequest"){
             if(UsersCanBeRemoved){
                 let response = DeclineRequest(self: self, user_id: user_id, SelectedUsersEmail: SelectedUsersEmail)
-                print(response)
                 if (response["success"] as! Bool) == true{
                     let vc = segue.destination as! DashboardViewController
                     vc.user_id = user_id

@@ -199,7 +199,6 @@ class NotesActivity : AppCompatActivity() {
             override fun onPostExecute(result: String?) {
                 try {
                     val jSONObject = JSONObject(result)
-                    println(jSONObject)
                     val uploaded = jSONObject.getBoolean("file_created")
 
                     if (uploaded) {

@@ -151,7 +151,6 @@ class LoginActivity : AppCompatActivity() {
         val connectToAPI = Connect(this, 0,email,password,intent)
         try{
             val url = "http://54.81.239.120/selectAPI.php?queryType=$query&email=$email"
-            println(url)
             connectToAPI.execute(url)
         }
         catch (error: Exception){}
@@ -180,7 +179,6 @@ class LoginActivity : AppCompatActivity() {
                     val connectToAPI = LoginActivity.Companion.Connect(mContext, 1, email, tryPassword, intent)
                     try {
                         val url = "http://54.81.239.120/selectAPI.php?queryType=$query&email=$email"
-                        println(url)
                         connectToAPI.execute(url)
                     } catch (error: Exception) {
                     }
@@ -232,7 +230,6 @@ class LoginActivity : AppCompatActivity() {
             override fun onPostExecute(result: String) {
                 try {
                     val jSONObject = JSONObject(result)
-                    println(jSONObject)
 
                     if(flag == 0){
                         val registered = jSONObject.getBoolean("empty")

@@ -85,7 +85,6 @@ class NotVerifiedActivity : AppCompatActivity() {
             val connectToAPI = Connect(this@NotVerifiedActivity)
             try {
                 val url = "http://54.81.239.120/updateAPI.php?queryType=$query&email=$email"
-                println(url)
                 connectToAPI.execute(url)
             } catch (error: Exception) {
             }
@@ -134,8 +133,6 @@ class NotVerifiedActivity : AppCompatActivity() {
             override fun onPostExecute(result: String) {
                 try {
                     val jSONObject = JSONObject(result)
-                    println(jSONObject)
-
 
                     val update = jSONObject.getBoolean("updated")
 

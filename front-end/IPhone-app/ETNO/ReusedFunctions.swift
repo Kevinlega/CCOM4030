@@ -31,7 +31,7 @@ public func saltGenerator(length: Int) -> String{
 // Displays alert popup message
 public func Alert(title: String, message: String, Dismiss: String) -> UIAlertController{
     let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
-    alertController.addAction(UIAlertAction.init(title: Dismiss, style: UIAlertAction.Style.destructive, handler: {(alert: UIAlertAction!) in print("Bad")}))
+    alertController.addAction(UIAlertAction.init(title: Dismiss, style: UIAlertAction.Style.destructive, handler: {(alert: UIAlertAction!) in print("ALERT")}))
     
     return alertController
 }
@@ -466,7 +466,7 @@ public func InsertParticipants(self: UIViewController,SelectedEmail: [String], p
         // Start data task
         let response = ConnectToAPI(self: self, request: request)
         if (response["registered"] as? Bool ?? false) == false{
-            print("bad")
+            print("COULD NOT INSERT")
         }
     }
 }

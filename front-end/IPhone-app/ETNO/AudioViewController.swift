@@ -132,14 +132,12 @@ class AudioViewController: UIViewController, AVAudioPlayerDelegate, AVAudioRecor
     func finishedRecording(success: Bool){
         if success{
             
-            print(Recorder.currentTime)
-            
             Recorder.stop()
             
             Recorder = nil
             ATimer.invalidate()
             
-            print("recorded successfully.")
+            self.present(Alert(title: "Recording Stop", message: "Successfully Saved.", Dismiss: "Dismiss"),animated: true,completion: nil)
         }
         else
         {

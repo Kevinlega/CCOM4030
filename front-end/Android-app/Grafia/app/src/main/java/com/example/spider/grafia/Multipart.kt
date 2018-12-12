@@ -120,8 +120,6 @@ constructor(url: URL) {
                 val response = reader.use(BufferedReader::readText)
                 httpConnection.disconnect()
 
-                println(response)
-
                 val string: String = response[16].toString() + response[17].toString() + response[18].toString() + response[19].toString()
 
                 if (string == "true"){

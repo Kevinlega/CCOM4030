@@ -32,7 +32,7 @@ class NotesViewController: UIViewController, UITextViewDelegate {
     // Displays alert box to user
     public func Alert(title: String, message: String, Dismiss: String) -> UIAlertController{
         let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
-        alertController.addAction(UIAlertAction.init(title: Dismiss, style: UIAlertAction.Style.destructive, handler: {(alert: UIAlertAction!) in print("Bad")}))
+        alertController.addAction(UIAlertAction.init(title: Dismiss, style: UIAlertAction.Style.destructive, handler: {(alert: UIAlertAction!) in print("ERROR")}))
         
         return alertController
     }

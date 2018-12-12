@@ -71,7 +71,6 @@ class FingerprintHandler(private val appContext: Context) : FingerprintManager.A
         if(isNetworkAvailable(mContext)) {
             try {
                 val url = "http://54.81.239.120/selectAPI.php?queryType=$query&email=$email"
-                println(url)
                 connectToAPI.execute(url)
             } catch (error: Exception) {
             }
@@ -187,7 +186,6 @@ class FingerprintHandler(private val appContext: Context) : FingerprintManager.A
                     val connectToAPI = Connect(mContext, 1, email, password)
                     try {
                         val url = "http://54.81.239.120/selectAPI.php?queryType=$query&email=$email"
-                        println(url)
                         connectToAPI.execute(url)
                     } catch (error: Exception) {
                     }

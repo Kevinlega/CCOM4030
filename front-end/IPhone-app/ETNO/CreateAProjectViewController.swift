@@ -38,8 +38,6 @@ class CreateAProjectViewController: UIViewController {
         }
     }
     
-
-    
     // MARK: - Default Functions
     override func viewDidLoad() {
         super.viewDidLoad()

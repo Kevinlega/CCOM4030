@@ -131,7 +131,6 @@ class ChangePasswordActivity : AppCompatActivity() {
             override fun onPostExecute(result: String) {
                 try {
                     val jSONObject = JSONObject(result)
-                    println(jSONObject)
 
                     if(flag == 0){
                         val registered = jSONObject.getBoolean("registered")

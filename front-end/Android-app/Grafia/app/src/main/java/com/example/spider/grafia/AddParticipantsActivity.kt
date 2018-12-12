@@ -178,7 +178,6 @@ class AddParticipantsActivity : AppCompatActivity() {
                     // Insert n selected users into project
                     for (i in 0..(selectedEmails.size - 1)) {
                         try {
-                            println(i)
                             val insertData = Connect(this, 1, listView, selectedEmails)
                             val email = selectedEmails.get(i)
 
@@ -321,7 +320,7 @@ class AddParticipantsActivity : AppCompatActivity() {
                             println("Success")
                         }
                         else{
-                            println("bad")
+                            println("Failed")
                         }
                     }
                     } catch (e: Exception) {

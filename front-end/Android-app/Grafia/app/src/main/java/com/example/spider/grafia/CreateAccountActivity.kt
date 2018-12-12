@@ -214,8 +214,6 @@ open class CreateAccountActivity : AppCompatActivity(){
                     val registered = jSONObject.getBoolean("registered")
 
                     if(type == 1) {
-                        println("hello")
-                        println(jSONObject)
 
                         if(registered) {
                             showDialog(mContext,email,password)
@@ -297,12 +295,9 @@ open class CreateAccountActivity : AppCompatActivity(){
                     val query = 0
                     try {
                         val connectToAPI = Connect(mContext, 1, name, email, password, answer,Move)
-                        println("url")
                         val url = "http://54.81.239.120/insertAPI.php?queryType=$query&name=$name&password=$password&email=$email&salt=$salt&answer=$answer"
-                        println(url)
                         connectToAPI.execute(url)
                     } catch (error: Exception) {
-                        println("Fuck")
                         println(error)
                     }
                 } else {

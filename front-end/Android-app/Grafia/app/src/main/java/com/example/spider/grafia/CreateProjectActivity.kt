@@ -111,7 +111,6 @@ class CreateProjectActivity : AppCompatActivity() {
                         val url = "http://54.81.239.120/insertAPI.php?queryType=2&$reqParam"
                         Log.i("CreateProjectActivity", "URL: $url")
 
-                        println(url)
                         downloadData.execute(url)
 
                     } catch (e: Exception) {
