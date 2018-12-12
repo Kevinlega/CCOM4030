@@ -46,7 +46,9 @@ class NotVerifiedViewController: UIViewController {
     // Performs segue for Login view.
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        ConnectionTest(self: self)
+        if segue.identifier != "Logout"{
+            let _ = ConnectionTest(self: self)
+        }
         
         if (segue.identifier == "BackToLogin"){
             let _ = segue.destination as! LoginViewController
@@ -57,7 +59,7 @@ class NotVerifiedViewController: UIViewController {
             let UserEmail = email.text!
             verify()
             if VerifyAble {
-                if(!(isRegistered(email: UserEmail))){
+                if(!(isRegistered(self: self, email: UserEmail))){
                     self.present(Alert(title: "Something went wrong.", message: "Cannot change password.", Dismiss: "Dismiss"),animated: true, completion: nil)
                 } else{
                     
@@ -71,7 +73,7 @@ class NotVerifiedViewController: UIViewController {
                     let post = "queryType=\(QueryType)&email=\(UserEmail)"
                     request.httpBody = post.data(using: String.Encoding.utf8)
                     
-                    response = ConnectToAPI(request: request)
+                    response = ConnectToAPI(self: self, request: request)
                     
                     if (response["updated"] as! Bool == true){
                         let _ = segue.destination as! LoginViewController
@@ -80,6 +82,8 @@ class NotVerifiedViewController: UIViewController {
                     }
                 }
             }
+        } else if (segue.identifier == "Logout"){
+            let _ = segue.destination as! LoginViewController
         }
     }
 }

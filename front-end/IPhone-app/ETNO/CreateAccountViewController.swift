@@ -45,7 +45,7 @@ class CreateAccountViewController: UIViewController {
         if (UserName!.isEmpty || UserEmail!.isEmpty || UserPassword!.isEmpty || UserConfirmPassword!.isEmpty || answered!.isEmpty){
             self.present(Alert(title: "Error", message: "All fields are requiered.", Dismiss: "Dismiss"),animated: true, completion: nil)
             }
-        else{ if(isRegistered(email: UserEmail!)){
+        else{ if(isRegistered(self: self,email: UserEmail!)){
                 
                 self.present(Alert(title: "Error", message: "Email is already in use.", Dismiss: "Dismiss"),animated: true, completion: nil)
                 }
@@ -72,11 +72,31 @@ class CreateAccountViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    // MARK: - Ask to store credentials
+    func AlertCredentials(UserEmail: String, UserPassword: String){
+        let refreshAlert = UIAlertController(title: "Biometric Access", message: "Do you want to store the credentials.", preferredStyle: UIAlertController.Style.alert)
+        
+        refreshAlert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction!) in
+            SaveToKeychain(email: UserEmail, password: UserPassword)
+            self.performSegue(withIdentifier: "Move", sender: nil)
+        }))
+        
+        refreshAlert.addAction(UIAlertAction(title: "No", style: .cancel, handler: { (action: UIAlertAction!) in
+            print("Don't save")
+            self.performSegue(withIdentifier: "Move", sender: nil)
+        }))
+        
+        self.present(refreshAlert, animated: true, completion: nil)
+    }
+    
+    
     // MARK: - Segue Function
     // Handles the data
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        ConnectionTest(self: self)
+        if segue.identifier != "Logout"{
+            let _ = ConnectionTest(self: self)
+        }
         
         if (segue.identifier == "BackToLogin"){
             let _ = segue.destination as! LoginViewController
@@ -95,14 +115,17 @@ class CreateAccountViewController: UIViewController {
                 let Salt = saltGenerator(length: 5)
                 UserPassword = saltAndHash(password: UserPassword!,salt: Salt)
                 
-                SaveToKeychain(email: UserEmail!, password: UserPassword!)
-                if CreateAccount(name: UserName!, email: UserEmail!,password: UserPassword!, salt: Salt, answer: answered!){
-                    let _ = segue.destination as! LoginViewController
+                if CreateAccount(self: self, name: UserName!, email: UserEmail!,password: UserPassword!, salt: Salt, answer: answered!){
+                    AlertCredentials(UserEmail: UserEmail!, UserPassword: UserPassword!)
                 }
                 else{
                     self.present(Alert(title: "Could not register", message: "Try Again", Dismiss: "Dismiss"),animated: true, completion: nil)
                 }
             }
+        } else if (segue.identifier == "Move"){
+            let _ = segue.destination as! LoginViewController
+        } else if (segue.identifier == "Logout"){
+            let _ = segue.destination as! LoginViewController
         }
     }
 }

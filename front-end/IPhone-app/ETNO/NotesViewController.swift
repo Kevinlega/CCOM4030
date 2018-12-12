@@ -117,12 +117,17 @@ class NotesViewController: UIViewController, UITextViewDelegate {
     
     // MARK: - Segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        ConnectionTest(self: self)
-    
+
+        if segue.identifier != "Logout"{
+            let _ = ConnectionTest(self: self)
+        }
+        
         if (segue.identifier == "BackToProject"){
             let vc = segue.destination as! ProjectViewController
             vc.user_id = user_id
             vc.project_id = project_id
+        } else if (segue.identifier == "Logout"){
+            let _ = segue.destination as! LoginViewController
         }
     }
 }

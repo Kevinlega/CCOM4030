@@ -85,8 +85,8 @@ class AllFriendsViewController: UIViewController, UITableViewDelegate, UITableVi
         user_id = TabBarViewController.User.uid
         hideKeyboardWhenTappedAround()
 
-        let response = GetFriends(user_id: user_id)
-        if (response["empty"] as! Bool) == false{
+        let response = GetFriends(self: self, user_id: user_id)
+        if ((response["empty"] as? Bool ?? true) == false){
             users = response["name"] as! [String]
             usersEmail = response["email"] as! [String]
         }
@@ -102,11 +102,16 @@ class AllFriendsViewController: UIViewController, UITableViewDelegate, UITableVi
     // MARK: - Segue Function
     // Prepare segue for user validation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        ConnectionTest(self: self)
+
+        if segue.identifier != "Logout"{
+            let _ = ConnectionTest(self: self)
+        }
         
         if (segue.identifier == "BackToDashboard"){
             let vc = segue.destination as! DashboardViewController
             vc.user_id = user_id
+        } else if (segue.identifier == "Logout"){
+            let _ = segue.destination as! LoginViewController
         }
     }
 }

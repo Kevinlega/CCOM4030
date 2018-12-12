@@ -38,30 +38,32 @@ public func Alert(title: String, message: String, Dismiss: String) -> UIAlertCon
 
 // MARK: - Connect to API
 // Connects to API after receiving request and returns API response as json
-public func ConnectToAPI(request: URLRequest) -> NSDictionary{
+public func ConnectToAPI(self: UIViewController,request: URLRequest) -> NSDictionary{
     
-    ConnectionTest(self: LoginViewController())
     var json : NSDictionary = NSDictionary()
-    let group = DispatchGroup()
-    group.enter()
     
-    let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-        do{
-            // Server response
-            json = try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! NSDictionary
-            group.leave()
+    if ConnectionTest(self: self) {
+        let group = DispatchGroup()
+        group.enter()
+        
+        let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
+            do{
+                // Server response
+                json = try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! NSDictionary
+                group.leave()
+                }
             }
-        }
-    // Wait until task is finished
-    task.resume()
-    group.wait()
-    return json
+        // Wait until task is finished
+        task.resume()
+        group.wait()
+    }
+     return json
 }
 
 // MARK: - Verify if Registration is Posible
 // Checks if user is already registered by email.
 
-public func isRegistered(email: String) -> Bool{
+public func isRegistered(self: UIViewController,email: String) -> Bool{
     
     var response : NSDictionary = NSDictionary()
     // Create the request to the API
@@ -76,15 +78,18 @@ public func isRegistered(email: String) -> Bool{
     let post = "queryType=\(QueryType)&email=\(email)"
     request.httpBody = post.data(using: String.Encoding.utf8)
     // Connect to API
-    response = ConnectToAPI(request: request)
+    response = ConnectToAPI(self: self, request: request)
     // Return true if user is registered, false otherwise
-    return (response["registered"] as! Bool)
+    
+    return (response["registered"] as? Bool ?? false)
+
 }
 
 // MARK: - Changes the Password
 // Sends request for updating password
-public func ChangePassword(email: String, answer: String) -> Bool{
+public func ChangePassword(self: UIViewController, email: String, answer: String) -> Bool{
     
+    let _ = ConnectionTest(self: self)
     // Create the request to the API
     let QueryType = "4"
     let url = URL(string: "http://54.81.239.120/insertAPI.php")
@@ -107,13 +112,13 @@ public func ChangePassword(email: String, answer: String) -> Bool{
     // Wait until task is finished
     task.resume()
     group.wait()
-    return json["inserted"] as! Bool
+    return json["inserted"] as? Bool ?? false
 }
 
 // MARK: - Creates the Account
 // Create an account
 
-public func CreateAccount(name: String, email: String, password: String, salt: String, answer: String) -> Bool{
+public func CreateAccount(self: UIViewController, name: String, email: String, password: String, salt: String, answer: String) -> Bool{
     // Create the request to the API
     var response : NSDictionary = NSDictionary()
     // Tells API which query to execute
@@ -128,9 +133,9 @@ public func CreateAccount(name: String, email: String, password: String, salt: S
     request.httpBody = post.data(using: String.Encoding.utf8)
     
     // Receive response from API
-    response = ConnectToAPI(request: request)
+    response = ConnectToAPI(self: self,request: request)
     
-    if (response["registered"] as? Bool) == true{
+    if (response["registered"] as? Bool ?? false) == true{
         return true
     }
     else{
@@ -140,7 +145,7 @@ public func CreateAccount(name: String, email: String, password: String, salt: S
 
 // MARK: - Connection to Database
 // Get projects from the user
-public func GetProjects(user_id: Int) -> NSDictionary{
+public func GetProjects(self: UIViewController, user_id: Int) -> NSDictionary{
     // Create the request to the API
     // Tells API which query to execute
     let QueryType = "3"
@@ -153,12 +158,12 @@ public func GetProjects(user_id: Int) -> NSDictionary{
     let post = "queryType=\(QueryType)&uid=\(user_id)"
     request.httpBody = post.data(using: String.Encoding.utf8)
     // Conect to API
-    return ConnectToAPI(request: request)
+    return ConnectToAPI(self: self,request: request)
 }
 
 // MARK: - Creates the project
 // Create a project
-public func CreateProject(user_id: Int, name: String, description: String, location: String) -> NSDictionary{
+public func CreateProject(self: UIViewController, user_id: Int, name: String, description: String, location: String) -> NSDictionary{
     // Create the request to the API
     // Tells API which query to execute
     let QueryType = "2"
@@ -171,12 +176,12 @@ public func CreateProject(user_id: Int, name: String, description: String, locat
     let post = "queryType=\(QueryType)&name=\(name)&description=\(description)&location=\(location)&user_id=\(user_id)"
     request.httpBody = post.data(using: String.Encoding.utf8)
     // Send request
-    return ConnectToAPI(request: request)
+    return ConnectToAPI(self: self,request: request)
 }
 
 // MARK: - CheckAdmin
 // Verifies if a user is project admin
-public func CheckAdmin(project_id: Int, user_id: Int) -> Bool{
+public func CheckAdmin(self: UIViewController, project_id: Int, user_id: Int) -> Bool{
     // Create the request to the API
     // Tells API which query to execute
     let QueryType = "8"
@@ -189,8 +194,8 @@ public func CheckAdmin(project_id: Int, user_id: Int) -> Bool{
     let post = "queryType=\(QueryType)&pid=\(project_id)"
     request.httpBody = post.data(using: String.Encoding.utf8)
     // Send request
-    let response = ConnectToAPI(request: request)
-    if (response["admin"] as! Int) == user_id{
+    let response = ConnectToAPI(self: self,request: request)
+    if (response["admin"] as? Int ?? -1) == user_id{
         return true
     }
     else{
@@ -199,7 +204,7 @@ public func CheckAdmin(project_id: Int, user_id: Int) -> Bool{
 }
 
 // MARK: - Login Handler
-public func CheckLogin(email: String, psw: String, Biometric: Bool) -> NSDictionary{
+public func CheckLogin(self: UIViewController ,email: String, psw: String, Biometric: Bool) -> NSDictionary{
     
     // check if internet
     var internet = true
@@ -232,9 +237,9 @@ public func CheckLogin(email: String, psw: String, Biometric: Bool) -> NSDiction
         request.httpBody = post.data(using: String.Encoding.utf8)
         
         // Connect to server
-        response = ConnectToAPI(request: request)
+        response = ConnectToAPI(self: self,request: request)
         
-        if (response["empty"] as! Bool) == false{
+        if (response["empty"] as? Bool ?? true) == false{
             hashed_password = response["hashed_password"] as! String
             salt = response["salt"] as! String
         }
@@ -250,6 +255,7 @@ public func CheckLogin(email: String, psw: String, Biometric: Bool) -> NSDiction
         
         // Login is succesful, get user id
         if (password == hashed_password){
+            
             // Create Request
             QueryType = "2";
             let url = URL(string: "http://54.81.239.120/selectAPI.php");
@@ -258,8 +264,12 @@ public func CheckLogin(email: String, psw: String, Biometric: Bool) -> NSDiction
             let post = "queryType=\(QueryType)&email=\(email)";
             request.httpBody = post.data(using: String.Encoding.utf8);
             
-            response = ConnectToAPI(request: request)
-            return ["registered":true, "uid": response["uid"] as! Int, "verified": response["verified"] as! Bool]
+            response = ConnectToAPI(self: self, request: request)
+            if Biometric {
+                return ["registered":true, "uid": response["uid"] as? Int ?? -1, "verified": response["verified"] as? Bool ?? false]
+            } else {
+                return ["registered":true, "uid": response["uid"] as? Int ?? -1, "verified": response["verified"] as? Bool ?? false, "hash":password]
+            }
         }
         else {
             return ["registered": false]
@@ -271,7 +281,7 @@ public func CheckLogin(email: String, psw: String, Biometric: Bool) -> NSDiction
 
 // MARK: - Create a Request
 // Sends another user a friend request
-public func SendRequest(user_id: Int, SelectedUsersEmail: [String] ) -> NSDictionary{
+public func SendRequest(self: UIViewController,user_id: Int, SelectedUsersEmail: [String] ) -> NSDictionary{
     
     // Tells API which query to execute
     let QueryType = "3"
@@ -289,9 +299,9 @@ public func SendRequest(user_id: Int, SelectedUsersEmail: [String] ) -> NSDictio
         let post = "queryType=\(QueryType)&uid=\(user_id)&email=\(email)"
         request.httpBody = post.data(using: String.Encoding.utf8)
         // Send request
-        let response = ConnectToAPI(request: request)
+        let response = ConnectToAPI(self: self, request: request)
         
-        if response["created"] as! Bool == false{
+        if (response["created"] as? Bool ?? false) == false{
             FailedEmail.append(email)
         }
     }
@@ -306,7 +316,7 @@ public func SendRequest(user_id: Int, SelectedUsersEmail: [String] ) -> NSDictio
 
 // MARK: - Retrieve Pending Requests
 // Get the pending friend requests of a user
-func GetPendingRequest(user_id: Int) -> NSDictionary{
+func GetPendingRequest(self: UIViewController, user_id: Int) -> NSDictionary{
     
     // Tells API which query to execute
     let QueryType = "7";
@@ -319,13 +329,13 @@ func GetPendingRequest(user_id: Int) -> NSDictionary{
     let post = "queryType=\(QueryType)&uid=\(user_id)"
     request.httpBody = post.data(using: String.Encoding.utf8)
     // Send request
-    return ConnectToAPI(request: request)
+    return ConnectToAPI(self: self, request: request)
 }
 
 
 // MARK: - Retrieve All Friends
 // Get the friends of user
-public func GetFriends(user_id: Int) -> NSDictionary {
+public func GetFriends(self: UIViewController ,user_id: Int) -> NSDictionary {
     
     // Tells API which query to execute
     let QueryType = "6"
@@ -338,13 +348,13 @@ public func GetFriends(user_id: Int) -> NSDictionary {
     let post = "queryType=\(QueryType)&uid=\(user_id)";
     request.httpBody = post.data(using: String.Encoding.utf8);
     // Send request
-    return ConnectToAPI(request: request)
+    return ConnectToAPI(self: self,request: request)
 }
 
 
 // MARK: - Get Participants of a project
 // Get the users from the project
-public func GetParticipants(project_id: Int, user_id: Int) -> NSDictionary{
+public func GetParticipants(self: UIViewController,project_id: Int, user_id: Int) -> NSDictionary{
     
     // Tells API which query to execute
     let QueryType = "1"
@@ -357,7 +367,7 @@ public func GetParticipants(project_id: Int, user_id: Int) -> NSDictionary{
     let post = "queryType=\(QueryType)&pid=\(project_id)&uid=\(user_id)"
     request.httpBody = post.data(using: String.Encoding.utf8)
     // Send request
-    return ConnectToAPI(request: request)
+    return ConnectToAPI(self: self, request: request)
 }
 
 // MARK: - Save to keychain function
@@ -375,7 +385,7 @@ public func SaveToKeychain(email: String, password: String){
 
 // MARK: - Handle Friend Requests
 // Insert new users to the project
-public func AnswerRequest(user_id: Int, SelectedUsersEmail: [String] ) -> NSDictionary{
+public func AnswerRequest(self: UIViewController ,user_id: Int, SelectedUsersEmail: [String] ) -> NSDictionary{
     
     // Tells API which query to execute
     let QueryType = "2"
@@ -392,9 +402,9 @@ public func AnswerRequest(user_id: Int, SelectedUsersEmail: [String] ) -> NSDict
         let post = "queryType=\(QueryType)&uid=\(user_id)&email=\(email)"
         request.httpBody = post.data(using: String.Encoding.utf8)
         // Start task
-        let response = ConnectToAPI(request: request)
+        let response = ConnectToAPI(self: self,request: request)
         
-        if response["updated"] as! Bool == false{
+        if response["updated"] as? Bool ?? false == false{
             FailedEmail.append(email)
         }
     }
@@ -407,7 +417,7 @@ public func AnswerRequest(user_id: Int, SelectedUsersEmail: [String] ) -> NSDict
 }
 
 // Decline a user's friend request.
-public func DeclineRequest(user_id: Int, SelectedUsersEmail: [String] ) -> NSDictionary{
+public func DeclineRequest(self: UIViewController, user_id: Int, SelectedUsersEmail: [String] ) -> NSDictionary{
     
     // Tells API query to be executed
     let QueryType = "3"
@@ -424,8 +434,8 @@ public func DeclineRequest(user_id: Int, SelectedUsersEmail: [String] ) -> NSDic
         let post = "queryType=\(QueryType)&uid=\(user_id)&email=\(email)"
         request.httpBody = post.data(using: String.Encoding.utf8)
         // Start task
-        let response = ConnectToAPI(request: request)
-        if response["updated"] as! Bool == false{
+        let response = ConnectToAPI(self: self, request: request)
+        if (response["updated"] as? Bool ?? false) == false{
             FailedEmail.append(email)
         }
     }
@@ -439,7 +449,7 @@ public func DeclineRequest(user_id: Int, SelectedUsersEmail: [String] ) -> NSDic
 
 // MARK: - Insert Users
 // Insert new users to the project
-public func InsertParticipants(SelectedEmail: [String], project_id: Int){
+public func InsertParticipants(self: UIViewController,SelectedEmail: [String], project_id: Int){
     // Tells api which query will be executed
     let QueryType = "1";
     // API url
@@ -454,8 +464,8 @@ public func InsertParticipants(SelectedEmail: [String], project_id: Int){
         let post = "queryType=\(QueryType)&pid=\(project_id)&email=\(email)"
         request.httpBody = post.data(using: String.Encoding.utf8)
         // Start data task
-        let response = ConnectToAPI(request: request)
-        if (response["registered"] as! Bool) == false{
+        let response = ConnectToAPI(self: self, request: request)
+        if (response["registered"] as? Bool ?? false) == false{
             print("bad")
         }
     }
@@ -476,6 +486,7 @@ public extension String{
     }
 }
 
+//MARK: - Keyboard hider
 // hides keyboard
 public extension UIViewController {
     func hideKeyboardWhenTappedAround() {
@@ -489,12 +500,13 @@ public extension UIViewController {
     }
 }
 
-public func ConnectionTest(self: UIViewController){
+//MARK: - Connection test
+public func ConnectionTest(self: UIViewController) -> Bool{
    
     var internet = true
     
     // check if internet
-    guard let status = Network.reachability?.status else { return }
+    guard let status = Network.reachability?.status else { return false }
         switch status {
         case .unreachable:
             internet = false
@@ -503,9 +515,36 @@ public func ConnectionTest(self: UIViewController){
         case .wwan:
             break
     }
-    if !internet{
-        self.present(Alert(title: "No Internet Connection", message: "Try Again Later", Dismiss: "Dismiss"),animated: true, completion: nil)
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "myVCID") as! LoginViewController
-        self.present(vc, animated: true, completion: nil)
+    
+    
+    var topController = UIApplication.shared.keyWindow?.rootViewController
+    while let presentedViewController = topController!.presentedViewController {
+        topController = presentedViewController
     }
+    
+    
+    if (!internet && !(topController is LoginViewController )){
+        AlertInternet(self: self)
+        return false
+    } else if(!internet){
+        self.present(Alert(title: "No Internet Connection", message: "Try Again Later", Dismiss: "Dismiss"),animated: true, completion: nil)
+        return false
+    } else{
+        return true
+    }
+}
+
+// MARK: - Alert Internet
+func AlertInternet(self: UIViewController){
+    let refreshAlert = UIAlertController(title: "No Internet Connection", message: "Do you want to logout or retry?.", preferredStyle: UIAlertController.Style.alert)
+    
+    refreshAlert.addAction(UIAlertAction(title: "Logout", style: .default, handler: { (action: UIAlertAction!) in
+        self.performSegue(withIdentifier: "Logout", sender: nil)
+    }))
+    
+    refreshAlert.addAction(UIAlertAction(title: "Retry", style: .cancel, handler: { (action: UIAlertAction!) in
+        self.viewDidLoad()
+    }))
+    
+    self.present(refreshAlert, animated: true, completion: nil)
 }

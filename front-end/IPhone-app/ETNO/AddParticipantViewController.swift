@@ -136,9 +136,9 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
         super.viewDidLoad()
         hideKeyboardWhenTappedAround()
         
-        let response = GetParticipants(project_id: project_id, user_id: user_id)
+        let response = GetParticipants(self: self, project_id: project_id, user_id: user_id)
 
-        if (response["empty"] as! Bool) == false{
+        if (response["empty"] as? Bool ?? true) == false{
             users = response["names"] as! [String]
             usersEmail = response["emails"] as! [String]
         }
@@ -156,12 +156,14 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
     // Prepare user info for next segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        ConnectionTest(self: self)
+        if segue.identifier != "Logout"{
+            let _ = ConnectionTest(self: self)
+        }
 
         // Add particpants to project and move to the project view
         if (segue.identifier == "AddParticipants"){
             if (SelectedUsers.count > 0 && !FirstSelected){
-               InsertParticipants(SelectedEmail: SelectedUsersEmail, project_id: project_id)
+                InsertParticipants(self: self, SelectedEmail: SelectedUsersEmail, project_id: project_id)
         
                let vc = segue.destination as! ProjectViewController
                vc.user_id = user_id
@@ -177,6 +179,8 @@ class AddParticipantViewController: UIViewController, UITableViewDelegate, UITab
             let vc = segue.destination as! ProjectViewController
             vc.user_id = user_id
             vc.project_id = project_id
+        } else if (segue.identifier == "Logout"){
+            let _ = segue.destination as! LoginViewController
         }
     }
 }

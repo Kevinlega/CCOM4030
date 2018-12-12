@@ -179,10 +179,6 @@ open class CreateAccountActivity : AppCompatActivity(){
                             val intent = Intent(mContext, LoginActivity::class.java)
                             Toast.makeText(mContext, "Account Created.", Toast.LENGTH_SHORT).show()
                             mContext.startActivity(intent) }
-                        DialogInterface.BUTTON_NEUTRAL ->{
-                            val intent = Intent(mContext, LoginActivity::class.java)
-                            Toast.makeText(mContext, "Account Created.", Toast.LENGTH_SHORT).show()
-                            mContext.startActivity(intent)}
                     }
                 }
 
@@ -191,9 +187,6 @@ open class CreateAccountActivity : AppCompatActivity(){
 
                 // Set the alert dialog negative/no button
                 builder.setNegativeButton("NO",dialogClickListener)
-
-                // Set the alert dialog neutral/cancel button
-                builder.setNeutralButton("CANCEL",dialogClickListener)
 
 
                 // Initialize the AlertDialog using builder object

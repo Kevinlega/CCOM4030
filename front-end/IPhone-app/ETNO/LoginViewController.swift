@@ -74,32 +74,63 @@ class LoginViewController: UIViewController {
     }
     
     
+    // MARK: - Ask to store credentials
+    func AlertCredentials(UserEmail: String, UserPassword: String){
+        let refreshAlert = UIAlertController(title: "Biometric Access", message: "Do you want to store the credentials.", preferredStyle: UIAlertController.Style.alert)
+        
+        refreshAlert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction!) in
+            SaveToKeychain(email: UserEmail, password: UserPassword)
+            self.performSegue(withIdentifier: "Move", sender: nil)
+        }))
+        
+        refreshAlert.addAction(UIAlertAction(title: "No", style: .cancel, handler: { (action: UIAlertAction!) in
+            print("Don't save")
+            self.performSegue(withIdentifier: "Move", sender: nil)
+        }))
+        
+        self.present(refreshAlert, animated: true, completion: nil)
+    }
+    
+    
+    
+        
     // MARK: - Segue Function
     // Handles the data and if the login is successful passes data to next view
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
+        if segue.identifier != "Logout"{
+            let _ = ConnectionTest(self: self)
+        }
         
-        ConnectionTest(self: self)
-    
         if (segue.identifier == "CreateAccount"){
             let _ = segue.destination as! CreateAccountViewController
         }
         else if (segue.identifier == "ChangePassword"){
             let _ = segue.destination as! ChangePasswordViewController
-        }
-        else if (segue.identifier == "Dashboard"){
+        } else if (segue.identifier == "Dashboard"){
     
             if CanSendLogin{
                 var response : NSDictionary = NSDictionary()
 
                 if BiometricAuthentication{
-                    response = CheckLogin(email: emailKeyChain, psw: passwordKeyChain,Biometric: BiometricAuthentication)
+                    response = CheckLogin(self: self, email: emailKeyChain, psw: passwordKeyChain,Biometric: BiometricAuthentication)
                 }
                 else{
-                    response = CheckLogin(email: emailField.text!, psw: passwordField.text!,Biometric: BiometricAuthentication)
+                    response = CheckLogin(self: self, email: emailField.text!, psw: passwordField.text!,Biometric: BiometricAuthentication)
                 }
                 if (response["registered"] as! Bool) == true{
                     if response["verified"] as! Bool == true{
+                        if !BiometricAuthentication{
+                            user_id = response["uid"] as! Int
+                            
+                            guard let email = UserDefaults.standard.object(forKey: "lastAccessedUserName") as? String else {return}
+                            LoadPassword(email)
+        
+                            if (emailField.text! != email || (response["hash"] as! String != passwordKeyChain)) {
+                                AlertCredentials(UserEmail: emailField.text!, UserPassword: response["hash"] as! String)
+                            }
+                        }
+                        
                         let vc = segue.destination as! DashboardViewController
                         vc.user_id = response["uid"] as! Int
                     
@@ -114,7 +145,10 @@ class LoginViewController: UIViewController {
                 }
                 
             }
-        }
+        } else if (segue.identifier == "Move"){
+            let vc = segue.destination as! DashboardViewController
+            vc.user_id = user_id
+        } 
     }
     
     // MARK: - TOUCH/FACE ID    
@@ -151,8 +185,9 @@ class LoginViewController: UIViewController {
                     self.LoadPassword(email)
                     
                     DispatchQueue.main.async{
-                        ConnectionTest(self: self)
-                        self.performSegue(withIdentifier: "Dashboard", sender: nil)
+                        if ConnectionTest(self: self) {
+                            self.performSegue(withIdentifier: "Dashboard", sender: nil)
+                        }
                     }
                 }
             })

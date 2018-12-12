@@ -56,21 +56,27 @@ class CreateAProjectViewController: UIViewController {
     // MARK: - Segue Function
     // Handles the data
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        ConnectionTest(self: self)
+        
+        if segue.identifier != "Logout"{
+            let _ = ConnectionTest(self: self)
+        }
+
         if (segue.identifier == "BackToDashboard"){
             let vc = segue.destination as! DashboardViewController
             vc.user_id = user_id
         }
         else if (segue.identifier == "CreateProject"){
             if CanProjectBeAdded{
-                let response = CreateProject(user_id: user_id,name: projectName.text!, description: projectDescription.text!, location: projectLocation.text!)
+                let response = CreateProject(self: self,user_id: user_id,name: projectName.text!, description: projectDescription.text!, location: projectLocation.text!)
                 
-                if (response["created"] as! Bool) ==  true{
+                if (response["created"] as? Bool ?? false) ==  true{
                     let vc = segue.destination as! ProjectViewController
                     vc.user_id = user_id
                     vc.project_id = response["project_id"] as! Int
                 }
             }
+        } else if (segue.identifier == "Logout"){
+            let _ = segue.destination as! LoginViewController
         }
     }
 }

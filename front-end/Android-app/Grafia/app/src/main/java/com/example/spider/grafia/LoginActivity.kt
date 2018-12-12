@@ -321,11 +321,6 @@ class LoginActivity : AppCompatActivity() {
                             intent.putExtra("userId", uid)
                             mContext.startActivity(intent)
                         }
-                        DialogInterface.BUTTON_NEUTRAL -> {
-                            val intent = Intent(mContext, DashboardActivity::class.java)
-                            intent.putExtra("userId", uid)
-                            mContext.startActivity(intent)
-                        }
                     }
                 }
 
@@ -335,10 +330,6 @@ class LoginActivity : AppCompatActivity() {
 
                 // Set the alert dialog negative/no button
                 builder.setNegativeButton("NO",dialogClickListener)
-
-                // Set the alert dialog neutral/cancel button
-                builder.setNeutralButton("CANCEL",dialogClickListener)
-
 
                 // Initialize the AlertDialog using builder object
                 dialog = builder.create()

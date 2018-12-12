@@ -61,24 +61,25 @@ class ProjectViewController: UIViewController, UINavigationControllerDelegate, U
         }
 
         location = "http://54.81.239.120/" + path + "/" + type + "/" + name
-        ConnectionTest(self: self)
-        // Check type of download and move to the according view
-        switch type {
-        case "images":
-            performSegue(withIdentifier: "DownloadImage", sender: nil)
-            break
-        
-        case "docs":
-            performSegue(withIdentifier: "DownloadNotes", sender: nil)
-            break
-        case "voice":
-            performSegue(withIdentifier: "DownloadAudio", sender: nil)
-            break
-        case "videos":
-            performSegue(withIdentifier: "DownloadVideo", sender: nil)
-            break
-        default:
-            break
+        if ConnectionTest(self: self){
+            // Check type of download and move to the according view
+            switch type {
+            case "images":
+                performSegue(withIdentifier: "DownloadImage", sender: nil)
+                break
+            
+            case "docs":
+                performSegue(withIdentifier: "DownloadNotes", sender: nil)
+                break
+            case "voice":
+                performSegue(withIdentifier: "DownloadAudio", sender: nil)
+                break
+            case "videos":
+                performSegue(withIdentifier: "DownloadVideo", sender: nil)
+                break
+            default:
+                break
+            }
         }
     }
     
@@ -88,7 +89,7 @@ class ProjectViewController: UIViewController, UINavigationControllerDelegate, U
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        is_admin = CheckAdmin(project_id: project_id, user_id: user_id)
+        is_admin = CheckAdmin(self: self, project_id: project_id, user_id: user_id)
         if !is_admin{
             AddParticipant.isHidden = true
         }
@@ -101,13 +102,13 @@ class ProjectViewController: UIViewController, UINavigationControllerDelegate, U
         let post = "queryType=10&pid=\(project_id)";
         request.httpBody = post.data(using: String.Encoding.utf8);
         
-        let response = ConnectToAPI(request: request)
+        let response = ConnectToAPI(self: self, request: request)
         
-        if (response["empty"] as! Bool) == false{
+        if (response["empty"] as? Bool ?? true) == false{
             project_path = response["path"] as! String
+            fetchPhotos()
         }
         
-        fetchPhotos()
         
         // Do any additional setup after loading the view.
     }
@@ -115,7 +116,7 @@ class ProjectViewController: UIViewController, UINavigationControllerDelegate, U
     // Download file names from server
     func fetchPhotos(){
         
-        ConnectionTest(self: self)
+        let _ = ConnectionTest(self: self)
         
         let url_parse = URL(string: "http://54.81.239.120/listdir.php?path=\(project_path)")
         if url_parse != nil {
@@ -145,7 +146,9 @@ class ProjectViewController: UIViewController, UINavigationControllerDelegate, U
     // Handles the segue and moves the data around.
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        ConnectionTest(self: self)
+        if segue.identifier != "Logout"{
+            let _ = ConnectionTest(self: self)
+        }
         
         if (segue.identifier == "AddParticipants"){
             let vc = segue.destination as! AddParticipantViewController
@@ -200,6 +203,8 @@ class ProjectViewController: UIViewController, UINavigationControllerDelegate, U
             vc.user_id = user_id
             vc.project_id = project_id
             vc.location = location
+        } else if (segue.identifier == "Logout"){
+            let _ = segue.destination as! LoginViewController
         }
     }
 }

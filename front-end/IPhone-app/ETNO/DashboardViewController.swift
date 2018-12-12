@@ -53,14 +53,16 @@ class DashboardViewController: UIViewController, UICollectionViewDelegate, UICol
     // Selects the item and performs a Segue to it
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.project_id = Int(id[indexPath.row] as! String)!
-        ConnectionTest(self: self)
-        performSegue(withIdentifier: "ViewProject", sender: nil)
+        
+        if (ConnectionTest(self: self)){
+            performSegue(withIdentifier: "ViewProject", sender: nil)
+        }
     }
     
     // MARK: - Default Functions
     // Every Time we come here we load
     override func loadViewIfNeeded() {
-        let response = GetProjects(user_id: user_id)
+        let response = GetProjects(self: self, user_id: user_id)
         if response["empty"] as! Bool == false{
             self.name = response["project_name"] as! NSArray
             self.id = response["project_id"] as! NSArray
@@ -73,9 +75,9 @@ class DashboardViewController: UIViewController, UICollectionViewDelegate, UICol
     // Get Projects on load
     override func viewDidLoad() {
         super.viewDidLoad()
-                
-        let response = GetProjects(user_id: user_id)
-        if response["empty"] as! Bool == false{
+        
+        let response = GetProjects(self: self, user_id: user_id)
+        if (response["empty"] as? Bool ?? true) == false{
             self.name = response["project_name"] as! NSArray
             self.id = response["project_id"] as! NSArray
         }
@@ -89,12 +91,13 @@ class DashboardViewController: UIViewController, UICollectionViewDelegate, UICol
         // Dispose of any resources that can be recreated.
     }
 
-    
     // MARK: - Segue Function
     // Handles the data
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        ConnectionTest(self: self)
+        if segue.identifier != "Logout"{
+            let _ = ConnectionTest(self: self)
+        }
         
         if (segue.identifier == "ViewProject"){
             let vc = segue.destination as! ProjectViewController
@@ -111,6 +114,6 @@ class DashboardViewController: UIViewController, UICollectionViewDelegate, UICol
         else if (segue.identifier == "Friends"){
             let vc = segue.destination as! TabBarViewController
             vc.user_id = user_id
-        }
+        } 
     }
 }

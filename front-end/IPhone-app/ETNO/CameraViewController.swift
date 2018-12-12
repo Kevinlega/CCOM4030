@@ -29,7 +29,7 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
             imagePickerController.delegate = self
             imagePickerController.sourceType = .photoLibrary
             imagePickerController.allowsEditing = false
-            self.present(imagePickerController, animated: true, completion: nil )
+            self.present(imagePickerController, animated: true, completion: nil)
         }
         else{
             print("photo library not available")
@@ -96,12 +96,17 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
     
     // Pass values to segue for user validation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        ConnectionTest(self: self)
 
+        if segue.identifier != "Logout"{
+            let _ = ConnectionTest(self: self)
+        }
+        
         if (segue.identifier == "BackToProject"){
             let vc = segue.destination as! ProjectViewController
             vc.user_id = user_id
             vc.project_id = project_id
+        } else if (segue.identifier == "Logout"){
+            let _ = segue.destination as! LoginViewController
         }
     }
     

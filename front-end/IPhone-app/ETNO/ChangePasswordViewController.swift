@@ -29,7 +29,7 @@ class ChangePasswordViewController: UIViewController {
         if (UserEmail!.isEmpty || answered!.isEmpty){
            self.present(Alert(title: "Error", message: "All fields are requiered.", Dismiss: "Dismiss"),animated: true, completion: nil)
         }
-        else if(!(isRegistered(email: UserEmail!))){
+        else if(!(isRegistered(self: self, email: UserEmail!))){
             self.present(Alert(title: "Something went wrong.", message: "Cannot change password.", Dismiss: "Dismiss"),animated: true, completion: nil)
         } else{
             UserCanBeAdded = true
@@ -54,7 +54,10 @@ class ChangePasswordViewController: UIViewController {
     // Makes sure that user is registered and changes user-password.
     // Performs segue for Login view.
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        ConnectionTest(self: self)
+
+        if segue.identifier != "Logout"{
+            let _ = ConnectionTest(self: self)
+        }
         
         if (segue.identifier == "BackToLogin"){
             let _ = segue.destination as! LoginViewController
@@ -65,7 +68,7 @@ class ChangePasswordViewController: UIViewController {
             if UserCanBeAdded{
                 let answered = answer.text
                 let UserEmail = email.text
-                let response = ChangePassword(email: UserEmail!, answer: answered!)
+                let response = ChangePassword(self: self, email: UserEmail!, answer: answered!)
                 if (response){
                      self.present(Alert(title: "Email was Sent.", message: "Please update password by tomorrow.", Dismiss: "Dismiss"),animated: true, completion: nil)
                      let _ = segue.destination as! LoginViewController
@@ -73,6 +76,8 @@ class ChangePasswordViewController: UIViewController {
                      self.present(Alert(title: "Something went wrong.", message: "Cannot change password.", Dismiss: "Dismiss"),animated: true, completion: nil)
                 }
             }
+        } else if (segue.identifier == "Logout"){
+            let _ = segue.destination as! LoginViewController
         }
     }
 }

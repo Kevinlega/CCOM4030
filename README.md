@@ -47,4 +47,4 @@
 
 ## Task Trade Off
 
-- [The users stories trade off.](https://docs.google.com/viewer?url=https://raw.githubusercontent.com/Kevinlega/Grafia/master/Task_Trade_Off.pdf)
+- [The user stories trade off.](https://docs.google.com/viewer?url=https://raw.githubusercontent.com/Kevinlega/Grafia/master/Task_Trade_Off.pdf)

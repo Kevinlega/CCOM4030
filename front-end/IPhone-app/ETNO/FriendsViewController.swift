@@ -131,7 +131,7 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
             request.httpMethod = "POST"
             let post = "queryType=\(QueryType)&email=\(searchBar.text!)&uid=\(user_id)"
             request.httpBody = post.data(using: String.Encoding.utf8)
-            response = ConnectToAPI(request: request)
+            response = ConnectToAPI(self: self, request: request)
             
             FilteredUsers = []
             FilteredUsersEmail = []
@@ -166,13 +166,14 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
     // Handles the data
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        ConnectionTest(self: self)
-
+        if segue.identifier != "Logout"{
+            let _ = ConnectionTest(self: self)
+        }
         
         // Send friend request
         if (segue.identifier == "SendFriendRequest"){
             if(UsersCanBeAdded){
-                let response = SendRequest(user_id: self.user_id, SelectedUsersEmail: self.SelectedUsersEmail)
+                let response = SendRequest(self: self, user_id: self.user_id, SelectedUsersEmail: self.SelectedUsersEmail)
                 if (response["success"] as! Bool) == true{
                     let vc = segue.destination as! DashboardViewController
                     vc.user_id = user_id
@@ -185,6 +186,8 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
         else if (segue.identifier == "BackToDashboard"){
             let vc = segue.destination as! DashboardViewController
             vc.user_id = user_id
+        } else if (segue.identifier == "Logout"){
+            let _ = segue.destination as! LoginViewController
         }
     }
 }

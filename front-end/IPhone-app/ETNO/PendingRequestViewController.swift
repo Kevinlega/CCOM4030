@@ -167,8 +167,8 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
         hideKeyboardWhenTappedAround()
         user_id = TabBarViewController.User.uid
 
-        let response = GetPendingRequest(user_id: user_id)
-        if response["empty"] as! Bool == false{
+        let response = GetPendingRequest(self: self, user_id: user_id)
+        if (response["empty"] as? Bool ?? true) == false{
             FirstSelected = true
             pendingUsers = response["name"] as! [String]
             pendingEmail = response["email"] as! [String]
@@ -186,12 +186,14 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
     // Handles the data
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        ConnectionTest(self: self)
-
+        if segue.identifier != "Logout"{
+            let _ = ConnectionTest(self: self)
+        }
+        
         // Send friend request
         if (segue.identifier == "SendFriendRequestAnswer"){
             if(UsersCanBeAdded){
-                let response = AnswerRequest(user_id: user_id, SelectedUsersEmail: SelectedUsersEmail)
+                let response = AnswerRequest(self: self, user_id: user_id, SelectedUsersEmail: SelectedUsersEmail)
                 print(response)
                 if (response["success"] as! Bool) == true{
                     let vc = segue.destination as! DashboardViewController
@@ -207,13 +209,15 @@ class PendingRequestViewController: UIViewController, UITableViewDelegate, UITab
             vc.user_id = user_id
         } else if (segue.identifier == "RejectRequest"){
             if(UsersCanBeRemoved){
-                let response = DeclineRequest(user_id: user_id, SelectedUsersEmail: SelectedUsersEmail)
+                let response = DeclineRequest(self: self, user_id: user_id, SelectedUsersEmail: SelectedUsersEmail)
                 print(response)
                 if (response["success"] as! Bool) == true{
                     let vc = segue.destination as! DashboardViewController
                     vc.user_id = user_id
                 }
             }
+        } else if (segue.identifier == "Logout"){
+            let _ = segue.destination as! LoginViewController
         }
     }
 }
